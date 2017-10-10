@@ -1,12 +1,21 @@
 package mx.itesm.beyondthedim;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
@@ -36,6 +45,18 @@ class PantallaJuego extends Pantalla {
     //Texto
 
     private Texto texto;
+
+
+    //Method to touchpad
+
+    private Touchpad touchpad;
+    private Touchpad.TouchpadStyle touchpadStyle;
+    private Skin touchpadSkin;
+    private Drawable touchBackground;
+    private Drawable touchKnob;
+    private Texture blockTexture;
+    private Sprite blockSprite;
+    private float blockSpeed;
 
 
 
@@ -85,6 +106,9 @@ class PantallaJuego extends Pantalla {
             }
 
         });
+
+
+
     }
 
     @Override
@@ -97,7 +121,7 @@ class PantallaJuego extends Pantalla {
         personaje = new Personaje(ANCHO/4,ALTO/2);
 
         Gdx.input.setInputProcessor(escenaJuego);
-        //Gdx.input.setInputProcessor(new ProcesadorEventos());
+        Gdx.input.setInputProcessor(new ProcesadorEventos());
 
         texto = new Texto();
     }
@@ -123,9 +147,13 @@ class PantallaJuego extends Pantalla {
         batch.begin();
         escenaJuego.draw();
         batch.end();
+        
+        escenaJuego.act(Gdx.graphics.getDeltaTime());
+        escenaJuego.draw();
 
 
     }
+
 
     @Override
     public void pause() {
@@ -142,7 +170,7 @@ class PantallaJuego extends Pantalla {
 
     }
 
-   /* private class ProcesadorEventos implements InputProcessor{
+   private class ProcesadorEventos implements InputProcessor {
 
         @Override
         public boolean keyDown(int keycode) {
@@ -194,5 +222,5 @@ class PantallaJuego extends Pantalla {
         public boolean scrolled(int amount) {
             return false;
         }
-    }*/
+    }
 }
