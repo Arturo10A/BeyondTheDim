@@ -147,7 +147,7 @@ class PantallaJuego extends Pantalla {
         batch.begin();
         escenaJuego.draw();
         batch.end();
-        
+
         escenaJuego.act(Gdx.graphics.getDeltaTime());
         escenaJuego.draw();
 
