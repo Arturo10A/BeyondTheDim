@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 class Personaje {
 
-    private Texture textureNave;
+    private Texture jettTexture;
     private float  x;
     private  float y;
 
@@ -18,13 +18,13 @@ class Personaje {
 
         this.x = x;
         this.y = y;
-        textureNave = new Texture("jett.png");
+        jettTexture = new Texture("jett.png");
 
     }
 
     public void render(SpriteBatch batch){
 
-        batch.draw(textureNave,x,y);
+        batch.draw(jettTexture,x,y);
 
     }
 
