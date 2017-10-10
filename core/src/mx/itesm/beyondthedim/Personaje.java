@@ -28,6 +28,13 @@ class Personaje {
 
     }
 
+    public float getPositionX(){
+        return this.x;
+    }
+
+    public float getPositionY(){
+        return this.y;
+    }
 
     public void mover (float dx, float dy){
         x += dx;

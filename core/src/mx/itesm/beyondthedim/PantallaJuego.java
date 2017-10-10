@@ -132,6 +132,8 @@ class PantallaJuego extends Pantalla{
 
         texto.mostrarMensaje(batch,"Vida: 100%",50,Pantalla.ALTO/1.02f);
 
+        enemy.mover(personaje.getPositionX(),personaje.getPositionY());
+
         batch.end();
 
         batch.begin();
@@ -146,7 +148,7 @@ class PantallaJuego extends Pantalla{
 
     @Override
     public void pause() {
-        
+
     }
 
     @Override
@@ -167,12 +169,19 @@ class PantallaJuego extends Pantalla{
 
             if (keycode == Input.Keys.LEFT){
                 personaje.mover(-DX_PERSONAJE,0);
+                enemy.mover(- personaje.getPositionX(),0);
+
             }if (keycode == Input.Keys.RIGHT){
                 personaje.mover(DX_PERSONAJE,0);
+                enemy.mover(personaje.getPositionX(),0);
+
             }if (keycode == Input.Keys.DOWN){
                 personaje.mover(0,-DY_PERSONAJE);
+                enemy.mover(0,-personaje.getPositionY());
+
             }if (keycode == Input.Keys.UP){
                 personaje.mover(0,DY_PERSONAJE);
+                enemy.mover(0,personaje.getPositionY());
             }
 
             return true;
