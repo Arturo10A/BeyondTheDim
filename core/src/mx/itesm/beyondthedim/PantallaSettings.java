@@ -15,6 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  * Created by Arturo on 15/09/17.
  */
 
+
+//Hola entre en ti
+
 class PantallaSettings extends Pantalla {
 
     private final Juego juego;
