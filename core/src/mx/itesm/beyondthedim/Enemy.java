@@ -34,4 +34,14 @@ public class Enemy {
         y += dy;
     }
 
+    //Change method name
+    public float getX(){
+        return this.x;
+    }
+
+    //Change method name
+    public float getY(){
+        return this.y;
+    }
+
 }

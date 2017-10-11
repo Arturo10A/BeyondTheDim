@@ -55,6 +55,9 @@ class PantallaJuego extends Pantalla{
 
     private Texto texto;
 
+    //Variable of control
+    private float time;
+
     public PantallaJuego(Juego juego) {
 
 
@@ -103,7 +106,7 @@ class PantallaJuego extends Pantalla{
         crearEscena();
 
         textureEcenario = new Texture("inicio.png");
-        personaje = new Personaje(ANCHO/4,ALTO/2);
+        personaje = new Personaje(ANCHO/4,ALTO/2, 100);
 
         //Class enemy test
         enemy = new Enemy(0, 0, 100);
@@ -120,6 +123,21 @@ class PantallaJuego extends Pantalla{
         borrarPantalla(0,0,0);
         batch.setProjectionMatrix(camara.combined);
 
+        //If time equals 10 move the enemy to the current location of the character
+        //Start damage
+
+        time += Gdx.graphics.getDeltaTime();
+        if (time >= 10){
+            enemy.mover(personaje.getPositionX()- enemy.getX(),personaje.getPositionY()-enemy.getY());
+
+            if (personaje.getPositionX() == enemy.getX() && personaje.getPositionY() == enemy.getY()){
+                personaje.damage(1);
+                System.out.println(personaje.damage(1));
+            }
+
+            time = 0;
+        }
+
         batch.begin();
 
         batch.draw(textureEcenario,Pantalla.ANCHO/2-textureEcenario.getWidth()/2, Pantalla.ALTO/2-textureEcenario.getHeight()/2);
@@ -130,9 +148,10 @@ class PantallaJuego extends Pantalla{
         //Drawing test of class enemy
         enemy.render(batch);
 
+
         texto.mostrarMensaje(batch,"Vida: 100%",50,Pantalla.ALTO/1.02f);
 
-        enemy.mover(personaje.getPositionX(),personaje.getPositionY());
+
 
         batch.end();
 
@@ -169,19 +188,15 @@ class PantallaJuego extends Pantalla{
 
             if (keycode == Input.Keys.LEFT){
                 personaje.mover(-DX_PERSONAJE,0);
-                enemy.mover(- personaje.getPositionX(),0);
 
             }if (keycode == Input.Keys.RIGHT){
                 personaje.mover(DX_PERSONAJE,0);
-                enemy.mover(personaje.getPositionX(),0);
 
             }if (keycode == Input.Keys.DOWN){
                 personaje.mover(0,-DY_PERSONAJE);
-                enemy.mover(0,-personaje.getPositionY());
 
             }if (keycode == Input.Keys.UP){
                 personaje.mover(0,DY_PERSONAJE);
-                enemy.mover(0,personaje.getPositionY());
             }
 
             return true;
