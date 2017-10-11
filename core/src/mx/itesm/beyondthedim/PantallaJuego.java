@@ -1,24 +1,14 @@
 package mx.itesm.beyondthedim;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.ai.steer.Steerable;
-import com.badlogic.gdx.ai.utils.Location;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 /**
@@ -31,7 +21,7 @@ class PantallaJuego extends Pantalla{
     private Texture textureEcenario;  //Imagen del ecenario
 
     private float DX = 28;
-    private int pasos = 10;
+    private int pasos = 20;
     private float timerPasos = 0;
 
     //Jett start
@@ -73,7 +63,7 @@ class PantallaJuego extends Pantalla{
         escenaJuego = new Stage(vista);
 
 
-        //Boton GOBACK
+        //Boton GOBACK -> check variable and conflic agins problems
 
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(texturaBtnGoBack));
         ImageButton btnGoBack = new ImageButton(trdGoBack);
@@ -128,12 +118,14 @@ class PantallaJuego extends Pantalla{
 
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
-            enemy.mover(personaje.getPositionX()- enemy.getX(),personaje.getPositionY()-enemy.getY());
+            enemy.mover(personaje.getPositionX()- enemy.getPositionX(),personaje.getPositionY()-enemy.getPositionY());
 
-            if (personaje.getPositionX() == enemy.getX() && personaje.getPositionY() == enemy.getY()){
+            if (personaje.getPositionX() == enemy.getPositionX() && personaje.getPositionY() == enemy.getPositionY()){
                 personaje.damage(1);
                 System.out.println(personaje.damage(1));
 
+
+                // If the life of jett is equal 0 youy return to te menu.
                 if (personaje.getLife() <= 0){
                     System.out.println("You die");
                     juego.setScreen(new PantallaMenu(juego));
@@ -154,7 +146,7 @@ class PantallaJuego extends Pantalla{
         enemy.render(batch);
 
 
-        texto.mostrarMensaje(batch,"Vida: 100%",50,Pantalla.ALTO/1.02f);
+        texto.mostrarMensaje(batch,"Vida: 100%",95,Pantalla.ALTO/1.07f);
 
 
 
