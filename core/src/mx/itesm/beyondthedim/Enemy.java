@@ -20,7 +20,6 @@ public class Enemy {
         this.x = x;
         this.y = y;
         this.life = life;
-
         enemmyTexture = new Texture("block.png");
 
     }

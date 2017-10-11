@@ -127,12 +127,17 @@ class PantallaJuego extends Pantalla{
         //Start damage
 
         time += Gdx.graphics.getDeltaTime();
-        if (time >= 10){
+        if (time >= 1){
             enemy.mover(personaje.getPositionX()- enemy.getX(),personaje.getPositionY()-enemy.getY());
 
             if (personaje.getPositionX() == enemy.getX() && personaje.getPositionY() == enemy.getY()){
                 personaje.damage(1);
                 System.out.println(personaje.damage(1));
+
+                if (personaje.getLife() <= 0){
+                    System.out.println("You die");
+                    juego.setScreen(new PantallaMenu(juego));
+                }
             }
 
             time = 0;

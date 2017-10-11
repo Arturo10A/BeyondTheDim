@@ -25,7 +25,7 @@ class Personaje {
     }
 
     //return the current life of the character
-    public int getLife(int life){
+    public int getLife(){
         return this.life;
     }
 
