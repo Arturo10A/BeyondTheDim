@@ -60,18 +60,14 @@ class PantallaMenu extends Pantalla {
         escenaMenu = new Stage(vista);
 
         //Boton jugar
-
         TextureRegionDrawable trdPlay = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
         ImageButton btnPlay = new ImageButton(trdPlay);
-        btnPlay.setPosition(ANCHO/2-btnPlay.getWidth()/2,ALTO*0.37f);
+        btnPlay.setPosition(ANCHO/2-(btnPlay.getWidth()/2),ALTO*0.23f);
 
         //Boton Settings
-
-
-
         TextureRegionDrawable trdSettings = new TextureRegionDrawable(new TextureRegion(texturaBtnSettings));
         ImageButton btnSettings = new ImageButton(trdSettings);
-        btnSettings.setPosition(ANCHO/2-btnSettings.getWidth()/2,ALTO*0.28f);
+        btnSettings.setPosition(1134,ALTO*0.423f);
 
         btnSettings.addListener( new ClickListener(){
 
@@ -86,10 +82,9 @@ class PantallaMenu extends Pantalla {
         });
 
         //Boton instruciones
-
         TextureRegionDrawable trdIntruction = new TextureRegionDrawable(new TextureRegion(texturaBtnInstructions));
         ImageButton btnIntruction = new ImageButton(trdIntruction);
-        btnIntruction.setPosition(ANCHO/2-btnPlay.getWidth()/2,0.2f*ALTO);
+        btnIntruction.setPosition(ANCHO/2-btnIntruction.getWidth()/2,100);
 
         btnIntruction.addListener( new ClickListener(){
 
@@ -105,7 +100,6 @@ class PantallaMenu extends Pantalla {
 
 
         //Fondo de pantalla
-
         TextureRegionDrawable backWall = new TextureRegionDrawable(new TextureRegion(fondoPantalla));
         Image back = new Image(backWall);
         back.setPosition(ANCHO/2-back.getWidth()/2,ALTO/2-back.getHeight()/2);
@@ -126,7 +120,7 @@ class PantallaMenu extends Pantalla {
         //Boton aboutUS
         TextureRegionDrawable trdAboutUs = new TextureRegionDrawable(new TextureRegion(texturaBtnAyuda));
         ImageButton btnAboutUs = new ImageButton(trdAboutUs);
-        btnAboutUs.setPosition(ANCHO/2-btnAboutUs.getWidth()/2,0.13f*ALTO);
+        btnAboutUs.setPosition(50,ALTO*0.423f);
 
 
 
