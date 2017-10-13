@@ -26,23 +26,27 @@ class PantallaJuego extends Pantalla{
 
     //Jett start
     private  Personaje personaje;
-    private int DX_PERSONAJE=10;
-    private int DY_PERSONAJE =10;
+
+    //Jett Speed
+    private int DX_PERSONAJE=25;
+    private int DY_PERSONAJE =25;
 
 
     //Enemy block
     private Enemy enemy;
-    private int DX_ENEMY = 10;
-    private int DY_ENMEY = 10;
+    private int DX_ENEMY = 100;
+    private int DY_ENMEY = 100;
+    private Enemy enemy1;
+    private Enemy enemy2;
+    private Enemy enemy3;
+    private Enemy enemy4;
+    private Enemy enemy5;
+
 
     private Stage escenaJuego;
     private Texture texturaBtnGoBack; //Boton de regreso
 
-
-    private Texture textureJoistickDerecho;
-    private Texture textureJoistickIzquierdo;
     //Texto
-
     private Texto texto;
 
     //Variable of control
@@ -100,6 +104,10 @@ class PantallaJuego extends Pantalla{
 
         //Class enemy test
         enemy = new Enemy(0, 0, 100);
+        enemy1 = new Enemy(20,50,100);
+        enemy2 = new Enemy(70, 90, 100);
+        enemy3 = new Enemy(180,680,100);
+        enemy4 = new Enemy(600,500,100);
 
         Gdx.input.setInputProcessor(escenaJuego);
         Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -119,14 +127,24 @@ class PantallaJuego extends Pantalla{
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
             float x = (float) ((personaje.getPositionX() - enemy.getPositionX()) * 0.2);
-            float y = (float) ((personaje.getPositionY()-enemy.getPositionY()) * 0.3);
+            float y = (float) ((personaje.getPositionY() - enemy.getPositionY()) * 0.3);
             enemy.mover(x,y);
+            enemy1.mover(x,y);
+
 
             if (personaje.getPositionX() == enemy.getPositionX() && personaje.getPositionY() == enemy.getPositionY()){
                 personaje.damage(1);
                 System.out.println(personaje.damage(1));
+                // If the life of jett is equal 0 youy return to te menu.
+                if (personaje.getLife() <= 0){
+                    System.out.println("You die");
+                    juego.setScreen(new PantallaMenu(juego));
+                }
+            }
 
-
+            if (personaje.getPositionX() == enemy1.getPositionX() && personaje.getPositionY() == enemy1.getPositionY()){
+                personaje.damage(1);
+                System.out.println(personaje.damage(1));
                 // If the life of jett is equal 0 youy return to te menu.
                 if (personaje.getLife() <= 0){
                     System.out.println("You die");
@@ -146,7 +164,10 @@ class PantallaJuego extends Pantalla{
 
         //Drawing test of class enemy
         enemy.render(batch);
-
+        enemy1.render(batch);
+        enemy2.render(batch);
+        enemy3.render(batch);
+        enemy4.render(batch);
 
         texto.mostrarMensaje(batch,"Vida: 100%",95,Pantalla.ALTO/1.07f);
 
