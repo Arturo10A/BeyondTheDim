@@ -118,7 +118,9 @@ class PantallaJuego extends Pantalla{
 
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
-            enemy.mover(personaje.getPositionX()- enemy.getPositionX(),personaje.getPositionY()-enemy.getPositionY());
+            float x = (float) ((personaje.getPositionX() - enemy.getPositionX()) * 0.2);
+            float y = (float) ((personaje.getPositionY()-enemy.getPositionY()) * 0.3);
+            enemy.mover(x,y);
 
             if (personaje.getPositionX() == enemy.getPositionX() && personaje.getPositionY() == enemy.getPositionY()){
                 personaje.damage(1);
