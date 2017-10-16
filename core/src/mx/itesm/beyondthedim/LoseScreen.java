@@ -1,5 +1,6 @@
 package mx.itesm.beyondthedim;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 /**
@@ -27,12 +28,22 @@ public class LoseScreen extends Pantalla{
     @Override
     public void show() {
 
+        //Gdx.input.setInputProcessor(escenaLose);
+
     }
 
     @Override
     public void render(float delta) {
 
-        texto.mostrarMensaje(batch,"You Lose", Pantalla.ANCHO/2, Pantalla.ALTO/2);
+
+        borrarPantalla(0,0,0);
+        batch.setProjectionMatrix(camara.combined);
+
+        batch.begin();
+        texto.mostrarMensaje(batch,"You Died", Pantalla.ANCHO/2, Pantalla.ALTO/2);
+        batch.end();
+
+
 
     }
 

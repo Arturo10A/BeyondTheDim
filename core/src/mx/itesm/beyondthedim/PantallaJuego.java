@@ -127,8 +127,6 @@ class PantallaJuego extends Pantalla{
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
 
-            float x = (float) ((personaje.getPositionX() - enemy.getPositionX()) * 0.2);
-            float y = (float) ((personaje.getPositionY() - enemy.getPositionY()) * 0.3);
             enemy.atack(personaje);
             enemy1.atack(personaje);
             enemy2.atack(personaje);
@@ -142,23 +140,13 @@ class PantallaJuego extends Pantalla{
 
                 // If the life of jett is equal 0 youy return to LoseScreen.
 
-                if (personaje.getLife() <= 0){
-                    System.out.println("You die");
-                    juego.setScreen(new LoseScreen(juego));
-                }
-
-
-            if (personaje.getPositionX() == enemy1.getPositionX() && personaje.getPositionY() == enemy1.getPositionY()){
-                personaje.damage(1);
-                System.out.println(personaje.damage(1));
-                // If the life of jett is equal 0 youy return to te menu.
-                if (personaje.getLife() <= 0){
-                    System.out.println("You die");
-                    juego.setScreen(new PantallaMenu(juego));
-                }
+            if (personaje.getLife() <= 0){
+                System.out.println("You die");
+                juego.setScreen(new LoseScreen(juego));
             }
 
             time = 0;
+
         }
 
         batch.begin();

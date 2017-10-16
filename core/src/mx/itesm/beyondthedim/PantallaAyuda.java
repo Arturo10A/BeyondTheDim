@@ -77,8 +77,6 @@ class PantallaAyuda extends Pantalla {
         Image back = new Image(backWall);
         back.setPosition(ANCHO/2-back.getWidth()/2,ALTO/2-back.getHeight()/2);
 
-
-
         ecenaAyuda.addActor(back);
         ecenaAyuda.addActor(btnGoBack);
 
@@ -90,6 +88,7 @@ class PantallaAyuda extends Pantalla {
                 juego.setScreen(new PantallaMenu(juego));
             }
         });
+
     }
 
 
@@ -113,8 +112,8 @@ class PantallaAyuda extends Pantalla {
 
         texto.mostrarMensaje(batch,"JOSE RODRIGO NARVAEZ - SENIOR JAVA DEVELOPER",Pantalla.ANCHO/2,Pantalla.ALTO/1.5f);
         texto.mostrarMensaje(batch,"MONSE LIRA - DESIGNER",Pantalla.ANCHO/2,Pantalla.ALTO/1.7f);
-        texto.mostrarMensaje(batch,"JORGE ALEXIS RUBIO SUMANO - Content cordinator",Pantalla.ANCHO/2,Pantalla.ALTO/1.9f);
-        texto.mostrarMensaje(batch,"ARTURO AMDOR - CTO SNIPER DEVELOPER",Pantalla.ANCHO/2,Pantalla.ALTO/2.1f);
+        texto.mostrarMensaje(batch,"JORGE ALEXIS RUBIO SUMANO - Content Cordinator",Pantalla.ANCHO/2,Pantalla.ALTO/1.9f);
+        texto.mostrarMensaje(batch,"ARTURO AMADOR - SNIPER DEVELOPER",Pantalla.ANCHO/2,Pantalla.ALTO/2.1f);
 
 
         batch.end();
