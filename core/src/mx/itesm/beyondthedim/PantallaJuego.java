@@ -100,7 +100,7 @@ class PantallaJuego extends Pantalla{
         crearEscena();
 
         textureEcenario = new Texture("inicio.png");
-        personaje = new Personaje(ANCHO/4,ALTO/2, 100);
+        personaje = new Personaje(ANCHO/4,ALTO/2, 1000000);
 
         //Class enemy test
         enemy = new Enemy(0, 0, 100, 20);
@@ -146,6 +146,8 @@ class PantallaJuego extends Pantalla{
             }
 
             time = 0;
+
+            //System.out.println("X: "+personaje.getPositionX()+" Y: "+ personaje.getPositionY());
 
         }
 
@@ -201,16 +203,34 @@ class PantallaJuego extends Pantalla{
         public boolean keyDown(int keycode) {
 
             if (keycode == Input.Keys.LEFT){
-                personaje.mover(-DX_PERSONAJE,0);
+
+                if (personaje.getPositionX() <= 145.f){
+
+                }else{
+                    personaje.mover(-DX_PERSONAJE,0);
+                }
 
             }if (keycode == Input.Keys.RIGHT){
-                personaje.mover(DX_PERSONAJE,0);
+
+                if (personaje.getPositionX() >= 1070.0){
+
+                }else{
+                    personaje.mover(DX_PERSONAJE,0);
+                }
 
             }if (keycode == Input.Keys.DOWN){
-                personaje.mover(0,-DY_PERSONAJE);
+
+                if (personaje.getPositionY() <= 110.0){}else{
+                    personaje.mover(0,-DY_PERSONAJE);
+                }
 
             }if (keycode == Input.Keys.UP){
-                personaje.mover(0,DY_PERSONAJE);
+
+                if (personaje.getPositionY() >= 585.0){}
+                else {
+                    personaje.mover(0,DY_PERSONAJE);
+                }
+
             }
 
             return true;

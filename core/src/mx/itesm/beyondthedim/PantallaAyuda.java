@@ -95,27 +95,20 @@ class PantallaAyuda extends Pantalla {
 
     @Override
     public void render(float delta) {
-
         borrarPantalla(0,0,0);
         batch.setProjectionMatrix(camara.combined);
 
         //Dibujamos los elementos graficos
         batch.begin();
-
         ecenaAyuda.draw();
-
         batch.end();
 
         //Dibujamos los elementos tipo texto de badLogic
-
         batch.begin();
-
         texto.mostrarMensaje(batch,"JOSE RODRIGO NARVAEZ - SENIOR JAVA DEVELOPER",Pantalla.ANCHO/2,Pantalla.ALTO/1.5f);
         texto.mostrarMensaje(batch,"MONSE LIRA - DESIGNER",Pantalla.ANCHO/2,Pantalla.ALTO/1.7f);
         texto.mostrarMensaje(batch,"JORGE ALEXIS RUBIO SUMANO - Content Cordinator",Pantalla.ANCHO/2,Pantalla.ALTO/1.9f);
         texto.mostrarMensaje(batch,"ARTURO AMADOR - SNIPER DEVELOPER",Pantalla.ANCHO/2,Pantalla.ALTO/2.1f);
-
-
         batch.end();
 
     }

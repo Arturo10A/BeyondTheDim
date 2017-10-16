@@ -37,8 +37,8 @@ public class Enemy {
 
     public void atack(Personaje target){
 
-        this.x += (float) ((target.getPositionX() - this.getPositionX()) * 0.2);
-        this.y += (float) ((target.getPositionY() - this.getPositionY()) * 0.2);
+        this.x += (float) ((target.getPositionX() - this.getPositionX()) * 0.6);
+        this.y += (float) ((target.getPositionY() - this.getPositionY()) * 0.5);
 
     }
 
@@ -46,7 +46,6 @@ public class Enemy {
 
         if (distance(target) < 80){
             target.damage(this.damage);
-            System.out.println("doDamge");
             System.out.println("Jett life: "+target.getLife());
         }
 
