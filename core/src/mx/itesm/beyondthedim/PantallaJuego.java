@@ -103,11 +103,11 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, 100);
 
         //Class enemy test
-        enemy = new Enemy(0, 0, 100);
-        enemy1 = new Enemy(20,50,100);
-        enemy2 = new Enemy(70, 90, 100);
-        enemy3 = new Enemy(180,680,100);
-        enemy4 = new Enemy(600,500,100);
+        enemy = new Enemy(0, 0, 100, 20);
+        enemy1 = new Enemy(20, 50, 100, 30);
+        enemy2 = new Enemy(70, 90, 100, 40);
+        enemy3 = new Enemy(180, 680,100, 50);
+        enemy4 = new Enemy(600, 500,100, 100);
 
         Gdx.input.setInputProcessor(escenaJuego);
         Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -126,21 +126,27 @@ class PantallaJuego extends Pantalla{
 
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
+
             float x = (float) ((personaje.getPositionX() - enemy.getPositionX()) * 0.2);
             float y = (float) ((personaje.getPositionY() - enemy.getPositionY()) * 0.3);
-            enemy.mover(x,y);
-            enemy1.mover(x,y);
+            enemy.atack(personaje);
+            enemy1.atack(personaje);
+            enemy2.atack(personaje);
+            enemy3.atack(personaje);
+            enemy4.atack(personaje);
 
+            enemy.doDamage(personaje);
+            enemy2.doDamage(personaje);
+            enemy3.doDamage(personaje);
+            enemy4.doDamage(personaje);
 
-            if (personaje.getPositionX() == enemy.getPositionX() && personaje.getPositionY() == enemy.getPositionY()){
-                personaje.damage(1);
-                System.out.println(personaje.damage(1));
-                // If the life of jett is equal 0 youy return to te menu.
+                // If the life of jett is equal 0 youy return to LoseScreen.
+
                 if (personaje.getLife() <= 0){
                     System.out.println("You die");
-                    juego.setScreen(new PantallaMenu(juego));
+                    juego.setScreen(new LoseScreen(juego));
                 }
-            }
+
 
             if (personaje.getPositionX() == enemy1.getPositionX() && personaje.getPositionY() == enemy1.getPositionY()){
                 personaje.damage(1);
