@@ -17,18 +17,14 @@ public class Enemy {
 
 
     public Enemy(float x, float y, float life, int damage){
-
         this.x = x;
         this.y = y;
         this.life = life;
         this.damage = damage;
         enemmyTexture = new Texture("block.png");
-
     }
 
-    public void render(SpriteBatch batch){
-        batch.draw(enemmyTexture, x, y);
-    }
+    public void render(SpriteBatch batch){batch.draw(enemmyTexture, x, y);}
 
     public void mover(float dx, float dy){
         x += dx;
@@ -43,19 +39,19 @@ public class Enemy {
     }
 
     public void doDamage(Personaje target){
-
         if (distance(target) < 80){
             target.damage(this.damage);
             System.out.println("Jett life: "+target.getLife());
         }
-
     }
 
     public double distance(Personaje target){
 
+        //character position
         double personajeX = target.getPositionX();
         double personajeY = target.getPositionY();
 
+        //Enemy position
         double currentX = this.getPositionX();
         double currentY = this.getPositionY();
 
@@ -64,10 +60,11 @@ public class Enemy {
 
     }
 
-    //Change method name
-    public float getPositionX(){return this.x;}
+    public void resiveDamage(int damage){
+        this.life -= damage;
+    }
 
-    //Change method name
+    public float getPositionX(){return this.x;}
     public float getPositionY(){return this.y;}
 
 }
