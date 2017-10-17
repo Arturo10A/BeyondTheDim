@@ -165,7 +165,7 @@ class PantallaJuego extends Pantalla{
         enemy3.render(batch);
         enemy4.render(batch);
 
-        texto.mostrarMensaje(batch,"Vida: 100%",95,Pantalla.ALTO/1.07f);
+        texto.mostrarMensaje(batch,"Vida: " + personaje.getLife(),95,Pantalla.ALTO/1.07f);
 
 
 

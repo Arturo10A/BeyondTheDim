@@ -14,7 +14,6 @@ public class Texto {
 
     private BitmapFont font;
 
-
     public Texto(){
         font = new BitmapFont(Gdx.files.internal("fuentecuadro.fnt"));
     }
@@ -28,4 +27,5 @@ public class Texto {
 
         font.draw(batch,glyph, x-anchoTexto/2,y);
     }
+
 }
