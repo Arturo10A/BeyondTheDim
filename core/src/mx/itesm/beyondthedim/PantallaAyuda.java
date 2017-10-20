@@ -70,7 +70,7 @@ class PantallaAyuda extends Pantalla {
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(texturaBtnGoBack));
         ImageButton btnGoBack = new ImageButton(trdGoBack);
 
-        btnGoBack.setPosition(ANCHO-btnGoBack.getWidth(),ALTO-btnGoBack.getHeight());
+        btnGoBack.setPosition(ANCHO-60-btnGoBack.getWidth(),ALTO-btnGoBack.getHeight()*2);
 
         //Fondo de pantalla
         TextureRegionDrawable backWall = new TextureRegionDrawable(new TextureRegion(texturaFondoPantallaAyudad));

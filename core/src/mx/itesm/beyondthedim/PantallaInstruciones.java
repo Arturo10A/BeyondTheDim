@@ -70,7 +70,7 @@ class PantallaInstruciones extends Pantalla  {
 
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(texturaGoBackButton));
         ImageButton buttonGoBack = new ImageButton(trdGoBack);
-        buttonGoBack.setPosition(ANCHO-buttonGoBack.getWidth(),ALTO-buttonGoBack.getHeight());
+        buttonGoBack.setPosition(ANCHO-60-buttonGoBack.getWidth(),ALTO-buttonGoBack.getHeight()*2);
 
         buttonGoBack.addListener(new ClickListener(){
             @Override

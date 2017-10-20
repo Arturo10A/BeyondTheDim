@@ -36,7 +36,7 @@ class PantallaCargando implements Screen {
     public void show() {
         inicializarCamara();
 
-        texturafondo = new Texture("casco2.png");
+        texturafondo = new Texture("Logo/logo.png");
         batch = new SpriteBatch();
 
 
@@ -45,7 +45,7 @@ class PantallaCargando implements Screen {
     private void inicializarCamara() {
         //Camara
         camara = new OrthographicCamera(1280,720);
-        camara.position.set((1280-825)/2 ,(720-331)/2,0);
+        camara.position.set((1380-825)/2 ,(720-331)/1,0);
         camara.update();
         vista = new FitViewport(640,360, camara);
     }

@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import java.util.LinkedList;
+
 /**
  * Created by Arturo on 05/09/17.
  */
@@ -40,7 +42,7 @@ class PantallaJuego extends Pantalla{
     private Enemy enemy2;
     private Enemy enemy3;
     private Enemy enemy4;
-    private Enemy enemy5;
+    LinkedList<Enemy> enemy_list = new LinkedList<Enemy>();
 
 
     private Stage escenaJuego;
@@ -51,6 +53,15 @@ class PantallaJuego extends Pantalla{
 
     //Variable of control
     private float time;
+
+
+    //Timers to control enemys
+    private float time_enemy;
+
+
+    //Random
+
+    private int numero;
 
     public PantallaJuego(Juego juego) {
 
@@ -81,7 +92,6 @@ class PantallaJuego extends Pantalla{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                Gdx.app.log("clicked","***GO BACK***");
                 juego.setScreen(new PantallaMenu(juego));
             }
 
@@ -150,6 +160,18 @@ class PantallaJuego extends Pantalla{
             //System.out.println("X: "+personaje.getPositionX()+" Y: "+ personaje.getPositionY());
 
         }
+
+
+        //If 10 second are alredy past we create a new enemy
+        time_enemy += Gdx.graphics.getDeltaTime();
+
+        if (time_enemy >= 10){
+
+           Enemy random_enemy = new Enemy((float)(Math.random() * 1070.0f) + 145.0f , (float)(Math.random() * 585.0f) + 110.0f, 100, 100);
+            System.out.println("***RANDOM ENEMY***");
+            time_enemy = 0;
+        }
+
 
         batch.begin();
 
