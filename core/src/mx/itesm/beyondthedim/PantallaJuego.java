@@ -100,14 +100,7 @@ class PantallaJuego extends Pantalla{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
-                if (pad.getKnobPercentX()>0.20) {
-                    System.out.println("Derecha");
-                    personaje.mover(DX_PERSONAJE,0);
-                } else if (pad.getKnobPercentX()<-0.20){
-                    System.out.println("Izquierda");
-                    personaje.mover(-DX_PERSONAJE,0);
-                } else {
-                }
+                personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
             }
         });
 
