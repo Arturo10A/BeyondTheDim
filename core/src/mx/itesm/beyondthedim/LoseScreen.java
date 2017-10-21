@@ -11,18 +11,19 @@ public class LoseScreen extends Pantalla{
 
     private final Juego juego;
     private Texture background;
-    private Texture goBackButtonTexture;
+    private Texture backButtonInicio;
+    private Texture backButtonReoload;
 
     private Texto texto;
-
 
     public LoseScreen(Juego juego){
         this.juego = juego;
     }
 
-
     public void cargarTexturas(){
-
+        background = new Texture("fondoSettings.png");
+        backButtonInicio = new Texture("button_inicio.png");
+        backButtonReoload = new Texture("button_reload.png");
     }
 
     @Override

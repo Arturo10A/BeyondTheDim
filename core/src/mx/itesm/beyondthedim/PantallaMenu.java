@@ -70,15 +70,12 @@ class PantallaMenu extends Pantalla {
         btnSettings.setPosition(1134,ALTO*0.423f);
 
         btnSettings.addListener( new ClickListener(){
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA Settings***");
                 juego.setScreen(new PantallaSettings(juego));
             }
-
-
         });
 
         //Boton instruciones

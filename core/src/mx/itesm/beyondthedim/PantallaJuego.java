@@ -1,3 +1,4 @@
+
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
@@ -5,9 +6,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -30,8 +35,8 @@ class PantallaJuego extends Pantalla{
     private  Personaje personaje;
 
     //Jett Speed
-    private int DX_PERSONAJE=25;
-    private int DY_PERSONAJE =25;
+    private int DX_PERSONAJE=10;
+    private int DY_PERSONAJE =10;
 
 
     //Enemy block
@@ -47,6 +52,9 @@ class PantallaJuego extends Pantalla{
 
     private Stage escenaJuego;
     private Texture texturaBtnGoBack; //Boton de regreso
+
+    //Joystick
+    private Touchpad joystick;
 
     //Texto
     private Texto texto;
@@ -77,6 +85,35 @@ class PantallaJuego extends Pantalla{
     public void crearEscena(){
         escenaJuego = new Stage(vista);
 
+        //Joystick
+        Skin skin = new Skin();
+        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento",new Texture("Joystick/joystick_movimiento.png"));
+
+        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
+        estilo.background = skin.getDrawable("padFondo");
+        estilo.knob = skin.getDrawable("padMovimiento");
+
+        joystick = new Touchpad(20, estilo);
+        joystick.setBounds(0, 0, 200, 200);
+        joystick.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Touchpad pad = (Touchpad) actor;
+                if (pad.getKnobPercentX()>0.20) {
+                    System.out.println("Derecha");
+                    personaje.mover(DX_PERSONAJE,0);
+                } else if (pad.getKnobPercentX()<-0.20){
+                    System.out.println("Izquierda");
+                    personaje.mover(-DX_PERSONAJE,0);
+                } else {
+                }
+            }
+        });
+
+        escenaJuego = new Stage(vista);
+        escenaJuego.addActor(joystick);
+       joystick.setColor(1,1,1,0.7f);
 
         //Boton GOBACK -> check variable and conflic agins problems
 
@@ -109,7 +146,7 @@ class PantallaJuego extends Pantalla{
         cargarTexturas();
         crearEscena();
 
-        textureEcenario = new Texture("inicio.png");
+        textureEcenario = new Texture("fondo_nivel_uno.png");
         personaje = new Personaje(ANCHO/4,ALTO/2, 1000000);
 
         //Class enemy test
@@ -120,7 +157,7 @@ class PantallaJuego extends Pantalla{
         enemy4 = new Enemy(600, 500,100, 100);
 
         Gdx.input.setInputProcessor(escenaJuego);
-        Gdx.input.setInputProcessor(new ProcesadorEventos());
+        //Gdx.input.setInputProcessor(new ProcesadorEventos());
 
         texto = new Texto();
     }
@@ -133,6 +170,12 @@ class PantallaJuego extends Pantalla{
 
         //If time equals 10 move the enemy to the current location of the character
         //Start damage
+
+        //HUD
+        batch.setProjectionMatrix(camara.combined);
+        escenaJuego.draw();
+        batch.begin();
+        batch.end();
 
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
@@ -148,7 +191,7 @@ class PantallaJuego extends Pantalla{
             enemy3.doDamage(personaje);
             enemy4.doDamage(personaje);
 
-                // If the life of jett is equal 0 youy return to LoseScreen.
+            // If the life of jett is equal 0 youy return to LoseScreen.
 
             if (personaje.getLife() <= 0){
                 System.out.println("You die");
@@ -167,7 +210,7 @@ class PantallaJuego extends Pantalla{
 
         if (time_enemy >= 10){
 
-           Enemy random_enemy = new Enemy((float)(Math.random() * 1070.0f) + 145.0f , (float)(Math.random() * 585.0f) + 110.0f, 100, 100);
+            Enemy random_enemy = new Enemy((float)(Math.random() * 1070.0f) + 145.0f , (float)(Math.random() * 585.0f) + 110.0f, 100, 100);
             System.out.println("***RANDOM ENEMY***");
             time_enemy = 0;
         }
@@ -218,6 +261,11 @@ class PantallaJuego extends Pantalla{
 
     }
 
+    @Override
+    public void resize(int width, int height) {
+        vista.update(width, height);
+
+    }
 
     private class ProcesadorEventos implements InputProcessor {
 

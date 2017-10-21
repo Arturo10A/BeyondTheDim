@@ -29,9 +29,6 @@ class PantallaInstruciones extends Pantalla  {
     private Stage escenaInstruciones;
 
 
-
-
-
     public PantallaInstruciones(Juego juego) {
         this.juego = juego;
 
