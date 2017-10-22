@@ -57,6 +57,7 @@ class PantallaJuego extends Pantalla{
 
     //Joystick
     private Touchpad joystick;
+    private Touchpad gunJoy;
 
     //Texto
     private Texto texto;
@@ -73,7 +74,12 @@ class PantallaJuego extends Pantalla{
 
     private int numero;
 
+
+    //BALA
     ArrayList<Bullet> bullets;
+    public static final float SWT = 0.3f;
+    float shootTimer;
+
 
     public PantallaJuego(Juego juego) {
 
@@ -87,8 +93,12 @@ class PantallaJuego extends Pantalla{
     }
 
     public void crearEscena(){
+
         escenaJuego = new Stage(vista);
+
+        //bala
         bullets = new ArrayList<Bullet>();
+        shootTimer=0;
 
         //Joystick
         Skin skin = new Skin();
@@ -99,18 +109,24 @@ class PantallaJuego extends Pantalla{
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
 
+        gunJoy = new Touchpad(20, estilo);
+        gunJoy.setBounds(ANCHO-200,0,200,200);
+
         joystick = new Touchpad(20, estilo);
         joystick.setBounds(0, 0, 200, 200);
         joystick.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
+                System.out.println("YUHU es"+joystick.getKnobPercentX());
+
                 personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
             }
         });
 
         escenaJuego = new Stage(vista);
         escenaJuego.addActor(joystick);
+        escenaJuego.addActor(gunJoy);
        joystick.setColor(1,1,1,0.7f);
 
         //Boton GOBACK -> check variable and conflic agins problems
@@ -204,10 +220,24 @@ class PantallaJuego extends Pantalla{
 
         }
 
-        // BALA
+        // SHOOTING LOGIC
+        shootTimer+=delta;
+        if(gunJoy.getKnobPercentY() > gunJoy.getKnobPercentX() && (gunJoy.getKnobPercentX() < 0.5f && gunJoy.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
+            shootTimer=0;
+            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),0,1));
+        }
+        if(gunJoy.getKnobPercentY() < -gunJoy.getKnobPercentX() && (gunJoy.getKnobPercentX() < 0.5f && gunJoy.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
+            shootTimer=0;
+            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),0,-1));
+        }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY()));
+        if(gunJoy.getKnobPercentX() > gunJoy.getKnobPercentY() && (gunJoy.getKnobPercentY() < 0.5f && gunJoy.getKnobPercentY()> -0.5f) && shootTimer>=SWT){
+            shootTimer=0;
+            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),1,0));
+        }
+        if(gunJoy.getKnobPercentX() < -gunJoy.getKnobPercentY() && (gunJoy.getKnobPercentY() < 0.5f && gunJoy.getKnobPercentY()> -0.5f) && shootTimer>=SWT){
+            shootTimer=0;
+            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),-1,0));
         }
         ArrayList<Bullet> bulletsRemove = new ArrayList<Bullet>();
         for(Bullet bullet : bullets){
