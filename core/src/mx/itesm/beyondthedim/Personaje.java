@@ -53,4 +53,5 @@ class Personaje {
         x += dx;
         y += dy;
     }
+
 }

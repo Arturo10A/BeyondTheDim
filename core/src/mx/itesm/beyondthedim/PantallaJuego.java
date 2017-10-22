@@ -15,7 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -71,6 +73,8 @@ class PantallaJuego extends Pantalla{
 
     private int numero;
 
+    ArrayList<Bullet> bullets;
+
     public PantallaJuego(Juego juego) {
 
 
@@ -84,6 +88,7 @@ class PantallaJuego extends Pantalla{
 
     public void crearEscena(){
         escenaJuego = new Stage(vista);
+        bullets = new ArrayList<Bullet>();
 
         //Joystick
         Skin skin = new Skin();
@@ -158,6 +163,8 @@ class PantallaJuego extends Pantalla{
     @Override
     public void render(float delta) {
 
+
+
         borrarPantalla(0,0,0);
         batch.setProjectionMatrix(camara.combined);
 
@@ -197,6 +204,21 @@ class PantallaJuego extends Pantalla{
 
         }
 
+        // BALA
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY()));
+        }
+        ArrayList<Bullet> bulletsRemove = new ArrayList<Bullet>();
+        for(Bullet bullet : bullets){
+            bullet.update(delta);
+            if (bullet.removeB){
+                bulletsRemove.add(bullet);
+            }
+        }
+        bullets.removeAll(bulletsRemove);
+
+
 
         //If 10 second are alredy past we create a new enemy
         time_enemy += Gdx.graphics.getDeltaTime();
@@ -225,7 +247,9 @@ class PantallaJuego extends Pantalla{
 
         texto.mostrarMensaje(batch,"Vida: " + personaje.getLife(),95,Pantalla.ALTO/1.07f);
 
-
+        for (Bullet bullet: bullets){
+            bullet.render(batch);
+        }
 
         batch.end();
 
