@@ -21,7 +21,7 @@ class PantallaAyuda extends Pantalla {
     private Texture ecenario;  //Imagen del ecenario
     private Texture texturaFondoPantallaAyudad; //Fondo del ecenario
     private Texto texto; // Variable que asignara todos los textos que deasemos mostrar en la pantalla
-    private Stage ecenaAyuda; /* Variable encargada de divujar todo nuestro escenario */
+    private Stage ecenaAyuda; /* Variable encargada de dibujar todo nuestro escenario */
     private Texture texturaBtnGoBack; //Boton de regresp
 
 
@@ -45,9 +45,9 @@ class PantallaAyuda extends Pantalla {
     }
 
     public void cargarTexturas(){
-        texturaBtnGoBack = new Texture("button_back.png");
+        texturaBtnGoBack = new Texture("Botones/button_back1.png");
         //Fondo para este ecenario
-        texturaFondoPantallaAyudad = new Texture("img.jpg");
+        texturaFondoPantallaAyudad = new Texture("Stage/about_pantalla.png");
     }
 
     public void crearEcenaAyuda(){
@@ -93,10 +93,7 @@ class PantallaAyuda extends Pantalla {
 
         //Dibujamos los elementos tipo texto de badLogic
         batch.begin();
-        texto.mostrarMensaje(batch,"JOSE RODRIGO NARVAEZ - SENIOR JAVA DEVELOPER",Pantalla.ANCHO/2,Pantalla.ALTO/1.5f);
-        texto.mostrarMensaje(batch,"MONSE LIRA - DESIGNER",Pantalla.ANCHO/2,Pantalla.ALTO/1.7f);
-        texto.mostrarMensaje(batch,"JORGE ALEXIS RUBIO SUMANO - Content Cordinator",Pantalla.ANCHO/2,Pantalla.ALTO/1.9f);
-        texto.mostrarMensaje(batch,"ARTURO AMADOR - SNIPER DEVELOPER",Pantalla.ANCHO/2,Pantalla.ALTO/2.1f);
+
         batch.end();
 
     }

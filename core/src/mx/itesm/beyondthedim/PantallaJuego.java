@@ -239,12 +239,14 @@ class PantallaJuego extends Pantalla{
                 ene.doDamage(personaje);
             }
 
-            for (Enemy ene:
-                    enemy_list) {
-                for (Bullet ammo:
-                        bullets) {
-                    ene.resiveDamage(ammo);
+
+            for (int i=0; i <= enemy_list.size()-1; i++){
+
+                for (int j=0; j<= bullets.size()-1; j++){
+                    enemy_list.get(i).resiveDamage(bullets.get(j));
+
                 }
+
             }
 
             /*enemy.doDamage(personaje);
@@ -299,7 +301,7 @@ class PantallaJuego extends Pantalla{
         if (bullets.isEmpty()){
             System.out.println("No hay balas");
         }else{
-            System.out.println("Hay balas");
+            //System.out.println("Hay balas");
         }
 
 
