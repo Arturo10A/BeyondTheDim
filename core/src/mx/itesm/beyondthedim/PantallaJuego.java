@@ -1,4 +1,3 @@
-
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
@@ -120,7 +119,32 @@ class PantallaJuego extends Pantalla{
                 Touchpad pad = (Touchpad) actor;
                 System.out.println("YUHU es"+joystick.getKnobPercentX());
 
-                personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
+                //personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
+
+                //Right
+                if (personaje.getPositionX() >= 1105.23 && joystick.getKnobPercentX() > 0){
+                    System.out.println("Personaje Menor a 1105.23");
+                    personaje.mover(-10, DY_PERSONAJE*pad.getKnobPercentY());
+                }
+                //Left
+                else if (personaje.getPositionX() <= 116.42 && joystick.getKnobPercentX() < 0){
+                    System.out.println("Personaje Mayor a 116.42");
+                    personaje.mover(10, DY_PERSONAJE*pad.getKnobPercentY());
+                }
+                //TOP
+                else if (personaje.getPositionY() >= 549.42 && joystick.getKnobPercentY() > 0){
+                    System.out.println("Personaje Menor a 549.42");
+                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),-10);
+                }
+                //Button
+                else if (personaje.getPositionY() <= 110.0 && joystick.getKnobPercentY() < 0){
+                    System.out.println("Personaje Mayor a 110.23");
+                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),10);
+                }
+
+                else {
+                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
+                }
             }
         });
 
@@ -160,7 +184,8 @@ class PantallaJuego extends Pantalla{
         cargarTexturas();
         crearEscena();
 
-        textureEcenario = new Texture("fondo_nivel_uno.png");
+        textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
+        textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
         personaje = new Personaje(ANCHO/4,ALTO/2, 1000000);
 
         //Class enemy test
@@ -228,7 +253,7 @@ class PantallaJuego extends Pantalla{
         }
         if(gunJoy.getKnobPercentY() < -gunJoy.getKnobPercentX() && (gunJoy.getKnobPercentX() < 0.5f && gunJoy.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
             shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),0,-1));
+            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),0,-1));
         }
 
         if(gunJoy.getKnobPercentX() > gunJoy.getKnobPercentY() && (gunJoy.getKnobPercentY() < 0.5f && gunJoy.getKnobPercentY()> -0.5f) && shootTimer>=SWT){
@@ -253,12 +278,6 @@ class PantallaJuego extends Pantalla{
         //If 10 second are alredy past we create a new enemy
         time_enemy += Gdx.graphics.getDeltaTime();
 
-        if (time_enemy >= 10){
-
-            Enemy random_enemy = new Enemy((float)(Math.random() * 1070.0f) + 145.0f , (float)(Math.random() * 585.0f) + 110.0f, 100, 100);
-            System.out.println("***RANDOM ENEMY***");
-            time_enemy = 0;
-        }
 
 
         batch.begin();

@@ -41,7 +41,6 @@ public class Enemy {
     public void doDamage(Personaje target){
         if (distance(target) < 80){
             target.damage(this.damage);
-            System.out.println("Jett life: "+target.getLife());
         }
     }
 

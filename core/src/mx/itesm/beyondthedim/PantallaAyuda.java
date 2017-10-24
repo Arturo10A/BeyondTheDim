@@ -18,24 +18,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 class PantallaAyuda extends Pantalla {
 
     private final Juego juego;
-
     private Texture ecenario;  //Imagen del ecenario
-
     private Texture texturaFondoPantallaAyudad; //Fondo del ecenario
-
-
     private Texto texto; // Variable que asignara todos los textos que deasemos mostrar en la pantalla
-
     private Stage ecenaAyuda; /* Variable encargada de divujar todo nuestro escenario */
-
     private Texture texturaBtnGoBack; //Boton de regresp
 
 
 
     public PantallaAyuda(Juego juego) {
-
         this.juego = juego;
-
     }
 
     @Override
@@ -54,12 +46,8 @@ class PantallaAyuda extends Pantalla {
 
     public void cargarTexturas(){
         texturaBtnGoBack = new Texture("button_back.png");
-
         //Fondo para este ecenario
         texturaFondoPantallaAyudad = new Texture("img.jpg");
-
-
-
     }
 
     public void crearEcenaAyuda(){
