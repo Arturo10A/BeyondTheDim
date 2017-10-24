@@ -48,7 +48,9 @@ class PantallaJuego extends Pantalla{
     private Enemy enemy2;
     private Enemy enemy3;
     private Enemy enemy4;
-    LinkedList<Enemy> enemy_list = new LinkedList<Enemy>();
+    ArrayList<Enemy> enemy_list = new ArrayList<Enemy>(20);
+
+
 
 
     private Stage escenaJuego;
@@ -117,26 +119,25 @@ class PantallaJuego extends Pantalla{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
-                System.out.println("YUHU es"+joystick.getKnobPercentX());
 
                 //personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
 
                 //Right
                 if (personaje.getPositionX() >= 1105.23 && joystick.getKnobPercentX() > 0){
-                    System.out.println("Personaje Menor a 1105.23");
+
                     personaje.mover(-10, DY_PERSONAJE*pad.getKnobPercentY());
                 }
                 //Left
                 else if (personaje.getPositionX() <= 116.42 && joystick.getKnobPercentX() < 0){
-                    System.out.println("Personaje Mayor a 116.42");
+
                     personaje.mover(10, DY_PERSONAJE*pad.getKnobPercentY());
                 }
                 //TOP
                 else if (personaje.getPositionY() >= 549.42 && joystick.getKnobPercentY() > 0){
-                    System.out.println("Personaje Menor a 549.42");
+
                     personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),-10);
                 }
-                //Button
+                //Bottom
                 else if (personaje.getPositionY() <= 110.0 && joystick.getKnobPercentY() < 0){
                     System.out.println("Personaje Mayor a 110.23");
                     personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),10);
@@ -151,7 +152,7 @@ class PantallaJuego extends Pantalla{
         escenaJuego = new Stage(vista);
         escenaJuego.addActor(joystick);
         escenaJuego.addActor(gunJoy);
-       joystick.setColor(1,1,1,0.7f);
+        joystick.setColor(1,1,1,0.7f);
 
         //Boton GOBACK -> check variable and conflic agins problems
 
@@ -189,11 +190,12 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, 1000000);
 
         //Class enemy test
-        enemy = new Enemy(0, 0, 100, 20);
-        enemy1 = new Enemy(20, 50, 100, 30);
-        enemy2 = new Enemy(70, 90, 100, 40);
-        enemy3 = new Enemy(180, 680,100, 50);
-        enemy4 = new Enemy(600, 500,100, 100);
+        enemy_list.add(new Enemy(0, 0, 100, 20));
+        enemy_list.add(new Enemy(20, 50, 100, 30));
+        enemy_list.add(new Enemy(70, 90, 100, 40));
+        enemy_list.add(new Enemy(180, 680,100, 50));
+        enemy_list.add(new Enemy(600, 500,100, 100));
+
 
         Gdx.input.setInputProcessor(escenaJuego);
         //Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -221,16 +223,36 @@ class PantallaJuego extends Pantalla{
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
 
-            enemy.atack(personaje);
+            /*enemy.atack(personaje);
             enemy1.atack(personaje);
             enemy2.atack(personaje);
             enemy3.atack(personaje);
-            enemy4.atack(personaje);
+            enemy4.atack(personaje);*/
 
-            enemy.doDamage(personaje);
+            for (Enemy ene:
+                 enemy_list) {
+                ene.atack(personaje);
+            }
+
+            for (Enemy ene:
+                    enemy_list) {
+                ene.doDamage(personaje);
+            }
+
+            for (Enemy ene:
+                    enemy_list) {
+                for (Bullet ammo:
+                        bullets) {
+                    ene.resiveDamage(ammo);
+                }
+            }
+
+            /*enemy.doDamage(personaje);
             enemy2.doDamage(personaje);
             enemy3.doDamage(personaje);
-            enemy4.doDamage(personaje);
+            enemy4.doDamage(personaje);*/
+
+
 
             // If the life of jett is equal 0 youy return to LoseScreen.
 
@@ -250,6 +272,7 @@ class PantallaJuego extends Pantalla{
         if(gunJoy.getKnobPercentY() > gunJoy.getKnobPercentX() && (gunJoy.getKnobPercentX() < 0.5f && gunJoy.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),0,1));
+
         }
         if(gunJoy.getKnobPercentY() < -gunJoy.getKnobPercentX() && (gunJoy.getKnobPercentX() < 0.5f && gunJoy.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
             shootTimer=0;
@@ -273,6 +296,11 @@ class PantallaJuego extends Pantalla{
         }
         bullets.removeAll(bulletsRemove);
 
+        if (bullets.isEmpty()){
+            System.out.println("No hay balas");
+        }else{
+            System.out.println("Hay balas");
+        }
 
 
         //If 10 second are alredy past we create a new enemy
@@ -288,11 +316,17 @@ class PantallaJuego extends Pantalla{
         personaje.render(batch);
 
         //Drawing test of class enemy
-        enemy.render(batch);
+
+        for (Enemy ene:
+                enemy_list) {
+            ene.render(batch);
+        }
+
+        /*enemy.render(batch);
         enemy1.render(batch);
         enemy2.render(batch);
         enemy3.render(batch);
-        enemy4.render(batch);
+        enemy4.render(batch);*/
 
         texto.mostrarMensaje(batch,"Vida: " + personaje.getLife(),95,Pantalla.ALTO/1.07f);
 
