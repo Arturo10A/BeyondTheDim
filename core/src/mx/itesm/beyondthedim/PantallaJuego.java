@@ -1,3 +1,4 @@
+
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
@@ -55,7 +56,7 @@ class PantallaJuego extends Pantalla{
     private Texture texturaBtnGoBack; //Boton de regreso
 
     //Joystick
-    private Touchpad joystick;
+    private Touchpad jettJoy;
     private Touchpad gunJoy;
 
     //Texto
@@ -111,47 +112,14 @@ class PantallaJuego extends Pantalla{
         gunJoy = new Touchpad(20, estilo);
         gunJoy.setBounds(ANCHO-200,0,200,200);
 
-        joystick = new Touchpad(20, estilo);
-        joystick.setBounds(0, 0, 200, 200);
-        joystick.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Touchpad pad = (Touchpad) actor;
-                System.out.println("YUHU es"+joystick.getKnobPercentX());
+        jettJoy = new Touchpad(20, estilo);
+        jettJoy.setBounds(0, 0, 200, 200);
 
-                //personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
 
-                //Right
-                if (personaje.getPositionX() >= 1105.23 && joystick.getKnobPercentX() > 0){
-                    System.out.println("Personaje Menor a 1105.23");
-                    personaje.mover(-10, DY_PERSONAJE*pad.getKnobPercentY());
-                }
-                //Left
-                else if (personaje.getPositionX() <= 116.42 && joystick.getKnobPercentX() < 0){
-                    System.out.println("Personaje Mayor a 116.42");
-                    personaje.mover(10, DY_PERSONAJE*pad.getKnobPercentY());
-                }
-                //TOP
-                else if (personaje.getPositionY() >= 549.42 && joystick.getKnobPercentY() > 0){
-                    System.out.println("Personaje Menor a 549.42");
-                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),-10);
-                }
-                //Button
-                else if (personaje.getPositionY() <= 110.0 && joystick.getKnobPercentY() < 0){
-                    System.out.println("Personaje Mayor a 110.23");
-                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),10);
-                }
-
-                else {
-                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
-                }
-            }
-        });
 
         escenaJuego = new Stage(vista);
-        escenaJuego.addActor(joystick);
+        escenaJuego.addActor(jettJoy);
         escenaJuego.addActor(gunJoy);
-       joystick.setColor(1,1,1,0.7f);
 
         //Boton GOBACK -> check variable and conflic agins problems
 
@@ -184,8 +152,7 @@ class PantallaJuego extends Pantalla{
         cargarTexturas();
         crearEscena();
 
-        textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
-        textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
+        textureEcenario = new Texture("fondo_nivel_uno.png");
         personaje = new Personaje(ANCHO/4,ALTO/2, 1000000);
 
         //Class enemy test
@@ -244,6 +211,28 @@ class PantallaJuego extends Pantalla{
             //System.out.println("X: "+personaje.getPositionX()+" Y: "+ personaje.getPositionY());
 
         }
+//
+//        float BE = ANCHO-(ANCHO/12);
+//        float BO = ANCHO/12;
+//        float BN = ALTO-(ALTO/16);
+//        float BS = ALTO/16;
+
+        // JETT'S MOVEMENT LOGIC (pendiente)
+//
+//        if(jettJoy.getKnobPercentX() !=0 && jettJoy.getKnobPercentY() != 0 && shootTimer>=SWT ){
+//            shootTimer=0.3f;
+//            if (personaje.getPositionX()<BO && jettJoy.getKnobPercentX()<0 ){
+//                personaje.mover(0, DY_PERSONAJE*jettJoy.getKnobPercentY());
+//            }else if (personaje.getPositionX()<BO && jettJoy.getKnobPercentX() > 0 ) {
+//                personaje.mover(DX_PERSONAJE * jettJoy.getKnobPercentX(), DY_PERSONAJE * jettJoy.getKnobPercentY());
+//            }else if (personaje.getPositionY()>BN && jettJoy.getKnobPercentY()>0) {
+//                personaje.mover(DX_PERSONAJE * jettJoy.getKnobPercentX(), 0);
+//            }else if (personaje.getPositionY()>BN && jettJoy.getKnobPercentY()<0){
+//                personaje.mover(DX_PERSONAJE * jettJoy.getKnobPercentX(), DY_PERSONAJE * jettJoy.getKnobPercentY());
+//            }else {
+//                personaje.mover(DX_PERSONAJE * jettJoy.getKnobPercentX(), DY_PERSONAJE * jettJoy.getKnobPercentY());
+//            }
+//        }
 
         // SHOOTING LOGIC
         shootTimer+=delta;
@@ -253,7 +242,7 @@ class PantallaJuego extends Pantalla{
         }
         if(gunJoy.getKnobPercentY() < -gunJoy.getKnobPercentX() && (gunJoy.getKnobPercentX() < 0.5f && gunJoy.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
             shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),0,-1));
+            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),0,-1));
         }
 
         if(gunJoy.getKnobPercentX() > gunJoy.getKnobPercentY() && (gunJoy.getKnobPercentY() < 0.5f && gunJoy.getKnobPercentY()> -0.5f) && shootTimer>=SWT){
@@ -278,6 +267,12 @@ class PantallaJuego extends Pantalla{
         //If 10 second are alredy past we create a new enemy
         time_enemy += Gdx.graphics.getDeltaTime();
 
+        if (time_enemy >= 10){
+
+            Enemy random_enemy = new Enemy((float)(Math.random() * 1070.0f) + 145.0f , (float)(Math.random() * 585.0f) + 110.0f, 100, 100);
+            System.out.println("***RANDOM ENEMY***");
+            time_enemy = 0;
+        }
 
 
         batch.begin();
