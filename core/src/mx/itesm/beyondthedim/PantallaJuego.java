@@ -187,7 +187,7 @@ class PantallaJuego extends Pantalla{
 
         textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
         textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
-        personaje = new Personaje(ANCHO/4,ALTO/2, 1000000);
+        personaje = new Personaje(ANCHO/4,ALTO/2, 100);
 
         //Class enemy test
         enemy_list.add(new Enemy(0, 0, 100, 20));
