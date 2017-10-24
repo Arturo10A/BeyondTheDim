@@ -59,8 +59,12 @@ public class Enemy {
 
     }
 
-    public void resiveDamage(int damage){
-        this.life -= damage;
+
+    public void resiveDamage(Bullet bullet){
+
+        if (bullet.getPositionX() == this.getPositionX() && bullet.getPositionY() == this.getPositionY())
+            System.out.println("*** Damage ***");
+            //this.life -= damage;
     }
 
     public float getPositionX(){return this.x;}

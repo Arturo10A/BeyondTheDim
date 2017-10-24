@@ -31,6 +31,15 @@ class Bullet {
         }
     }
 
+
+    public float getPositionX(){
+        return this.x;
+    }
+
+    public float getPositionY(){
+        return this.y;
+    }
+
     public void update (float deltaTime)
     {
         x+= SPEED*deltaTime*dx;
