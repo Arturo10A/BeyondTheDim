@@ -49,8 +49,8 @@ class PantallaInstruciones extends Pantalla  {
     }
 
     public void cargarTexturas(){
-        texturaGoBackButton = new Texture("button_back.png");
-        texturaBack = new Texture("fondo_instruciones.png");
+        texturaGoBackButton = new Texture("Botones/button_back1.png");
+        texturaBack = new Texture("Stage/fondo_instruciones.png");
     }
 
 

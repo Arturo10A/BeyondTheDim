@@ -52,6 +52,27 @@ class Personaje {
     public void mover (float dx, float dy){
         x += dx;
         y += dy;
+        /*
+        if(this.getPositionX()>1280*0.11 && this.getPositionX()<1280-(1280*0.12)) {
+            x += dx;
+        }else{
+            if(this.getPositionX()>1280-(1280*0.12)){
+                x-=2;
+            }
+            if(this.getPositionX()<1280*0.12) {
+                x += 2;
+            }
+        }
+        if(this.getPositionY()>720*0.21 && this.getPositionY()<720-(720*0.21)) {
+            y += dy;
+        }else{
+            if(this.getPositionX()>720-(1280*0.21)){
+                y-=2;
+            }
+            if(this.getPositionX()<720*0.21) {
+                y += 2;
+            }
+        }*/
     }
 
 }
