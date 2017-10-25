@@ -23,19 +23,16 @@ class PantallaSettings extends Pantalla {
     private final Juego juego;
 
     //Textura fondo de pantalla
-
     private Texture textureBackground;
 
 
     //Textura botones
-
     private Texture textureGoBack;
 
 
     private Stage escenaSettings;
 
     private SpriteBatch batch;
-
 
     public void CargarTextura(){
 
@@ -56,7 +53,7 @@ class PantallaSettings extends Pantalla {
         //Go BACK
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(textureGoBack));
         ImageButton btnGoBack = new ImageButton(trdGoBack);
-        btnGoBack.setPosition(ANCHO-60-btnGoBack.getWidth(),ALTO-btnGoBack.getHeight()*2);
+        btnGoBack.setPosition(ANCHO*0.3f,ALTO-btnGoBack.getHeight());
 
         btnGoBack.addListener(new ClickListener(){
             @Override
@@ -89,10 +86,6 @@ class PantallaSettings extends Pantalla {
         Gdx.input.setInputProcessor(escenaSettings);
 
         batch = new SpriteBatch();
-
-
-
-
     }
 
     @Override

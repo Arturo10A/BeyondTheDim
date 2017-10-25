@@ -48,26 +48,40 @@ class PantallaMenu extends Pantalla {
     }
 
     private void cargarTexturas() {
-        texturaBtnJugar = new Texture("button_play.png");
-        texturaBtnAyuda = new Texture("button_about-us.png");
-        texturaBtnSettings = new Texture("button_settings.png");
-        texturaBtnInstructions = new Texture("button_instructions.png");
+        texturaBtnJugar = new Texture("Botones/button_play.png");
+        texturaBtnAyuda = new Texture("Botones/button_about-us.png");
+        texturaBtnSettings = new Texture("Botones/button_settings.png");
+        texturaBtnInstructions = new Texture("Botones/button_instructions.png");
         fondoPantalla = new Texture("MenuFondo.png");
     }
 
     private void crearEcenaMenu() {
 
         escenaMenu = new Stage(vista);
+        //Fondo de pantalla
+        TextureRegionDrawable backWall = new TextureRegionDrawable(new TextureRegion(fondoPantalla));
+        Image back = new Image(backWall);
+        back.setPosition(ANCHO/2-back.getWidth()/2,ALTO/2-back.getHeight()/2);
+        escenaMenu.addActor(back);
 
         //Boton jugar
         TextureRegionDrawable trdPlay = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
         ImageButton btnPlay = new ImageButton(trdPlay);
         btnPlay.setPosition(ANCHO/2-(btnPlay.getWidth()/2),ALTO*0.23f);
+        btnPlay.addListener( new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Gdx.app.log("clicked","***PANTALLA JUEGO***");
+                juego.setScreen(new PantallaJuego(juego));
+            }
+        });
+        escenaMenu.addActor(btnPlay);
 
         //Boton Settings
         TextureRegionDrawable trdSettings = new TextureRegionDrawable(new TextureRegion(texturaBtnSettings));
         ImageButton btnSettings = new ImageButton(trdSettings);
-        btnSettings.setPosition(1134,ALTO*0.423f);
+        btnSettings.setPosition(ANCHO-(ANCHO*0.114f),ALTO*0.423f);
 
         btnSettings.addListener( new ClickListener(){
             @Override
@@ -77,11 +91,12 @@ class PantallaMenu extends Pantalla {
                 juego.setScreen(new PantallaSettings(juego));
             }
         });
+        escenaMenu.addActor(btnSettings);
 
         //Boton instruciones
         TextureRegionDrawable trdIntruction = new TextureRegionDrawable(new TextureRegion(texturaBtnInstructions));
         ImageButton btnIntruction = new ImageButton(trdIntruction);
-        btnIntruction.setPosition(ANCHO/2-btnIntruction.getWidth()/2,100);
+        btnIntruction.setPosition(ANCHO/2-btnIntruction.getWidth()/2,ALTO*0.15f);
 
         btnIntruction.addListener( new ClickListener(){
 
@@ -94,32 +109,12 @@ class PantallaMenu extends Pantalla {
 
 
         });
-
-
-        //Fondo de pantalla
-        TextureRegionDrawable backWall = new TextureRegionDrawable(new TextureRegion(fondoPantalla));
-        Image back = new Image(backWall);
-        back.setPosition(ANCHO/2-back.getWidth()/2,ALTO/2-back.getHeight()/2);
-        escenaMenu.addActor(back);
-
-
-        //Listener del Botón
-        btnPlay.addListener( new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                Gdx.app.log("clicked","***PANTALLA JUEGO***");
-                juego.setScreen(new PantallaJuego(juego));
-            }
-        });
-
+        escenaMenu.addActor(btnIntruction);
 
         //Boton aboutUS
         TextureRegionDrawable trdAboutUs = new TextureRegionDrawable(new TextureRegion(texturaBtnAyuda));
         ImageButton btnAboutUs = new ImageButton(trdAboutUs);
-        btnAboutUs.setPosition(50,ALTO*0.423f);
-
-
+        btnAboutUs.setPosition(ANCHO*0.039f,ALTO*0.423f);
 
         btnAboutUs.addListener( new ClickListener(){
 
@@ -132,14 +127,7 @@ class PantallaMenu extends Pantalla {
 
 
         });
-
-
-        //add actors
-
-        escenaMenu.addActor(btnSettings);
         escenaMenu.addActor(btnAboutUs);
-        escenaMenu.addActor(btnPlay);
-        escenaMenu.addActor(btnIntruction);
     }
 
     @Override
@@ -147,16 +135,14 @@ class PantallaMenu extends Pantalla {
         borrarPantalla(1.0f,1.0f,1.0f);
         batch.setProjectionMatrix(camara.combined);
 
+
+
         batch.begin();
         escenaMenu.draw();
         batch.end();
 
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
 
     @Override
     public void pause() {
