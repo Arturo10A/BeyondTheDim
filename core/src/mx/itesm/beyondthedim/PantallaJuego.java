@@ -34,8 +34,8 @@ class PantallaJuego extends Pantalla{
     private  Personaje personaje;
 
     //Jett Speed
-    private int DX_PERSONAJE=10;
-    private int DY_PERSONAJE =10;
+    private int DX_PERSONAJE=5;
+    private int DY_PERSONAJE =5;
 
 
     //Enemy block
@@ -187,11 +187,11 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, 100000);
 
         //Class enemy test
-        enemy_list.add(new Enemy(0, 0, 100, 20));
+        /*enemy_list.add(new Enemy(0, 0, 100, 20));
         enemy_list.add(new Enemy(20, 50, 100, 30));
         enemy_list.add(new Enemy(70, 90, 100, 40));
         enemy_list.add(new Enemy(180, 680,100, 50));
-        enemy_list.add(new Enemy(600, 500,100, 100));
+        enemy_list.add(new Enemy(600, 500,100, 100));*/
 
 
         Gdx.input.setInputProcessor(escenaJuego);
@@ -214,15 +214,15 @@ class PantallaJuego extends Pantalla{
         escenaJuego.draw();
         batch.begin();
         batch.end();
-
+        /*
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
 
             /*enemy.atack(personaje);
-            enemy1.atack(personaje);
-            enemy2.atack(personaje);
-            enemy3.atack(personaje);
-            //enemy4.atack(personaje);*/
+            //enemy1.atack(personaje);
+            //enemy2.atack(personaje);
+            //enemy3.atack(personaje);
+            //enemy4.atack(personaje);
 
             for (Enemy ene:
                  enemy_list) {
@@ -245,9 +245,9 @@ class PantallaJuego extends Pantalla{
             }
 
             /*enemy.doDamage(personaje);
-            enemy2.doDamage(personaje);
-            enemy3.doDamage(personaje);
-            enemy4.doDamage(personaje);*/
+            //enemy2.doDamage(personaje);
+            //enemy3.doDamage(personaje);
+            //enemy4.doDamage(personaje);
 
 
 
@@ -262,7 +262,7 @@ class PantallaJuego extends Pantalla{
 
             //System.out.println("X: "+personaje.getPositionX()+" Y: "+ personaje.getPositionY());
 
-        }
+        }*/
 
         // SHOOTING LOGIC
         shootTimer+=delta;
@@ -307,20 +307,21 @@ class PantallaJuego extends Pantalla{
         time_enemy += Gdx.graphics.getDeltaTime();
 
 
+        //Drawing jett:::::::::SE cambio de posicion, si hay error al descomentar mover a donde esta ¨sin begin y end¨¨¨¨
+
 
         batch.begin();
 
         batch.draw(textureEcenario,Pantalla.ANCHO/2-textureEcenario.getWidth()/2, Pantalla.ALTO/2-textureEcenario.getHeight()/2);
-
-        //Drawing jett
-        personaje.render(batch);
+        personaje.render(batch, Gdx.graphics.getDeltaTime());
+        //¨¨¨¨
 
         //Drawing test of class enemy
-
+        /*
         for (Enemy ene:
                 enemy_list) {
             ene.render(batch);
-        }
+        }*/
 
         /*enemy.render(batch);
         enemy1.render(batch);
@@ -328,7 +329,8 @@ class PantallaJuego extends Pantalla{
         enemy3.render(batch);
         enemy4.render(batch);*/
 
-        texto.mostrarMensaje(batch,"Vida: " + personaje.getLife(),95,Pantalla.ALTO/1.07f);
+        //quitar comentario
+        //texto.mostrarMensaje(batch,"Vida: " + personaje.getLife(),95,Pantalla.ALTO/1.07f);
 
         for (Bullet bullet: bullets){
             bullet.render(batch);

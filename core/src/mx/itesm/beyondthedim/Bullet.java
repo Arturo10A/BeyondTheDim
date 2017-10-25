@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 class Bullet {
     private float lifeTime;
     private float lifeTimer;
-    public static final int SPEED=500;
+    public static final int SPEED=1000;
     private static Texture texture;
 
     float x,y,dx,dy;
