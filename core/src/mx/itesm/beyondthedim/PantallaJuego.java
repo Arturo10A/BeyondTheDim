@@ -81,8 +81,6 @@ class PantallaJuego extends Pantalla{
 
 
     public PantallaJuego(Juego juego) {
-
-
         this.juego = juego;
     }
 
@@ -186,7 +184,7 @@ class PantallaJuego extends Pantalla{
 
         textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
         textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
-        personaje = new Personaje(ANCHO/4,ALTO/2, 1000);
+        personaje = new Personaje(ANCHO/4,ALTO/2, 100000);
 
         //Class enemy test
         enemy_list.add(new Enemy(0, 0, 100, 20));
@@ -268,22 +266,26 @@ class PantallaJuego extends Pantalla{
 
         // SHOOTING LOGIC
         shootTimer+=delta;
-        if(gunJoystick.getKnobPercentY() > gunJoystick.getKnobPercentX() && (gunJoystick.getKnobPercentX() < 0.5f && gunJoystick.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
+        if(gunJoystick.getKnobPercentY() > gunJoystick.getKnobPercentX() &&
+                (gunJoystick.getKnobPercentX() < 0.5f && gunJoystick.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
             shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),0,1));
+            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),gunJoystick.getKnobPercentX(),gunJoystick.getKnobPercentY()));
         }
         if(gunJoystick.getKnobPercentY() < -gunJoystick.getKnobPercentX() && (gunJoystick.getKnobPercentX() < 0.5f && gunJoystick.getKnobPercentX()> -0.5f) && shootTimer>=SWT){
             shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),0,-1));
+            //bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),0,-1));
+            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),gunJoystick.getKnobPercentX(),gunJoystick.getKnobPercentY()));
         }
 
         if(gunJoystick.getKnobPercentX() > gunJoystick.getKnobPercentY() && (gunJoystick.getKnobPercentY() < 0.5f && gunJoystick.getKnobPercentY()> -0.5f) && shootTimer>=SWT){
             shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),1,0));
+            //bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),1,0));
+            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),gunJoystick.getKnobPercentX(),gunJoystick.getKnobPercentY()));
         }
         if(gunJoystick.getKnobPercentX() < -gunJoystick.getKnobPercentY() && (gunJoystick.getKnobPercentY() < 0.5f && gunJoystick.getKnobPercentY()> -0.5f) && shootTimer>=SWT){
             shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),-1,0));
+            //bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),-1,0));
+            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),gunJoystick.getKnobPercentX(),gunJoystick.getKnobPercentY()));
         }
         ArrayList<Bullet> bulletsRemove = new ArrayList<Bullet>();
         for(Bullet bullet : bullets){
@@ -369,38 +371,26 @@ class PantallaJuego extends Pantalla{
 
         @Override
         public boolean keyDown(int keycode) {
-
             if (keycode == Input.Keys.LEFT){
-
                 if (personaje.getPositionX() <= 145.f){
-
                 }else{
                     personaje.mover(-DX_PERSONAJE,0);
                 }
-
             }if (keycode == Input.Keys.RIGHT){
-
                 if (personaje.getPositionX() >= 1070.0){
-
                 }else{
                     personaje.mover(DX_PERSONAJE,0);
                 }
-
             }if (keycode == Input.Keys.DOWN){
-
                 if (personaje.getPositionY() <= 110.0){}else{
                     personaje.mover(0,-DY_PERSONAJE);
                 }
-
             }if (keycode == Input.Keys.UP){
-
                 if (personaje.getPositionY() >= 585.0){}
                 else {
                     personaje.mover(0,DY_PERSONAJE);
                 }
-
             }
-
             return true;
         }
 
