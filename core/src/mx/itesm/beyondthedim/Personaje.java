@@ -41,8 +41,6 @@ class Personaje extends Objeto{
         // Crea el sprite con el personaje quieto (idle)
         sprite = new Sprite(texturaPersonaje[0][0]);    // QUIETO
         sprite.setPosition(x,y);    // Posición inicial
-
-
     }
 
     //return the current life of the character
