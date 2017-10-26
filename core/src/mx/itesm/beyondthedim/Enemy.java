@@ -14,6 +14,7 @@ public class Enemy {
     private float y;
     private float life;
     private int damage;
+    public static final int SPEED=1;
 
 
     public Enemy(float x, float y, float life, int damage){
@@ -33,8 +34,8 @@ public class Enemy {
 
     public void atack(Personaje target){
 
-        this.x += (float) ((target.getPositionX() - this.getPositionX()) * 0.6);
-        this.y += (float) ((target.getPositionY() - this.getPositionY()) * 0.5);
+        this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.04));
+        this.y +=  ((float) ((target.getPositionY() - this.getPositionY()) * 0.04));
 
     }
 
@@ -59,8 +60,18 @@ public class Enemy {
 
     }
 
-    public void resiveDamage(int damage){
-        this.life -= damage;
+    public boolean isDead(){
+        if (this.life > 0){
+            return false;
+        }
+        return true;
+    }
+
+
+    public void resiveDamage(){
+
+        this.life--;
+        System.out.println("Enemy life: "+this.life);
     }
 
     public float getPositionX(){return this.x;}

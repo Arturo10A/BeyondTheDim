@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 class Bullet {
     private float lifeTime;
     private float lifeTimer;
-    public static final int SPEED=500;
+    public static final int SPEED=1000;
     private static Texture texture;
 
     float x,y,dx,dy;
@@ -31,6 +31,15 @@ class Bullet {
         }
     }
 
+
+    public float getPositionX(){
+        return this.x;
+    }
+
+    public float getPositionY(){
+        return this.y;
+    }
+
     public void update (float deltaTime)
     {
         x+= SPEED*deltaTime*dx;
@@ -41,6 +50,30 @@ class Bullet {
 
     public void render (SpriteBatch batch){
         batch.draw(texture,x,y);
+    }
+
+    public void collisionD(Double distance){
+
+        if (distance < 2){
+            System.out.println("** collisionD **");
+        }
+
+
+    }
+
+    public double distance(Enemy target){
+
+        //character position
+        double enemyX = target.getPositionX();
+        double enemyY = target.getPositionY();
+
+        //Enemy position
+        double currentX = this.getPositionX();
+        double currentY = this.getPositionY();
+
+        double distance = Math.sqrt( Math.pow(enemyX-currentX,2) + Math.pow(enemyY-currentY,2));
+        return distance;
+
     }
 
 }
