@@ -68,8 +68,11 @@ class PantallaJuego extends Pantalla{
 
 
     //Random
-
     private int numero;
+
+    //Life string
+
+    private String life;
 
 
     //BALA
@@ -185,7 +188,7 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, 100000);
 
         //Class enemy test
-        enemy_list.add(new Enemy(0, 0, 100, 20));
+        enemy_list.add(new Enemy(25, 80, 100, 20));
         enemy_list.add(new Enemy(20, 50, 100, 30));
         enemy_list.add(new Enemy(70, 90, 100, 40));
         enemy_list.add(new Enemy(180, 680,100, 50));
