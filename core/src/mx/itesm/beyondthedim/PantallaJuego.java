@@ -333,6 +333,7 @@ class PantallaJuego extends Pantalla{
                    if (bullets.get(i).distance(enemy_list.get(j) ) < 15 ){
                        System.out.println("true");
                        enemy_list.get(j).resiveDamage();
+                       bullets.remove(bullets.get(i));
 
                        if (enemy_list.get(j).isDead()){
                            enemy_list.remove(enemy_list.get(j));
