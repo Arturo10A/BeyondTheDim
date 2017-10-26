@@ -1,8 +1,6 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -46,7 +44,7 @@ class PantallaJuego extends Pantalla{
     private Enemy enemy2;
     private Enemy enemy3;
     private Enemy enemy4;
-    ArrayList<Enemy> enemy_list = new ArrayList<Enemy>(20);
+    ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
 
 
 
@@ -187,11 +185,11 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, 100000);
 
         //Class enemy test
-        /*enemy_list.add(new Enemy(0, 0, 100, 20));
+        enemy_list.add(new Enemy(0, 0, 100, 20));
         enemy_list.add(new Enemy(20, 50, 100, 30));
         enemy_list.add(new Enemy(70, 90, 100, 40));
         enemy_list.add(new Enemy(180, 680,100, 50));
-        enemy_list.add(new Enemy(600, 500,100, 100));*/
+        enemy_list.add(new Enemy(600, 500,100, 100));
 
 
         Gdx.input.setInputProcessor(escenaJuego);
@@ -214,15 +212,12 @@ class PantallaJuego extends Pantalla{
         escenaJuego.draw();
         batch.begin();
         batch.end();
+
         /*
         time += Gdx.graphics.getDeltaTime();
         if (time >= 1){
 
-            /*enemy.atack(personaje);
-            //enemy1.atack(personaje);
-            //enemy2.atack(personaje);
-            //enemy3.atack(personaje);
-            //enemy4.atack(personaje);
+
 
             for (Enemy ene:
                  enemy_list) {
@@ -244,10 +239,7 @@ class PantallaJuego extends Pantalla{
 
             }
 
-            /*enemy.doDamage(personaje);
-            //enemy2.doDamage(personaje);
-            //enemy3.doDamage(personaje);
-            //enemy4.doDamage(personaje);
+
 
 
 
@@ -263,6 +255,10 @@ class PantallaJuego extends Pantalla{
             //System.out.println("X: "+personaje.getPositionX()+" Y: "+ personaje.getPositionY());
 
         }*/
+
+        for (Enemy ene: enemy_list) {
+            ene.atack(personaje);
+        }
 
         // SHOOTING LOGIC
         shootTimer+=delta;
@@ -296,11 +292,10 @@ class PantallaJuego extends Pantalla{
         }
         bullets.removeAll(bulletsRemove);
 
-        if (bullets.isEmpty()){
-            System.out.println("No hay balas");
-        }else{
-            //System.out.println("Hay balas");
-        }
+
+
+
+
 
 
         //If 10 second are alredy past we create a new enemy
@@ -317,17 +312,13 @@ class PantallaJuego extends Pantalla{
         //¨¨¨¨
 
         //Drawing test of class enemy
-        /*
-        for (Enemy ene:
-                enemy_list) {
-            ene.render(batch);
-        }*/
 
-        /*enemy.render(batch);
-        enemy1.render(batch);
-        enemy2.render(batch);
-        enemy3.render(batch);
-        enemy4.render(batch);*/
+        for (Enemy ene:enemy_list) {
+            ene.render(batch);
+        }
+
+
+
 
         //quitar comentario
         //texto.mostrarMensaje(batch,"Vida: " + personaje.getLife(),95,Pantalla.ALTO/1.07f);
@@ -337,6 +328,21 @@ class PantallaJuego extends Pantalla{
         }
 
         batch.end();
+
+        //Check colision system
+
+        for (int i = 0; i <= enemy_list.size()-1 ; i++) {
+            for (int j = 0; j <= bullets.size()-1 ; j++) {
+               if (enemy_list.get(i).getPositionX() == bullets.get(j).getPositionX()
+                       &&
+                       enemy_list.get(i).getPositionY() == bullets.get(j).getPositionY()){
+                   System.out.println("Colision");
+               }else{
+                   System.out.println("Bullet Y :"+bullets.get(j).getPositionY());
+                   System.out.println("Bullet X :"+bullets.get(j).getPositionX());
+               }
+            }
+        }
 
         batch.begin();
         escenaJuego.draw();
@@ -369,66 +375,5 @@ class PantallaJuego extends Pantalla{
 
     }
 
-    private class ProcesadorEventos implements InputProcessor {
 
-        @Override
-        public boolean keyDown(int keycode) {
-            if (keycode == Input.Keys.LEFT){
-                if (personaje.getPositionX() <= 145.f){
-                }else{
-                    personaje.mover(-DX_PERSONAJE,0);
-                }
-            }if (keycode == Input.Keys.RIGHT){
-                if (personaje.getPositionX() >= 1070.0){
-                }else{
-                    personaje.mover(DX_PERSONAJE,0);
-                }
-            }if (keycode == Input.Keys.DOWN){
-                if (personaje.getPositionY() <= 110.0){}else{
-                    personaje.mover(0,-DY_PERSONAJE);
-                }
-            }if (keycode == Input.Keys.UP){
-                if (personaje.getPositionY() >= 585.0){}
-                else {
-                    personaje.mover(0,DY_PERSONAJE);
-                }
-            }
-            return true;
-        }
-
-        @Override
-        public boolean keyUp(int keycode) {
-            return false;
-        }
-
-        @Override
-        public boolean keyTyped(char character) {
-            return false;
-        }
-
-        @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            return false;
-        }
-
-        @Override
-        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-            return false;
-        }
-
-        @Override
-        public boolean touchDragged(int screenX, int screenY, int pointer) {
-            return false;
-        }
-
-        @Override
-        public boolean mouseMoved(int screenX, int screenY) {
-            return false;
-        }
-
-        @Override
-        public boolean scrolled(int amount) {
-            return false;
-        }
-    }
 }
