@@ -60,12 +60,18 @@ public class Enemy {
 
     }
 
+    public boolean isDead(){
+        if (this.life > 0){
+            return false;
+        }
+        return true;
+    }
 
-    public void resiveDamage(Bullet bullet){
 
-        if (bullet.getPositionX() == this.getPositionX() && bullet.getPositionY() == this.getPositionY())
-            System.out.println("*** Damage ***");
-            //this.life -= damage;
+    public void resiveDamage(){
+
+        this.life--;
+        System.out.println("Enemy life: "+this.life);
     }
 
     public float getPositionX(){return this.x;}

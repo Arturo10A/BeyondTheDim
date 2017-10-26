@@ -188,7 +188,7 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, 100000);
 
         //Class enemy test
-        enemy_list.add(new Enemy(25, 80, 100, 0));
+        enemy_list.add(new Enemy(25, 80, 1, 0));
 
 
         Gdx.input.setInputProcessor(escenaJuego);
@@ -332,6 +332,13 @@ class PantallaJuego extends Pantalla{
 
                    if (bullets.get(i).distance(enemy_list.get(j) ) < 15 ){
                        System.out.println("true");
+                       enemy_list.get(j).resiveDamage();
+
+                       if (enemy_list.get(j).isDead()){
+                           enemy_list.remove(enemy_list.get(j));
+                       }
+
+
                    }
                 }
             }
