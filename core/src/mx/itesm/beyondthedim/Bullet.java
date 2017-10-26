@@ -52,4 +52,28 @@ class Bullet {
         batch.draw(texture,x,y);
     }
 
+    public void collisionD(Double distance){
+
+        if (distance < 2){
+            System.out.println("** collisionD **");
+        }
+
+
+    }
+
+    public double distance(Enemy target){
+
+        //character position
+        double enemyX = target.getPositionX();
+        double enemyY = target.getPositionY();
+
+        //Enemy position
+        double currentX = this.getPositionX();
+        double currentY = this.getPositionY();
+
+        double distance = Math.sqrt( Math.pow(enemyX-currentX,2) + Math.pow(enemyY-currentY,2));
+        return distance;
+
+    }
+
 }

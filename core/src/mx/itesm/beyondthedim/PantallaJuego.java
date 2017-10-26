@@ -72,7 +72,7 @@ class PantallaJuego extends Pantalla{
 
     //Life string
 
-    private String life;
+    private String lifeString;
 
 
     //BALA
@@ -188,11 +188,7 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, 100000);
 
         //Class enemy test
-        enemy_list.add(new Enemy(25, 80, 100, 20));
-        enemy_list.add(new Enemy(20, 50, 100, 30));
-        enemy_list.add(new Enemy(70, 90, 100, 40));
-        enemy_list.add(new Enemy(180, 680,100, 50));
-        enemy_list.add(new Enemy(600, 500,100, 100));
+        enemy_list.add(new Enemy(25, 80, 100, 0));
 
 
         Gdx.input.setInputProcessor(escenaJuego);
@@ -296,11 +292,6 @@ class PantallaJuego extends Pantalla{
         bullets.removeAll(bulletsRemove);
 
 
-
-
-
-
-
         //If 10 second are alredy past we create a new enemy
         time_enemy += Gdx.graphics.getDeltaTime();
 
@@ -321,10 +312,10 @@ class PantallaJuego extends Pantalla{
         }
 
 
-
+        lifeString = "Vida: "+personaje.getLife();
 
         //quitar comentario
-        //texto.mostrarMensaje(batch,"Vida: " + personaje.getLife(),95,Pantalla.ALTO/1.07f);
+        texto.mostrarMensaje(batch,lifeString,98,Pantalla.ALTO/1.03f);
 
         for (Bullet bullet: bullets){
             bullet.render(batch);
@@ -334,18 +325,18 @@ class PantallaJuego extends Pantalla{
 
         //Check colision system
 
-        for (int i = 0; i <= enemy_list.size()-1 ; i++) {
-            for (int j = 0; j <= bullets.size()-1 ; j++) {
-               if (enemy_list.get(i).getPositionX() == bullets.get(j).getPositionX()
-                       &&
-                       enemy_list.get(i).getPositionY() == bullets.get(j).getPositionY()){
-                   System.out.println("Colision");
-               }else{
-                   System.out.println("Bullet Y :"+bullets.get(j).getPositionY());
-                   System.out.println("Bullet X :"+bullets.get(j).getPositionX());
-               }
+
+
+            for (int i = 0; i <= bullets.size()-1 ; i++) {
+                for (int j = 0; j <= enemy_list.size()-1 ; j++) {
+
+                   if (bullets.get(i).distance(enemy_list.get(j) ) < 15 ){
+                       System.out.println("true");
+                   }
+                }
             }
-        }
+
+
 
         batch.begin();
         escenaJuego.draw();
