@@ -38,7 +38,7 @@ class PantallaSettings extends Pantalla {
     public void cargarTextura(){
 
         textureBackground = new Texture("fondoSettings.png");
-        textureGoBack = new Texture("Botones/button_back1.png");
+        textureGoBack = new Texture("Botones/button_back_2.png");
 
     }
 

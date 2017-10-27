@@ -51,7 +51,7 @@ class PantallaAyuda extends Pantalla {
     }
 
     public void cargarTexturas(){
-        texturaBtnGoBack = new Texture("Botones/button_back.png");
+        texturaBtnGoBack = new Texture("Botones/button_back_2.png");
         //Fondo para este ecenario
         texturaFondoPantallaAyudad = new Texture("Stage/about_pantalla.png");
     }

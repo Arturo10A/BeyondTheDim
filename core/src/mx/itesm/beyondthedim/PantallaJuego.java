@@ -51,7 +51,7 @@ class PantallaJuego extends Pantalla{
     private Enemy enemy2;
     private Enemy enemy3;
     private Enemy enemy4;
-    private int damageEnemigo = 0;
+    private int damageEnemigo = 10;
     ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
     //Escenario
     private Stage escenaJuego;
