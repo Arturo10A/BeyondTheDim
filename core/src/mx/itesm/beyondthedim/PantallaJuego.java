@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
 
@@ -88,6 +89,9 @@ class PantallaJuego extends Pantalla{
     public static final float SWT = 0.3f;
     float shootTimer;
 
+
+    //Music
+    Music music = Gdx.audio.newMusic(Gdx.files.internal("Music\\bensound-extremeaction.mp3"));
 
     public PantallaJuego(Juego juego) {
         this.juego = juego;
@@ -232,9 +236,11 @@ class PantallaJuego extends Pantalla{
         for (Bullet bullet: bullets){
             bullet.render(batch);
         }
+
         batch.end();
         //*******************************************************Dibujar escena del juego*******************************************************
         batch.begin();
+        music.play();
         escenaJuego.draw();
         batch.end();
         escenaJuego.act(Gdx.graphics.getDeltaTime());
@@ -325,6 +331,8 @@ class PantallaJuego extends Pantalla{
         //*******************************************************Ganar/Perder*******************************************************
         //Perder
         if (personaje.getLife() <= 0) {
+            music.stop();
+            music.dispose();
             juego.setScreen(new LoseScreen(juego));
         }
         //Ganar

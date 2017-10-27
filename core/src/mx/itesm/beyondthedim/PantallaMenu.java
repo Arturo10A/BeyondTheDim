@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,6 +37,7 @@ class PantallaMenu extends Pantalla {
     private Texto texto;
 
     private Texture fondoPantalla;
+    Music music = Gdx.audio.newMusic(Gdx.files.internal("Music\\bensound-slowmotion.mp3"));
 
     public PantallaMenu(Juego juego) {
         this.juego = juego;
@@ -79,6 +81,8 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***PANTALLA JUEGO***");
+                music.stop();
+                music.dispose();
                 juego.setScreen(new PantallaJuego(juego));
             }
         });
@@ -144,6 +148,7 @@ class PantallaMenu extends Pantalla {
 
 
         batch.begin();
+        music.play();
         escenaMenu.draw();
         batch.end();
 
