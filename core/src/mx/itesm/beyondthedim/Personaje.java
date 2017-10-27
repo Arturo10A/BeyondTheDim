@@ -58,8 +58,6 @@ class Personaje extends Objeto{
     // return the current life after recive a attack
     public int damage(int damage){
         this.life -= damage;
-        System.out.println("***********************");
-        System.out.println(this.life);
         return this.life;
     }
 

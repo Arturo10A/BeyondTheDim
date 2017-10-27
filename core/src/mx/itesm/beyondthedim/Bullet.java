@@ -49,7 +49,6 @@ class Bullet {
     public void update (float deltaTime)
     {
         if(dx==0 || dy==0){
-            System.out.println("ENTRO");
             x+= (SPEED*1.5*deltaTime*dx);
             y+= (SPEED*1.5*deltaTime*dy);
         }else{
