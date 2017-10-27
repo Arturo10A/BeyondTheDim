@@ -31,13 +31,15 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 class PantallaJuego extends Pantalla{
     //Imagen del ecenario
     private final Juego juego;
-    private Texture textureEcenario;
+    private Texture textureEscenario;
+    private Texture textureEscenarioAbierto;
     //
     private float DX = 28;
     private int pasos = 20;
     private float timerPasos = 0;
     //Jett start
     private  Personaje personaje;
+    private int vidaPersonaje = 1000;
     //Jett Speed
     private int DX_PERSONAJE=5;
     private int DY_PERSONAJE =5;
@@ -49,6 +51,7 @@ class PantallaJuego extends Pantalla{
     private Enemy enemy2;
     private Enemy enemy3;
     private Enemy enemy4;
+    private int damageEnemigo = 0;
     ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
     //Escenario
     private Stage escenaJuego;
@@ -78,7 +81,8 @@ class PantallaJuego extends Pantalla{
 
     public void cargarTexturas(){
         texturaBtnGoBack = new Texture("Botones/button_pause.png");
-        textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
+        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
+        //textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.png");
     }
 
     public void crearEscena(){
@@ -171,10 +175,10 @@ class PantallaJuego extends Pantalla{
         cargarTexturas();
         crearEscena();
         //Crear personaje
-        personaje = new Personaje(ANCHO/4,ALTO/2, 1000);
+        personaje = new Personaje(ANCHO/4,ALTO/2, vidaPersonaje);
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
-        enemy_list.add(new Enemy(25, 80, 1, 100));
+        enemy_list.add(new Enemy(25, 80, 1, damageEnemigo));
         //
         Gdx.input.setInputProcessor(escenaJuego);
         //Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -192,7 +196,7 @@ class PantallaJuego extends Pantalla{
         escenaJuego.draw();
         //*******************************************************Dibujar Objetos*******************************************************
         batch.begin();
-        batch.draw(textureEcenario,Pantalla.ANCHO/2-textureEcenario.getWidth()/2, Pantalla.ALTO/2-textureEcenario.getHeight()/2);
+        batch.draw(textureEscenario,Pantalla.ANCHO/2- textureEscenario.getWidth()/2, Pantalla.ALTO/2- textureEscenario.getHeight()/2);
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
         //Enemigos
@@ -220,10 +224,6 @@ class PantallaJuego extends Pantalla{
         for (Enemy ene :
                 enemy_list) {
             ene.doDamage(this.personaje);
-        }
-        if (personaje.getLife() <= 0) {
-            System.out.println("You die");
-            juego.setScreen(new LoseScreen(juego));
         }
         //*******************************************************Logica Disparo*******************************************************
         shootTimer+=delta;
@@ -284,6 +284,21 @@ class PantallaJuego extends Pantalla{
                 }
             }
         }
+        //*******************************************************Ganar/Perder*******************************************************
+        //Perder
+        if (personaje.getLife() <= 0) {
+            System.out.println("You die");
+            juego.setScreen(new LoseScreen(juego));
+        }
+        //Ganar
+        if(enemy_list.isEmpty()){
+            textureEscenario = new Texture("Stage/fondo_nivel_uno_abierto.png");
+            System.out.println(String.valueOf(personaje.getPositionX()) + " " + String.valueOf(personaje.getPositionY()));
+        }
+        if(personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320){
+            juego.setScreen(new PantallaMenu(juego));
+        }
+
     }
 
     @Override
