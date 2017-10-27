@@ -37,7 +37,7 @@ class PantallaSettings extends Pantalla {
 
     public void cargarTextura(){
 
-        textureBackground = new Texture("Stage/fondo_estrellas.png");
+        textureBackground = new Texture("Stage/settings.png");
         textureGoBack = new Texture("Botones/button_back_2.png");
 
     }
