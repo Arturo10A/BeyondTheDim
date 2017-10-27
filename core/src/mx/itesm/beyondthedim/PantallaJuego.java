@@ -200,7 +200,7 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, vidaPersonaje);
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
-        enemy_list.add(new Enemy(25, 80, 1, damageEnemigo));
+        enemy_list.add(new Enemy(ANCHO-200, ALTO/2, 100, damageEnemigo));
         //
         Gdx.input.setInputProcessor(escenaJuego);
         //Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -305,7 +305,8 @@ class PantallaJuego extends Pantalla{
             for (int j = 0; j <= enemy_list.size()-1 ; j++) {
                 if (bullets.get(i).distance(enemy_list.get(j) ) < 15 ){
                     System.out.println("true");
-                    enemy_list.get(j).resiveDamage();
+                    enemy_list.get(j).receiveDamage(20);
+                    enemy_list.get(j).goBack();
                     bullets.remove(bullets.get(i));
 
                     if (enemy_list.get(j).isDead()){

@@ -33,15 +33,20 @@ public class Enemy {
 
     public void render(SpriteBatch batch){batch.draw(enemmyTexture, x, y);}
 
+
     public void mover(float dx, float dy){
         x += dx;
         y += dy;
     }
 
+    public void goBack(){
+        mover(50,0);
+    }
+
     public void atack(Personaje target){
 
-        this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.04));
-        this.y +=  ((float) ((target.getPositionY() - this.getPositionY()) * 0.04));
+        this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.02));
+        this.y +=  ((float) ((target.getPositionY() - this.getPositionY()) * 0.02));
 
     }
 
@@ -74,9 +79,9 @@ public class Enemy {
     }
 
 
-    public void resiveDamage(){
+    public void receiveDamage(int damage){
 
-        this.life--;
+        this.life-=damage;
         System.out.println("Enemy life: "+this.life);
     }
 

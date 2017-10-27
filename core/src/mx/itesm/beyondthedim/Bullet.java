@@ -19,6 +19,7 @@ class Bullet {
     private float lifeTimer;
     public static final int SPEED=400;
     private static Texture texture;
+    public int damage =20;
 
     float x,y,dx,dy;
 
@@ -37,6 +38,8 @@ class Bullet {
         }
     }
 
+
+    public float getDamage(){ return this.damage;}
 
     public float getPositionX(){
         return this.x;
@@ -86,5 +89,6 @@ class Bullet {
         return distance;
 
     }
+
 
 }
