@@ -174,7 +174,7 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, 1000);
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
-        enemy_list.add(new Enemy(25, 80, 1, 0));
+        enemy_list.add(new Enemy(25, 80, 1, 100));
         //
         Gdx.input.setInputProcessor(escenaJuego);
         //Gdx.input.setInputProcessor(new ProcesadorEventos());

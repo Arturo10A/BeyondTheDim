@@ -27,20 +27,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 class PantallaSettings extends Pantalla {
 
     private final Juego juego;
-
-    //Textura fondo de pantalla
+    //Fondo de pantalla
     private Texture textureBackground;
-
-
+    private Stage escenaSettings;
     //Textura botones
     private Texture textureGoBack;
-
-
-    private Stage escenaSettings;
-
+    //
     private SpriteBatch batch;
 
-    public void CargarTextura(){
+    public void cargarTextura(){
 
         textureBackground = new Texture("fondoSettings.png");
         textureGoBack = new Texture("Botones/button_back1.png");
@@ -59,7 +54,7 @@ class PantallaSettings extends Pantalla {
         //Go BACK
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(textureGoBack));
         ImageButton btnGoBack = new ImageButton(trdGoBack);
-        btnGoBack.setPosition(ANCHO*0.3f,ALTO-btnGoBack.getHeight());
+        btnGoBack.setPosition(ANCHO*0.9f,(ALTO*0.9f)-btnGoBack.getHeight()*0.5f);
 
         btnGoBack.addListener(new ClickListener(){
             @Override
@@ -86,7 +81,7 @@ class PantallaSettings extends Pantalla {
 
     @Override
     public void show() {
-        CargarTextura();
+        cargarTextura();
         crearEcena();
 
         Gdx.input.setInputProcessor(escenaSettings);
