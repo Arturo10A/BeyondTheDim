@@ -14,22 +14,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 class Personaje extends Objeto{
 
     private TextureRegion jettTextureCompleta;
+    TextureRegion[][] texturaPersonaje;
     private Animation<TextureRegion> spriteAnimado;
+    protected EstadoMovimiento estadoMovimiento = EstadoMovimiento.QUIETO;
     private float timerAnimacion;
-    private float  x;
-    private  float y;
+    private float x;
+    private float y;
     private int life;
 
 
     public Personaje(float x, float y, int life){
-
+        this.life = life;
         this.x = x;
         this.y = y;
-        this.life = life;
         jettTextureCompleta = new TextureRegion(new Texture("Personaje/jett_completo.png"));
 
         //Divide en 4 frames 63x100
-        TextureRegion[][] texturaPersonaje = jettTextureCompleta.split(63,100);
+        texturaPersonaje = jettTextureCompleta.split(63,100);
 
         //Se crea la animacion con tiempo de 0.25 segundos entre frames
         spriteAnimado = new Animation(0.1f, texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1]);
@@ -54,22 +55,57 @@ class Personaje extends Objeto{
         return this.life;
     }
 
-    public void render(SpriteBatch batch, float tiempo){
+    public void dibujar(SpriteBatch batch, float tiempo){
+        // Dibuja el personaje dependiendo del estadoMovimiento
+        switch (estadoMovimiento) {
+            case MOV_DERECHA:
+            case MOV_IZQUIERDA:
+                timerAnimacion += tiempo;
+                // Frame que se dibujará
+                TextureRegion region = spriteAnimado.getKeyFrame(timerAnimacion, true);
+                if (estadoMovimiento==EstadoMovimiento.MOV_IZQUIERDA) {
+                    if (!region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+                } else {
+                    if (region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+                }
+                batch.draw(region,x,y);
+                break;
+            case QUIETO:
+            case INICIANDO:
+                batch.draw(texturaPersonaje[0][0], x, y);
+                break;
+        }
 
-        timerAnimacion+= tiempo;
-        batch.draw(spriteAnimado.getKeyFrame(timerAnimacion, true), x,y);
+    }
 
+    public void setEstadoMovimiento(EstadoMovimiento estadoMovimiento, SpriteBatch batch, float tiempo) {
+        this.estadoMovimiento = estadoMovimiento;
     }
 
     public float getPositionX(){
-        return this.x;
+        return x;
     }
 
     public float getPositionY(){
-        return this.y;
+        return y;
+    }
+
+    // Accesor de estadoMovimiento
+    public EstadoMovimiento getEstadoMovimiento() {
+        return estadoMovimiento;
+    }
+
+    // Modificador de estadoMovimiento
+    public void setEstadoMovimiento(EstadoMovimiento estadoMovimiento) {
+        this.estadoMovimiento = estadoMovimiento;
     }
 
     public void mover (float dx, float dy){
+
         x += dx;
         y += dy;
         /*
@@ -93,6 +129,13 @@ class Personaje extends Objeto{
                 y += 2;
             }
         }*/
+    }
+
+    public enum EstadoMovimiento {
+        INICIANDO,
+        QUIETO,
+        MOV_IZQUIERDA,
+        MOV_DERECHA,
     }
 
 }

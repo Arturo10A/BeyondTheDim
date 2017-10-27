@@ -27,7 +27,7 @@ class Bullet {
 
 
         if (texture == null) {
-            texture = new Texture("like.png");
+            texture = new Texture("Objetos_varios/bala_circular.png");
         }
     }
 

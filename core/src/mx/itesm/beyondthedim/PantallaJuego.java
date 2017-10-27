@@ -118,7 +118,15 @@ class PantallaJuego extends Pantalla{
                 System.out.println("YUHU es"+ movJoystick.getKnobPercentX());
 
                 //personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
-
+                //Control de Sprites
+                if(pad.getKnobPercentX()>0.20) {
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+                }else if(pad.getKnobPercentX()<-0.20){
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+                }else if(pad.getKnobPercentX()==0){
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+                }
+                //Restricciones de movimiento
                 //Right
                 if (personaje.getPositionX() >= 1105.23 && movJoystick.getKnobPercentX() > 0){
                     System.out.println("Personaje Menor a 1105.23");
@@ -128,6 +136,7 @@ class PantallaJuego extends Pantalla{
                 else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0){
                     System.out.println("Personaje Mayor a 116.42");
                     personaje.mover(10, DY_PERSONAJE*pad.getKnobPercentY());
+
                 }
                 //TOP
                 else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0){
@@ -139,7 +148,6 @@ class PantallaJuego extends Pantalla{
                     System.out.println("Personaje Mayor a 110.23");
                     personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),10);
                 }
-
                 else {
                     personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
                 }
@@ -180,8 +188,11 @@ class PantallaJuego extends Pantalla{
         textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
         textureEcenario = new Texture("Stage/fondo_nivel_uno.png");
         personaje = new Personaje(ANCHO/4,ALTO/2, 100000);
+        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
 
         //Class enemy test
+        //*******quitar comentario
+        //enemy_list.add(new Enemy(25, 80, 100, 0));
         enemy_list.add(new Enemy(25, 80, 1, 0));
 
 
@@ -203,8 +214,6 @@ class PantallaJuego extends Pantalla{
         //HUD
         batch.setProjectionMatrix(camara.combined);
         escenaJuego.draw();
-        batch.begin();
-        batch.end();
 
         /*
         time += Gdx.graphics.getDeltaTime();
@@ -306,9 +315,8 @@ class PantallaJuego extends Pantalla{
 
 
         batch.begin();
-
         batch.draw(textureEcenario,Pantalla.ANCHO/2-textureEcenario.getWidth()/2, Pantalla.ALTO/2-textureEcenario.getHeight()/2);
-        personaje.render(batch, Gdx.graphics.getDeltaTime());
+        personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
         //¨¨¨¨
 
         //Drawing test of class enemy
