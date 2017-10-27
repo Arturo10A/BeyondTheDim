@@ -81,7 +81,7 @@ class PantallaInstruciones extends Pantalla  {
         //Boton go Back
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(texturaGoBackButton));
         ImageButton buttonGoBack = new ImageButton(trdGoBack);
-        buttonGoBack.setPosition(ANCHO-buttonGoBack.getWidth(),ALTO-buttonGoBack.getHeight());
+        buttonGoBack.setPosition(ANCHO*0.85f,(ALTO*0.80f)-buttonGoBack.getHeight()*0.2f);
 
         buttonGoBack.addListener(new ClickListener(){
             @Override
@@ -125,7 +125,6 @@ class PantallaInstruciones extends Pantalla  {
     }
 
     private void cargarFondos(){
-
 
         imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_02.png"));
         fondos.add(imagen);

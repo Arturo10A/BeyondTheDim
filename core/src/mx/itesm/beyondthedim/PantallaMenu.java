@@ -128,7 +128,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA PANTALLA***");
-                juego.setScreen(new PantallaAyuda(juego));
+                juego.setScreen(new PantallaAboutUs(juego));
             }
 
 

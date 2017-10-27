@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  *
  */
 
-class PantallaAyuda extends Pantalla {
+class PantallaAboutUs extends Pantalla {
 
     private final Juego juego;
     private Texture ecenario;  //Imagen del ecenario
@@ -32,7 +32,7 @@ class PantallaAyuda extends Pantalla {
 
 
 
-    public PantallaAyuda(Juego juego) {
+    public PantallaAboutUs(Juego juego) {
         this.juego = juego;
     }
 
@@ -64,16 +64,7 @@ class PantallaAyuda extends Pantalla {
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(texturaBtnGoBack));
         ImageButton btnGoBack = new ImageButton(trdGoBack);
 
-        btnGoBack.setPosition(ANCHO-60-btnGoBack.getWidth(),ALTO-btnGoBack.getHeight()*2);
-
-        //Fondo de pantalla
-        TextureRegionDrawable backWall = new TextureRegionDrawable(new TextureRegion(texturaFondoPantallaAyudad));
-        Image back = new Image(backWall);
-        back.setPosition(ANCHO/2-back.getWidth()/2,ALTO/2-back.getHeight()/2);
-
-        ecenaAyuda.addActor(back);
-        ecenaAyuda.addActor(btnGoBack);
-
+        btnGoBack.setPosition(ANCHO*0.85f,(ALTO*0.80f)-btnGoBack.getHeight()*0.2f);
         btnGoBack.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -83,6 +74,14 @@ class PantallaAyuda extends Pantalla {
             }
         });
 
+        //Fondo de pantalla
+        TextureRegionDrawable backWall = new TextureRegionDrawable(new TextureRegion(texturaFondoPantallaAyudad));
+        Image back = new Image(backWall);
+        back.setPosition(ANCHO/2-back.getWidth()/2,ALTO/2-back.getHeight()/2);
+
+        //Add actors
+        ecenaAyuda.addActor(back);
+        ecenaAyuda.addActor(btnGoBack);
     }
 
 

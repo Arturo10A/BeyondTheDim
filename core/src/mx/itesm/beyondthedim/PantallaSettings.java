@@ -37,7 +37,7 @@ class PantallaSettings extends Pantalla {
 
     public void cargarTextura(){
 
-        textureBackground = new Texture("fondoSettings.png");
+        textureBackground = new Texture("Stage/fondo_estrellas.png");
         textureGoBack = new Texture("Botones/button_back_2.png");
 
     }
@@ -54,7 +54,7 @@ class PantallaSettings extends Pantalla {
         //Go BACK
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(textureGoBack));
         ImageButton btnGoBack = new ImageButton(trdGoBack);
-        btnGoBack.setPosition(ANCHO*0.9f,(ALTO*0.9f)-btnGoBack.getHeight()*0.5f);
+        btnGoBack.setPosition(ANCHO*0.85f,(ALTO*0.80f)-btnGoBack.getHeight()*0.2f);
 
         btnGoBack.addListener(new ClickListener(){
             @Override
