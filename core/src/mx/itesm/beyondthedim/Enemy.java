@@ -28,7 +28,7 @@ public class Enemy {
         this.y = y;
         this.life = life;
         this.damage = damage;
-        enemmyTexture = new Texture("block.png");
+        enemmyTexture = new Texture("Enemigos/enemigo_mosca.png");
     }
 
     public void render(SpriteBatch batch){batch.draw(enemmyTexture, x, y);}
