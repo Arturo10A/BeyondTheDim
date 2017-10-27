@@ -353,6 +353,8 @@ class PantallaJuego extends Pantalla{
 
         }
         if(personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320){
+            music.stop();
+            music.dispose();
             juego.setScreen(new PantallaMenu(juego));
         }
 

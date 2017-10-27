@@ -1,6 +1,8 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -33,6 +35,9 @@ public class LoseScreen extends Pantalla{
     //Texto
     private Texto texto;
 
+    //Music
+    Music lose = Gdx.audio.newMusic(Gdx.files.internal("Music/lose.mp3"));
+
     public LoseScreen(Juego juego){
         this.juego = juego;
     }
@@ -61,6 +66,8 @@ public class LoseScreen extends Pantalla{
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***Inicio***");
+                lose.stop();
+                lose.dispose();
                 juego.setScreen(new PantallaMenu(juego));
             }
         });
@@ -74,6 +81,8 @@ public class LoseScreen extends Pantalla{
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***Reload***");
+                lose.stop();
+                lose.dispose();
                 juego.setScreen(new PantallaJuego(juego));
             }
         });
@@ -104,6 +113,7 @@ public class LoseScreen extends Pantalla{
         //texto.mostrarMensaje(batch,"You Died", Pantalla.ANCHO/2, Pantalla.ALTO/2);
         //
         batch.begin();
+        lose.play();
         escenaLoseScreen.draw();
         batch.end();
     }
