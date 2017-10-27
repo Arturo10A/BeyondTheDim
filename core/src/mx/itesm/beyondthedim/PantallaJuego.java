@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -91,7 +92,8 @@ class PantallaJuego extends Pantalla{
 
 
     //Music
-    Music music = Gdx.audio.newMusic(Gdx.files.internal("Music\\bensound-extremeaction.mp3"));
+    Music music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
+    Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
 
     public PantallaJuego(Juego juego) {
         this.juego = juego;
@@ -260,34 +262,42 @@ class PantallaJuego extends Pantalla{
         if(((angle > 337.5 && angle < 360) || (angle>0 && angle < 22.5)) && shootTimer>=SWT){
             shootTimer = 0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),1,0));
+            shoot.play();
         }
         if((angle < 337.5 && angle > 292.5) && shootTimer>=SWT){
             shootTimer = 0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),1,-1));
+            shoot.play();
         }
         if((angle < 292.5 && angle > 247.5) && shootTimer>=SWT){
             shootTimer = 0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),0,-1));
+            shoot.play();
         }
         if((angle < 247.5 && angle > 202.5) && shootTimer>=SWT){
             shootTimer = 0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),-1,-1));
+            shoot.play();
         }
         if((angle < 202.5 && angle > 157.5) && shootTimer>=SWT){
             shootTimer = 0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),-1,0));
+            shoot.play();
         }
         if((angle < 157.5 && angle > 112.5) && shootTimer>=SWT){
             shootTimer = 0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),-1,1));
+            shoot.play();
         }
         if((angle < 112.5 && angle > 67.5) && shootTimer>=SWT){
             shootTimer = 0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),0,1));
+            shoot.play();
         }
         if((angle < 67.5 && angle > 22.5) && shootTimer>=SWT){
             shootTimer = 0;
             bullets.add(new Bullet(personaje.getPositionX(),personaje.getPositionY(),1,1));
+            shoot.play();
         }
 
 

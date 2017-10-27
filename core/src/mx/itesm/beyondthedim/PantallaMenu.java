@@ -37,7 +37,7 @@ class PantallaMenu extends Pantalla {
     private Texto texto;
 
     private Texture fondoPantalla;
-    Music music = Gdx.audio.newMusic(Gdx.files.internal("Music\\bensound-slowmotion.mp3"));
+    Music music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3"));
 
     public PantallaMenu(Juego juego) {
         this.juego = juego;
