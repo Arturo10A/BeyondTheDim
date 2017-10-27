@@ -63,7 +63,7 @@ class PantallaInstruciones extends Pantalla  {
     }
 
     public void cargarTexturas(){
-        texturaGoBackButton = new Texture("Botones/button_back1.png");
+        texturaGoBackButton = new Texture("Botones/button_back_2.png");
         //texturaBack = new Texture("Stage/fondo_instruciones.png");
     }
 
@@ -127,18 +127,39 @@ class PantallaInstruciones extends Pantalla  {
     private void cargarFondos(){
 
 
-        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_2.png"));
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_02.png"));
         fondos.add(imagen);
-        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_3.png"));
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_03.png"));
         fondos.add(imagen);
-        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_4.png"));
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_04.png"));
         fondos.add(imagen);
-        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_5.png"));
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_05.png"));
         fondos.add(imagen);
-        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_6.png"));
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_06.png"));
         fondos.add(imagen);
-        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_7.png"));
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_07.png"));
         fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_08.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_09.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_10.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_11.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_12.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_13.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_14.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_15.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_16.png"));
+        fondos.add(imagen);
+        imagen = new Sprite(new Texture("Stage/Instrucciones/instrucciones_17.png"));
+        fondos.add(imagen);
+
 
         for(Sprite imagen: fondos){
             imagen.setPosition(0,0);
