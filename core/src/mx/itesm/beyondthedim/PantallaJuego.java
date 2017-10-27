@@ -242,6 +242,7 @@ class PantallaJuego extends Pantalla{
         batch.end();
         //*******************************************************Dibujar escena del juego*******************************************************
         batch.begin();
+        music.setVolume(0.5f);
         music.play();
         escenaJuego.draw();
         batch.end();
