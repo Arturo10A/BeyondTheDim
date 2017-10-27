@@ -5,7 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * Created by rodri on 21/10/2017.
+ * Creado por Equipo 2
+ *
+ *Arturo Amador Paulino
+ *Monserrat Lira Sorcia
+ *Jose Rodrigo Narvaez Berlanga
+ *Jorge Alexis Rubio Sumano
+ *
  */
 
 class Bullet {

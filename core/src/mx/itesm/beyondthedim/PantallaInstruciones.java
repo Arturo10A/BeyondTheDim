@@ -14,7 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Created by Arturo on 15/09/17.
+ * Creado por Equipo 2
+ *
+ *Arturo Amador Paulino
+ *Monserrat Lira Sorcia
+ *Jose Rodrigo Narvaez Berlanga
+ *Jorge Alexis Rubio Sumano
+ *
  */
 
 class PantallaInstruciones extends Pantalla  {

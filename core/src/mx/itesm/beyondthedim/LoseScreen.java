@@ -4,7 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 /**
- * Created by Arturo on 16/10/17.
+ * Creado por Equipo 2
+ *
+ *Arturo Amador Paulino
+ *Monserrat Lira Sorcia
+ *Jose Rodrigo Narvaez Berlanga
+ *Jorge Alexis Rubio Sumano
+ *
  */
 
 public class LoseScreen extends Pantalla{

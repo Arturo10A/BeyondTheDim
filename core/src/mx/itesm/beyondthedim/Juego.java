@@ -11,6 +11,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
+/**
+ * Creado por Equipo 2
+ *
+ *Arturo Amador Paulino
+ *Monserrat Lira Sorcia
+ *Jose Rodrigo Narvaez Berlanga
+ *Jorge Alexis Rubio Sumano
+ *
+ */
+
 public class Juego extends Game {
 
 	//Asset Manager

@@ -8,7 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * Created by Arturo on 08/09/17.
+ * Creado por Equipo 2
+ *
+ *Arturo Amador Paulino
+ *Monserrat Lira Sorcia
+ *Jose Rodrigo Narvaez Berlanga
+ *Jorge Alexis Rubio Sumano
+ *
  */
 
 class Personaje extends Objeto{
@@ -52,6 +58,8 @@ class Personaje extends Objeto{
     // return the current life after recive a attack
     public int damage(int damage){
         this.life -= damage;
+        System.out.println("***********************");
+        System.out.println(this.life);
         return this.life;
     }
 
