@@ -49,13 +49,6 @@ class PantallaJuego extends Pantalla{
 
 
     //Enemy block
-    private Enemy enemy;
-    private int DX_ENEMY = 100;
-    private int DY_ENMEY = 100;
-    private Enemy enemy1;
-    private Enemy enemy2;
-    private Enemy enemy3;
-    private Enemy enemy4;
     private int damageEnemigo = 10;
     ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
     //Escenario
@@ -77,12 +70,7 @@ class PantallaJuego extends Pantalla{
     private float time_enemy;
 
 
-    //Random
-    private int numero;
-
     //Life string
-
-    private String lifeString;
 
 
     //BALA
@@ -103,6 +91,16 @@ class PantallaJuego extends Pantalla{
         texturaBtnGoBack = new Texture("Botones/button_pause.png");
         textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
         //textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.png");
+    }
+
+
+    public void createEnemy(float delta){
+
+        if (delta >= 10.0){
+            System.out.println("Enemy created");
+            delta = 0;
+        }
+
     }
 
     public void crearEscena(){
@@ -232,8 +230,8 @@ class PantallaJuego extends Pantalla{
             ene.render(batch);
         }
         //Vida
-        lifeString = "Vida: "+personaje.getLife();
-        texto.mostrarMensaje(batch,lifeString,98,Pantalla.ALTO/1.03f);
+        String lifeString = "Vida: " + personaje.getLife();
+        texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
         //Balas
         for (Bullet bullet: bullets){
             bullet.render(batch);
@@ -251,10 +249,11 @@ class PantallaJuego extends Pantalla{
         //*******************************************************Logica enemigos*******************************************************{
         for (Enemy ene : enemy_list) {
             ene.atack(personaje);
-        }
-        for (Enemy ene : enemy_list) {
             ene.doDamage(this.personaje);
         }
+
+        createEnemy(delta);
+
         //*******************************************************Logica Disparo*******************************************************
         shootTimer += delta;
         Vector2 v   = new Vector2(gunJoystick.getKnobPercentX(), gunJoystick.getKnobPercentY());
@@ -315,7 +314,6 @@ class PantallaJuego extends Pantalla{
         for (int i = 0; i <= bullets.size()-1 ; i++) {
             for (int j = 0; j <= enemy_list.size()-1 ; j++) {
                 if (bullets.get(i).distance(enemy_list.get(j) ) < 15 ){
-                    System.out.println("true");
                     enemy_list.get(j).receiveDamage(20);
                     enemy_list.get(j).goBack();
                     bullets.remove(bullets.get(i));
@@ -332,13 +330,10 @@ class PantallaJuego extends Pantalla{
                 bullets.remove(i);
             }
 
-            System.out.println("****borrado****");
-            System.out.println(timeBala);
             timeBala = 0;
 
         }else {
             timeBala++;
-            System.out.println(timeBala);
         }
         //*******************************************************Ganar/Perder*******************************************************
         //Perder
@@ -351,12 +346,14 @@ class PantallaJuego extends Pantalla{
         if(enemy_list.isEmpty()){
             textureEscenario = new Texture("Stage/fondo_nivel_uno_abierto.png");
 
+            if(personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320){
+                music.stop();
+                music.dispose();
+                juego.setScreen(new PantallaMenu(juego));
+            }
+
         }
-        if(personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320){
-            music.stop();
-            music.dispose();
-            juego.setScreen(new PantallaMenu(juego));
-        }
+
 
     }
 
