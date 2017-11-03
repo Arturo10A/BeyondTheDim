@@ -45,10 +45,20 @@ public class boss extends Objeto {
     }
 
     public int Damege(int Damage){
-        return (this.life-= Damage);
+        return (this.life -= Damage);
     }
 
+    public void atack (Personaje personaje){
+        //Do something
+    }
 
+    public void specialAtack (){
+        //Do something
+    }
+
+    public void teleport(Personaje personaje){
+        //Do something
+    }
 
 
 
