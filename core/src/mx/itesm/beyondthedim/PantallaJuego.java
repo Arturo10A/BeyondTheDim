@@ -81,7 +81,7 @@ class PantallaJuego extends Pantalla{
 
     //Music
     Music music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
-    Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
+    Sound   shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
 
     public PantallaJuego(Juego juego) {
         this.juego = juego;
@@ -198,6 +198,7 @@ class PantallaJuego extends Pantalla{
         crearEscena();
         //Crear personaje
         personaje = new Personaje(ANCHO/4,ALTO/2, vidaPersonaje);
+        //personaje.sprite.getBoundingRectangle()
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
         enemy_list.add(new Enemy(ANCHO-200, ALTO/2, 100, 1));
