@@ -200,7 +200,9 @@ class PantallaJuego extends Pantalla{
         personaje = new Personaje(ANCHO/4,ALTO/2, vidaPersonaje);
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
-        enemy_list.add(new Enemy(ANCHO-200, ALTO/2, 100, damageEnemigo));
+        enemy_list.add(new Enemy(ANCHO-200, ALTO/2, 100, 1));
+        enemy_list.add(new Enemy(ANCHO-300, ALTO/4, 100, 1));
+        enemy_list.add(new Enemy(ANCHO-50, ALTO/2, 100, 1));
         //
         Gdx.input.setInputProcessor(escenaJuego);
         //Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -240,7 +242,7 @@ class PantallaJuego extends Pantalla{
         batch.end();
         //*******************************************************Dibujar escena del juego*******************************************************
         batch.begin();
-        music.setVolume(0.5f);
+        music.setVolume(0.2f);
         music.play();
         escenaJuego.draw();
         batch.end();
@@ -311,8 +313,8 @@ class PantallaJuego extends Pantalla{
         bullets.removeAll(bulletsRemove);
         //*******************************************************Check colision system*******************************************************
 
-        for (int i = 0; i <= bullets.size()-1 ; i++) {
-            for (int j = 0; j <= enemy_list.size()-1 ; j++) {
+        for (int j = 0; j <= enemy_list.size()-1 ; j++) {
+            for (int i = 0; i <= bullets.size()-1 ; i++) {
                 if (bullets.get(i).distance(enemy_list.get(j) ) < 15 ){
                     enemy_list.get(j).receiveDamage(20);
                     enemy_list.get(j).goBack();
