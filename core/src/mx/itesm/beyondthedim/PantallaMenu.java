@@ -60,7 +60,7 @@ class PantallaMenu extends Pantalla {
         texturaBtnAyuda = new Texture("Botones/button_about-us.png");
         texturaBtnSettings = new Texture("Botones/button_settings.png");
         texturaBtnInstructions = new Texture("Botones/button_instructions.png");
-        fondoPantalla = new Texture("MenuFondo.png");
+        fondoPantalla = new Texture("Stage/MenuFondo.png");
     }
 
     private void crearEcenaMenu() {

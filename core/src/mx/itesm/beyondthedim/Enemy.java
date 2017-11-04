@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *
  */
 
-public class Enemy {
+public class Enemy extends Objeto{
 
     private Texture enemmyTexture;
     private float x;

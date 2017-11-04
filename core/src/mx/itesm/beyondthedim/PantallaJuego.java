@@ -80,8 +80,8 @@ class PantallaJuego extends Pantalla{
 
 
     //Music
-    private Music music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
-    private Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
+    Music music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
+    Sound   shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
 
     public PantallaJuego(Juego juego) {
         this.juego = juego;
@@ -194,6 +194,21 @@ class PantallaJuego extends Pantalla{
         escenaJuego.addActor(movJoystick);
         escenaJuego.addActor(gunJoystick);
         movJoystick.setColor(1,1,1,0.7f);
+        //*******************************************************Boton GOBACK -> check variable and conflic agins problems*******************************************************
+        TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(texturaBtnGoBack));
+        ImageButton btnGoBack = new ImageButton(trdGoBack);
+        btnGoBack.setPosition(ANCHO-btnGoBack.getWidth()-5,ALTO-btnGoBack.getHeight()-5);
+        escenaJuego.addActor(btnGoBack);
+        //Listener boton goBack
+        btnGoBack.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                juego.setScreen(new PantallaMenu(juego));
+            }
+
+        });
     }
 
     @Override
