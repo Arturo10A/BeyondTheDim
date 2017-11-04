@@ -2,7 +2,6 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -32,6 +31,7 @@ public class boss extends Objeto {
         spriteAnimation = new Animation(0.1f, texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1]);
 
         spriteAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
 
         timerAnimation = 0;
 
