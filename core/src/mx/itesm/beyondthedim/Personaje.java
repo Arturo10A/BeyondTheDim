@@ -85,7 +85,6 @@ class Personaje extends Objeto{
                 batch.draw(texturaPersonaje[0][0], x, y);
                 break;
         }
-
     }
 
     public void setEstadoMovimiento(EstadoMovimiento estadoMovimiento, SpriteBatch batch, float tiempo) {

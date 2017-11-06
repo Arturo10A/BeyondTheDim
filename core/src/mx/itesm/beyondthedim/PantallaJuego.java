@@ -198,7 +198,7 @@ class PantallaJuego extends Pantalla{
         crearEscena();
         //Crear personaje
         personaje = new Personaje(ANCHO/4,ALTO/2, vidaPersonaje);
-        //personaje.sprite.getBoundingRectangle()
+        //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
         enemy_list.add(new Enemy(ANCHO-200, ALTO/2, 100, 1));
@@ -230,7 +230,7 @@ class PantallaJuego extends Pantalla{
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
         //Enemigos
         for (Enemy ene:enemy_list) {
-            ene.render(batch);
+            ene.render(batch, Gdx.graphics.getDeltaTime());
         }
         //Vida
         String lifeString = "Vida: " + personaje.getLife();
@@ -239,7 +239,6 @@ class PantallaJuego extends Pantalla{
         for (Bullet bullet: bullets){
             bullet.render(batch);
         }
-
         batch.end();
         //*******************************************************Dibujar escena del juego*******************************************************
         batch.begin();
@@ -250,8 +249,13 @@ class PantallaJuego extends Pantalla{
         escenaJuego.act(Gdx.graphics.getDeltaTime());
         escenaJuego.draw();
         //*******************************************************Logica enemigos*******************************************************{
+        float enemyPosAncho = 0;
+        float enemyPosAlto = 0;
         for (Enemy ene : enemy_list) {
-            ene.atack(personaje);
+            ene.atack(personaje, enemyPosAncho, enemyPosAlto);
+            enemyPosAncho += ene.sprite.getWidth()/2;
+            enemyPosAlto += ene.sprite.getHeight()/2;
+            System.out.println(ene.sprite.getBoundingRectangle());
             ene.doDamage(this.personaje);
         }
 
