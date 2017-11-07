@@ -37,7 +37,7 @@ class PantallaMenu extends Pantalla {
     private Texto texto;
 
     private Texture fondoPantalla;
-    Music music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3"));
+    private Music music;
 
     public PantallaMenu(Juego juego) {
         this.juego = juego;
@@ -48,11 +48,18 @@ class PantallaMenu extends Pantalla {
 
         cargarTexturas(); //Carga imagenes
         crearEcenaMenu(); //Crea la escena
+        cargarMusica();
         Gdx.input.setInputProcessor(escenaMenu);
 
         batch = new SpriteBatch();
         texto = new Texto();
 
+    }
+
+    private void cargarMusica(){
+        music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3"));
+        music.setLooping(true);
+        music.play();
     }
 
     private void cargarTexturas() {
@@ -148,7 +155,6 @@ class PantallaMenu extends Pantalla {
 
 
         batch.begin();
-        music.play();
         escenaMenu.draw();
         batch.end();
 
