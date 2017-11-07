@@ -139,7 +139,7 @@ class PantallaJuego extends Pantalla {
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
-        //Listener joystick movimiento
+
         movJoystick.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -260,6 +260,7 @@ class PantallaJuego extends Pantalla {
             logicaDisparo(delta);
             //***************Colision Bala/Enemigo***************
             sistemaColisionesBala();
+
         }
         //*******************************************************Ganar/Perder*******************************************************
         //***************Perder***************
@@ -381,6 +382,17 @@ class PantallaJuego extends Pantalla {
             }
         }
         bullets.removeAll(bulletsRemove);
+    }
+
+
+    private void logicaMovimiento(float delta) {
+        //*******************************************************Logica enemigos*******************************************************{
+        System.out.println("x: "+movJoystick.getKnobPercentX());
+        System.out.println("y: "+movJoystick.getKnobPercentY());
+        if(movJoystick.getKnobPercentX()!=0.000000000 && movJoystick.getKnobPercentY()!=0.000000000) {
+            System.out.println("ENTRA");
+            personaje.mover(DX_PERSONAJE * movJoystick.getKnobPercentX(), DY_PERSONAJE * movJoystick.getKnobPercentY());
+        }
     }
 
     private void logicaEnemigo(float delta) {
