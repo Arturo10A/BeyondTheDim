@@ -90,5 +90,35 @@ class Bullet {
 
     }
 
+    public double distanceBoss(boss target){
+
+        //character position
+        double enemyX = target.getPositionX();
+        double enemyY = target.getPositionY();
+
+        //Enemy position
+        double currentX = this.getPositionX();
+        double currentY = this.getPositionY();
+
+        double distance = Math.sqrt( Math.pow(enemyX-currentX,2) + Math.pow(enemyY-currentY,2));
+        return distance;
+
+    }
+
+    public double distanceJett(Personaje target){
+
+        //character position
+        double enemyX = target.getPositionX();
+        double enemyY = target.getPositionY();
+
+        //Enemy position
+        double currentX = this.getPositionX();
+        double currentY = this.getPositionY();
+
+        double distance = Math.sqrt( Math.pow(enemyX-currentX,2) + Math.pow(enemyY-currentY,2));
+        return distance;
+
+    }
+
 
 }

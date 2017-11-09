@@ -1,6 +1,5 @@
 package mx.itesm.beyondthedim;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -56,7 +55,7 @@ class Personaje extends Objeto{
     }
 
     // return the current life after recive a attack
-    public int damage(int damage){
+    public int damage(double damage){
         this.life -= damage;
         return this.life;
     }

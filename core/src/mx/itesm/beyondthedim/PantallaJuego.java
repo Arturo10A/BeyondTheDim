@@ -2,12 +2,15 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -88,7 +91,6 @@ class PantallaJuego extends Pantalla{
     }
 
     private void cargarTexturas(){
-        texturaBtnGoBack = new Texture("Botones/button_pause.png");
         texturaBtnPausa = new Texture("Botones/button_pause.png");
         textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
         //textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.png");
@@ -216,8 +218,6 @@ class PantallaJuego extends Pantalla{
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
         enemy_list.add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
-        enemy_list.add(new Enemy(ANCHO - 300, ALTO / 4, 100, 1));
-        enemy_list.add(new Enemy(ANCHO - 50, ALTO / 2, 100, 1));
         //
         Gdx.input.setInputProcessor(escenaJuego);
         //Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -271,7 +271,7 @@ class PantallaJuego extends Pantalla{
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
                 music.stop();
                 music.dispose();
-                juego.setScreen(new PantallaMenu(juego));
+                juego.setScreen(new EscenarioBoss(juego));
             }
         }
         if(estado==EstadoJuego.PAUSADO){
@@ -399,7 +399,7 @@ class PantallaJuego extends Pantalla{
             ene.atack(personaje, enemyPosAncho, enemyPosAlto);
             enemyPosAncho += ene.sprite.getWidth() / 2;
             enemyPosAlto += ene.sprite.getHeight() / 2;
-            System.out.println(ene.sprite.getBoundingRectangle());
+            //System.out.println(ene.sprite.getBoundingRectangle());
             ene.doDamage(this.personaje);
         }
 
@@ -424,7 +424,7 @@ class PantallaJuego extends Pantalla{
 
     private class EscenaPausa extends Stage {
 
-        public EscenaPausa(Viewport vista, SpriteBatch batch) {
+        EscenaPausa(Viewport vista, SpriteBatch batch) {
             // Crear triángulo transparente
             //ESTo se tiene que cambiar!!!!!!!!!!!!!!!!!!!!
             Pixmap pixmap = new Pixmap((int) (ANCHO * 0.7f), (int) (ALTO * 0.8f), Pixmap.Format.RGBA8888);

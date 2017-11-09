@@ -41,6 +41,14 @@ public class EscenarioBoss extends  Pantalla {
     private int DX_PERSONAJE=5;
     private int DY_PERSONAJE =5;
 
+
+    //BOSS
+    private boss boss;
+    float Bosstimer = 0;
+    double bossShot = 100;
+    double bossShotFollow = 0.0;
+
+
     //Escenario
     private Stage escenaJuego;
 
@@ -49,6 +57,9 @@ public class EscenarioBoss extends  Pantalla {
     private ArrayList<Bullet> bullets;
     private static final float SWT = 0.3f;
     private float shootTimer;
+
+
+    private ArrayList<Bullet> BossBullets;
 
 
     private Texto texto;
@@ -69,8 +80,11 @@ public class EscenarioBoss extends  Pantalla {
     private void crearEscena(){
         escenaJuego = new Stage(vista);
 
+
         bullets = new ArrayList<Bullet>();
         shootTimer=0;
+
+        BossBullets = new ArrayList<Bullet>();
 
         logicaJoystick();
 
@@ -164,6 +178,9 @@ public class EscenarioBoss extends  Pantalla {
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Gdx.input.setInputProcessor(escenaJuego);
 
+        boss = new boss(ANCHO/2,ALTO/2,100);
+
+
         texto = new Texto();
     }
 
@@ -179,15 +196,31 @@ public class EscenarioBoss extends  Pantalla {
         batch.begin();
         batch.draw(textureEscenario, Pantalla.ANCHO/2- textureEscenario.getWidth()/2, Pantalla.ALTO/2- textureEscenario.getHeight()/2);
 
+        if (boss.getLife() > 0){
+            boss.dibujar(batch);
+        }
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
         //Vida
-        String lifeString = "Vida: " + personaje.getLife();
-        texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
+
+        if (personaje.getLife() > 0) {
+            String lifeString = "Vida: " + personaje.getLife();
+            texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
+        }else {
+            String lifeString = "vida 0";
+            texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
+            juego.setScreen(new LoseScreen(juego));
+        }
+
 
         //Balas
         for (Bullet bullet: bullets){
+            bullet.render(batch);
+        }
+
+        //Balas de jefe
+        for (Bullet bullet: BossBullets){
             bullet.render(batch);
         }
 
@@ -251,8 +284,106 @@ public class EscenarioBoss extends  Pantalla {
         bullets.removeAll(bulletsRemove);
     }
 
+    private void bossSpecialAtack(float delta, Personaje target, boss boss){
+
+        Bosstimer += delta;
+        bossShotFollow += delta;
+
+
+        if (boss.getLife() < 80){
+            bossShot = 3.0;
+        }
+        else if(boss.getLife() < 60){
+            bossShot = 2.0;
+        }
+        else if(boss.getLife() < 30){
+            bossShot = 1.0;
+        }
+
+        else if(boss.getLife() < 10){
+            bossShot = 0.1;
+        }
+
+        if (Bosstimer >= bossShot) {
+            Bosstimer = 0;
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 0));
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, -1));
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, -1));
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, -1));
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 0));
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 1));
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
+            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 1));
+        }
+
+
+        //Diparar al objetivo mientras lo sigue
+        if (bossShotFollow > 0.2){
+            bossShotFollow = 0;
+            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
+                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 1));
+            }
+            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
+                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, -1));
+            }
+            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
+                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 1));
+            }
+            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
+                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, -1));
+            }
+
+            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() == personaje.getPositionY()) {
+                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 0));
+            }
+
+            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() == personaje.getPositionY()) {
+                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 0));
+            }
+            if (boss.getPositionX() == personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
+                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, -1));
+            }
+            if (boss.getPositionX() == personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
+                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
+            }
+        }
+        ArrayList<Bullet> BoosbulletsRemove = new ArrayList<Bullet>();
+
+        for(Bullet bullet : BossBullets){
+            bullet.update(delta);
+            if (bullet.removeB){
+                BoosbulletsRemove.add(bullet);
+            }
+        }
+        BossBullets.removeAll(BoosbulletsRemove);
+
+        for (int i = 0; i < BossBullets.size(); i++) {
+            if (BossBullets.get(i).distanceJett(personaje) < 25){
+                System.out.println("** JETT EN PROBLEMAS **");
+                personaje.damage(1);
+                BossBullets.remove(i);
+            }
+        }
+    }
+
+    public void collisiones(boss Boss){
+
+
+        for (int bala = 0; bala < bullets.size(); bala++) {
+            if (bullets.get(bala).distanceBoss(Boss) < 100){
+                Boss.Damege(1);
+                bullets.remove(bala);
+            }
+        }
+
+
+    }
+
+
     @Override
     public void render(float delta) {
+
 
         borrarPantalla();
         batch.setProjectionMatrix(camara.combined);
@@ -262,9 +393,26 @@ public class EscenarioBoss extends  Pantalla {
 
         escenaJuego.draw();
 
+        //boss.teleport(personaje);
+        if (boss.getLife() > 0){
+
+            boss.atack(personaje);
+            for (Bullet bullet: bullets) {
+                boss.isUnderAtack(bullet,personaje);
+            }
+            collisiones(boss);
+            bossSpecialAtack(delta, personaje, boss);
+           
+        }
+        else {
+            BossBullets.clear();
+        }
+
+
         dibujarObjetos();
         dibujarEscena();
         logicaDisparo(delta);
+
 
         if(timeBala >= 100.0){
             for (int i = 0; i < bullets.size()-4; i++) {
@@ -274,10 +422,6 @@ public class EscenarioBoss extends  Pantalla {
         }else {
             timeBala++;
         }
-
-
-
-
 
     }
 
