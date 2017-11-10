@@ -68,7 +68,7 @@ public class LoseScreen extends Pantalla{
                 Gdx.app.log("clicked","***Inicio***");
                 lose.stop();
                 lose.dispose();
-                juego.setScreen(new PantallaMenu(juego));
+                juego.setScreen(new PantallaMenu(juego, null));
             }
         });
 

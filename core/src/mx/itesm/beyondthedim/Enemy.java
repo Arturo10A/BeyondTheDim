@@ -95,7 +95,7 @@ public class Enemy extends Objeto{
         mover(50,0);
     }
 
-    public void atack(Personaje target, float enemyPosAncho, float enemyPosAlto){
+    public void attack(Personaje target, float enemyPosAncho, float enemyPosAlto){
         if(target.getPositionX()>this.x)
             setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA);
         else{
@@ -103,7 +103,6 @@ public class Enemy extends Objeto{
         }
         this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.02));
         this.y +=  ((float) ((target.getPositionY() - this.getPositionY() + enemyPosAlto) * 0.02));
-
     }
 
     public void doDamage(Personaje target){

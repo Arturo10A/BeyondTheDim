@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -29,11 +30,13 @@ class PantallaAboutUs extends Pantalla {
     private Texto texto; // Variable que asignara todos los textos que deasemos mostrar en la pantalla
     private Stage ecenaAyuda; /* Variable encargada de dibujar todo nuestro escenario */
     private Texture texturaBtnGoBack; //Boton de regresp
+    private Music music;
 
 
 
-    public PantallaAboutUs(Juego juego) {
+    public PantallaAboutUs(Juego juego, Music music) {
         this.juego = juego;
+        this.music = music;
     }
 
     @Override
@@ -70,7 +73,7 @@ class PantallaAboutUs extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***GO BACK***");
-                juego.setScreen(new PantallaMenu(juego));
+                juego.setScreen(new PantallaMenu(juego,music));
             }
         });
 

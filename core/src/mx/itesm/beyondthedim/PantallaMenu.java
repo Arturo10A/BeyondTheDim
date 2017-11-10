@@ -38,9 +38,11 @@ class PantallaMenu extends Pantalla {
 
     private Texture fondoPantalla;
     private Music music;
+    private boolean musicOn;
 
-    public PantallaMenu(Juego juego) {
+    public PantallaMenu(Juego juego, Music musicMenu) {
         this.juego = juego;
+        this.music = musicMenu;
     }
 
     @Override
@@ -48,7 +50,9 @@ class PantallaMenu extends Pantalla {
 
         cargarTexturas(); //Carga imagenes
         crearEcenaMenu(); //Crea la escena
-        cargarMusica();
+        if(music == null) {
+            cargarMusica();
+        }
         Gdx.input.setInputProcessor(escenaMenu);
 
         batch = new SpriteBatch();
@@ -105,7 +109,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA Settings***");
-                juego.setScreen(new PantallaSettings(juego));
+                juego.setScreen(new PantallaSettings(juego, music));
             }
         });
         escenaMenu.addActor(btnSettings);
@@ -121,7 +125,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA Intruciones***");
-                juego.setScreen(new PantallaInstruciones(juego));
+                juego.setScreen(new PantallaInstruciones(juego, music));
             }
 
 
@@ -139,7 +143,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA PANTALLA***");
-                juego.setScreen(new PantallaAboutUs(juego));
+                juego.setScreen(new PantallaAboutUs(juego, music));
             }
 
 

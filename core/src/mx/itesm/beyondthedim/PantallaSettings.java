@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -34,6 +35,12 @@ class PantallaSettings extends Pantalla {
     private Texture textureGoBack;
     //
     private SpriteBatch batch;
+    private Music music;
+
+    public PantallaSettings(Juego juego, Music music) {
+        this.juego = juego;
+        this.music = music;
+    }
 
     public void cargarTextura(){
 
@@ -61,7 +68,7 @@ class PantallaSettings extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***GO BACK***");
-                juego.setScreen(new PantallaMenu(juego));
+                juego.setScreen(new PantallaMenu(juego, music));
             }
         });
 
@@ -73,9 +80,7 @@ class PantallaSettings extends Pantalla {
 
     }
 
-    public PantallaSettings(Juego juego) {
-        this.juego = juego;
-    }
+
 
 
 

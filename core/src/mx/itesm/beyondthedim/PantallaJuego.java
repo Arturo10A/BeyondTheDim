@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
@@ -35,12 +34,16 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
  *
  */
 
-class PantallaJuego extends Pantalla{
+class PantallaJuego extends Pantalla {
     //Imagen del ecenario
     private final Juego juego;
     private Texture textureEscenario;
     private Texture textureEscenarioAbierto;
-
+    //
+    private float DX = 28;
+    private int pasos = 20;
+    private float timerPasos = 0;
+    private boolean nivelTerminado = false;
 
     //Jett start
     private Personaje personaje;
@@ -52,7 +55,7 @@ class PantallaJuego extends Pantalla{
     private EstadoJuego estado = EstadoJuego.JUGANDO;
     //Enemy block
     private int damageEnemigo = 10;
-    private ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
+    ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
     //Escenario
     private Stage escenaJuego;
     private EscenaPausa escenaPausa;
@@ -80,8 +83,6 @@ class PantallaJuego extends Pantalla{
     private ArrayList<Bullet> bullets;
     private static final float SWT = 0.3f;
     private float shootTimer;
-
-
     //Music
     private Music music;
     private Sound shoot;
@@ -90,10 +91,10 @@ class PantallaJuego extends Pantalla{
         this.juego = juego;
     }
 
-    private void cargarTexturas(){
+    public void cargarTexturas() {
         texturaBtnPausa = new Texture("Botones/button_pause.png");
         textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
-        //textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.png");
+        textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.png");
     }
 
     private void cargarMusica(){
@@ -103,7 +104,7 @@ class PantallaJuego extends Pantalla{
 
         shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
     }
-
+    /*
     public void createEnemy(float delta) {
 
         if (delta >= 10.0) {
@@ -111,7 +112,7 @@ class PantallaJuego extends Pantalla{
             delta = 0;
         }
 
-    }
+    }*/
 
     public void crearEscena() {
 
@@ -137,7 +138,7 @@ class PantallaJuego extends Pantalla{
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
-
+        //Listener joystick movimiento
         movJoystick.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -218,6 +219,8 @@ class PantallaJuego extends Pantalla{
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
         enemy_list.add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        enemy_list.add(new Enemy(ANCHO - 300, ALTO / 4, 100, 1));
+        enemy_list.add(new Enemy(ANCHO - 50, ALTO / 2, 100, 1));
         //
         Gdx.input.setInputProcessor(escenaJuego);
         //Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -256,7 +259,6 @@ class PantallaJuego extends Pantalla{
             logicaDisparo(delta);
             //***************Colision Bala/Enemigo***************
             sistemaColisionesBala();
-
         }
         //*******************************************************Ganar/Perder*******************************************************
         //***************Perder***************
@@ -266,11 +268,13 @@ class PantallaJuego extends Pantalla{
             juego.setScreen(new LoseScreen(juego));
         }
         //***************Ganar***************
-        if (enemy_list.isEmpty()) {
-            textureEscenario = new Texture("Stage/fondo_nivel_uno_abierto.png");
+        if (enemy_list.isEmpty()){
+            textureEscenario = textureEscenarioAbierto;
+
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
                 music.stop();
                 music.dispose();
+                //juego.setScreen(new PantallaMenu(juego, false));
                 juego.setScreen(new EscenarioBoss(juego));
             }
         }
@@ -298,20 +302,22 @@ class PantallaJuego extends Pantalla{
 
     private void sistemaColisionesBala() {
         //*******************************************************Check colision system*******************************************************
-
-        for (int j = 0; j <= enemy_list.size() - 1; j++) {
-            for (int i = 0; i <= bullets.size() - 1; i++) {
+        //Empezar en -1 y terminar en 0
+        for (int j = enemy_list.size() - 1; j >=0 ; j--) {
+            for (int i = bullets.size() - 1; i>=0; i--) {
                 if (bullets.get(i).distance(enemy_list.get(j)) < 15) {
                     enemy_list.get(j).receiveDamage(20);
                     enemy_list.get(j).goBack();
-                    bullets.remove(bullets.get(i));
+                    bullets.remove(i);
 
                     if (enemy_list.get(j).isDead()) {
-                        enemy_list.remove(enemy_list.get(j));
+                        enemy_list.remove(j);
+                        break;
                     }
                 }
             }
         }
+        //Cambiar timeBala a timer
         if (timeBala >= 100.0) {
             for (int i = 0; i < bullets.size() - 4; i++) {
                 bullets.remove(i);
@@ -368,16 +374,23 @@ class PantallaJuego extends Pantalla{
             bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), 1, 1));
             shoot.play();
         }
-
-
+/*
+        //Modificar
         ArrayList<Bullet> bulletsRemove = new ArrayList<Bullet>();
         for (Bullet bullet : bullets) {
             bullet.update(delta);
             if (bullet.removeB) {
                 bulletsRemove.add(bullet);
             }
+        }*/
+        //bullets.removeAll(bulletsRemove);
+        for(int i = bullets.size()-1;i>=0;i--){
+            bullets.get(i).update(delta);
+            if(bullets.get(i).removeB){
+                bullets.remove(i);
+            }
         }
-        bullets.removeAll(bulletsRemove);
+        Gdx.app.log("Logica balas", "Tamaño" + bullets.size());
     }
 
 
@@ -396,14 +409,13 @@ class PantallaJuego extends Pantalla{
         float enemyPosAncho = 0;
         float enemyPosAlto = 0;
         for (Enemy ene : enemy_list) {
-            ene.atack(personaje, enemyPosAncho, enemyPosAlto);
+            ene.attack(personaje, enemyPosAncho, enemyPosAlto);
             enemyPosAncho += ene.sprite.getWidth() / 2;
             enemyPosAlto += ene.sprite.getHeight() / 2;
-            //System.out.println(ene.sprite.getBoundingRectangle());
             ene.doDamage(this.personaje);
         }
 
-        createEnemy(delta);
+        //createEnemy(delta);
     }
 
     @Override
@@ -424,7 +436,7 @@ class PantallaJuego extends Pantalla{
 
     private class EscenaPausa extends Stage {
 
-        EscenaPausa(Viewport vista, SpriteBatch batch) {
+        public EscenaPausa(Viewport vista, SpriteBatch batch) {
             // Crear triángulo transparente
             //ESTo se tiene que cambiar!!!!!!!!!!!!!!!!!!!!
             Pixmap pixmap = new Pixmap((int) (ANCHO * 0.7f), (int) (ALTO * 0.8f), Pixmap.Format.RGBA8888);
@@ -447,7 +459,7 @@ class PantallaJuego extends Pantalla{
                 public void clicked(InputEvent event, float x, float y) {
                     // Regresa al menú
                     music.stop();
-                    juego.setScreen(new PantallaMenu(juego));
+                    juego.setScreen(new PantallaMenu(juego, null));
                 }
             });
             this.addActor(btnSalir);
