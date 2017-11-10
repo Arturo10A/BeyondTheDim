@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -35,7 +37,7 @@ public abstract class Pantalla implements Screen {
     //Betacolliders
     protected Box2DDebugRenderer b2dr;
     protected World world;
-    private Body player;
+    protected Body player;
 
     //Todas las pantallas sibujan
     protected SpriteBatch batch;
@@ -45,7 +47,7 @@ public abstract class Pantalla implements Screen {
         camara = new OrthographicCamera(ANCHO,ALTO);
 
 
-        world = new World(new Vector2(0,-9.8f),false);
+        world = new World(new Vector2(0,0f),false);
         b2dr = new Box2DDebugRenderer();
 
         camara.position.set(ANCHO/2,ALTO/2,0);
@@ -55,8 +57,11 @@ public abstract class Pantalla implements Screen {
     }
 
     protected void borrarPantalla(){
+        update(Gdx.graphics.getDeltaTime());
+
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
     }
 
     protected  void borrarPantalla(float r, float g, float b){
@@ -79,6 +84,30 @@ public abstract class Pantalla implements Screen {
     @Override
     public void hide() {
         dispose();
+
         /// Libera los recursos asignados por cada pantalla
     }
+
+    public void update(float delta){
+        world.step(1/60f,6,2);
+
+    }
+
+    public Body createObject(float x, float y){
+        Body pBody;
+        BodyDef def = new BodyDef();
+        def.type = BodyDef.BodyType.DynamicBody;
+        def.position.set(x,y);
+        def.fixedRotation = true;
+        pBody = world.createBody(def);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(Constants.PPM / 2, Constants.PPM /2);
+
+        pBody.createFixture(shape,1.0f);
+        shape.dispose();
+
+        return pBody;
+    }
+
 }

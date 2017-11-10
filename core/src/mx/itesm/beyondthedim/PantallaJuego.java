@@ -83,6 +83,9 @@ class PantallaJuego extends Pantalla {
     private ArrayList<Bullet> bullets;
     private static final float SWT = 0.3f;
     private float shootTimer;
+
+    private SpacialBox obj1;
+
     //Music
     private Music music;
     private Sound shoot;
@@ -154,9 +157,9 @@ class PantallaJuego extends Pantalla {
                 }
                 //Restricciones de movimiento(paredes)
                 //Right
-                if (personaje.getPositionX() >= 1105.23 && movJoystick.getKnobPercentX() > 0) {
+                if (personaje.getPositionX() >= 1120 && movJoystick.getKnobPercentX() > 0) {
 
-                    personaje.mover(-10, DY_PERSONAJE * pad.getKnobPercentY());
+                    personaje.mover(-1, DY_PERSONAJE * pad.getKnobPercentY());
                 }
                 //Left
                 else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
@@ -211,6 +214,7 @@ class PantallaJuego extends Pantalla {
     public void show() {
         //Cargar escena
         cargarTexturas();
+
         crearEscena();
         cargarMusica();
         //Crear personaje
@@ -233,7 +237,6 @@ class PantallaJuego extends Pantalla {
 
         borrarPantalla(0, 0, 0);
         batch.setProjectionMatrix(camara.combined);
-
         //If timeBala equals 10 move the enemy to the current location of the character
         //Start damage
 
@@ -242,7 +245,9 @@ class PantallaJuego extends Pantalla {
         escenaJuego.draw();
         //*******************************************************Dibujar Objetos*******************************************************
         batch.begin();
+
         dibujarObjetos();
+
         batch.end();
         //*******************************************************Dibujar escena del juego*******************************************************
         batch.begin();
@@ -285,6 +290,9 @@ class PantallaJuego extends Pantalla {
 
     private void dibujarObjetos() {
         batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
+        player = createObject(personaje.getPositionX(),personaje.getPositionY());
+        obj1 = new SpacialBox(world,"LOCO",personaje.getPositionX(),personaje.getPositionY());
+
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
         //Enemigos
@@ -298,6 +306,7 @@ class PantallaJuego extends Pantalla {
         for (Bullet bullet : bullets) {
             bullet.render(batch);
         }
+
     }
 
     private void sistemaColisionesBala() {
