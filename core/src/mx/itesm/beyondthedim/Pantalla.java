@@ -5,6 +5,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -28,6 +32,10 @@ public abstract class Pantalla implements Screen {
     //Todas las pantallas tiene una cámara y la vista
     protected OrthographicCamera camara;
     protected Viewport vista;
+    //Betacolliders
+    protected Box2DDebugRenderer b2dr;
+    protected World world;
+    private Body player;
 
     //Todas las pantallas sibujan
     protected SpriteBatch batch;
@@ -35,6 +43,11 @@ public abstract class Pantalla implements Screen {
     public Pantalla(){
 
         camara = new OrthographicCamera(ANCHO,ALTO);
+
+
+        world = new World(new Vector2(0,-9.8f),false);
+        b2dr = new Box2DDebugRenderer();
+
         camara.position.set(ANCHO/2,ALTO/2,0);
         camara.update();
         vista = new StretchViewport(ANCHO,ALTO,camara);
@@ -56,12 +69,16 @@ public abstract class Pantalla implements Screen {
     //Borra la pantalla con el color RGB(r,g,b)
     @Override
     public void resize(int width, int height) {
+
         vista.update(width,height);
+        camara.viewportHeight=ALTO;
+        camara.viewportWidth=ANCHO;
+        camara.update();
     }
 
     @Override
     public void hide() {
-        dispose();  /// Libera los recursos asignados por cada pantalla
+        dispose();
+        /// Libera los recursos asignados por cada pantalla
     }
-
 }

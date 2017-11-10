@@ -77,4 +77,5 @@ class HistoriaPrimeraParte extends Pantalla {
     public void dispose() {
 
     }
+
 }

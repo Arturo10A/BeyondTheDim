@@ -124,4 +124,5 @@ public class LoseScreen extends Pantalla{
     public void resume() {}
     @Override
     public void dispose() {}
+
 }

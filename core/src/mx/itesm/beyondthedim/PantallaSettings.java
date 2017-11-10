@@ -120,4 +120,6 @@ class PantallaSettings extends Pantalla {
     public void dispose() {
 
     }
+
+
 }

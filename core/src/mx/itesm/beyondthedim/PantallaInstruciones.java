@@ -183,4 +183,5 @@ class PantallaInstruciones extends Pantalla  {
     public void dispose() {
 
     }
+
 }
