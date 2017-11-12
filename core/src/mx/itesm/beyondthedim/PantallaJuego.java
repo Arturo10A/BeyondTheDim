@@ -442,20 +442,19 @@ class PantallaJuego extends Pantalla {
 
     }
 
-
     private class EscenaPausa extends Stage {
 
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
-            // Crear triángulo transparente
+            super(vista,batch);
             //ESTo se tiene que cambiar!!!!!!!!!!!!!!!!!!!!
-            Pixmap pixmap = new Pixmap((int) (ANCHO * 0.7f), (int) (ALTO * 0.8f), Pixmap.Format.RGBA8888);
-            pixmap.setColor(255, 102, 102, 0.65f);
-            pixmap.fillTriangle(0, pixmap.getHeight(), pixmap.getWidth(), pixmap.getHeight(), pixmap.getWidth() / 2, 0);
-            Texture texturaTriangulo = new Texture(pixmap);
+            Pixmap pixmap = new Pixmap((int) (ANCHO), (int) (ALTO), Pixmap.Format.RGBA8888);
+            pixmap.setColor(255, 255, 255, 0.5f);
+            pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
+            Texture texturaRectangulo = new Texture(pixmap);
             pixmap.dispose();
-            Image imgTriangulo = new Image(texturaTriangulo);
-            imgTriangulo.setPosition(0.15f * ANCHO, 0.1f * ALTO);
-            this.addActor(imgTriangulo);
+            Image imgRectangulo = new Image(texturaRectangulo);
+            imgRectangulo.setPosition(0, 0);
+            this.addActor(imgRectangulo);
 
             // Salir
             Texture texturaBtnSalir = new Texture("Objetos_varios/btnSalir.png");
@@ -489,11 +488,7 @@ class PantallaJuego extends Pantalla {
                 }
             });
             this.addActor(btnReintentar);
-
         }
-
-
-
     }
 
 

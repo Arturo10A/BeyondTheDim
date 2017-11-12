@@ -36,6 +36,9 @@ class PantallaMenu extends Pantalla {
     private Texture texturaBtnInstructions;
     private Texto texto;
 
+    //Nave
+    private Nave nave;
+
     private Texture fondoPantalla;
     private Music music;
     private boolean musicOn;
@@ -50,6 +53,7 @@ class PantallaMenu extends Pantalla {
 
         cargarTexturas(); //Carga imagenes
         crearEcenaMenu(); //Crea la escena
+        cargarNave();
         if(music == null) {
             cargarMusica();
         }
@@ -58,6 +62,11 @@ class PantallaMenu extends Pantalla {
         batch = new SpriteBatch();
         texto = new Texto();
 
+    }
+
+    private void cargarNave() {
+        nave = new Nave(ANCHO/2-280/2,ALTO*0.20f);
+        nave.setEstadoMovimiento(Objeto.EstadoMovimiento.ACTIVO);
     }
 
     private void cargarMusica(){
@@ -86,7 +95,7 @@ class PantallaMenu extends Pantalla {
         //Boton jugar
         TextureRegionDrawable trdPlay = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
         ImageButton btnPlay = new ImageButton(trdPlay);
-        btnPlay.setPosition(ANCHO/2-(btnPlay.getWidth()/2),ALTO*0.23f);
+        btnPlay.setPosition(ANCHO/2-(btnPlay.getWidth()/2),ALTO*0.20f);
         btnPlay.addListener( new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -113,7 +122,7 @@ class PantallaMenu extends Pantalla {
             }
         });
         escenaMenu.addActor(btnSettings);
-
+        /*
         //Boton instruciones
         TextureRegionDrawable trdIntruction = new TextureRegionDrawable(new TextureRegion(texturaBtnInstructions));
         ImageButton btnIntruction = new ImageButton(trdIntruction);
@@ -131,7 +140,7 @@ class PantallaMenu extends Pantalla {
 
         });
         escenaMenu.addActor(btnIntruction);
-
+        */
         //Boton aboutUS
         TextureRegionDrawable trdAboutUs = new TextureRegionDrawable(new TextureRegion(texturaBtnAyuda));
         ImageButton btnAboutUs = new ImageButton(trdAboutUs);
@@ -149,17 +158,16 @@ class PantallaMenu extends Pantalla {
 
         });
         escenaMenu.addActor(btnAboutUs);
+
     }
 
     @Override
     public void render(float delta) {
         borrarPantalla(1.0f,1.0f,1.0f);
         batch.setProjectionMatrix(camara.combined);
-
-
-
-        batch.begin();
         escenaMenu.draw();
+        batch.begin();
+        nave.dibujar(batch,Gdx.graphics.getDeltaTime());
         batch.end();
 
     }

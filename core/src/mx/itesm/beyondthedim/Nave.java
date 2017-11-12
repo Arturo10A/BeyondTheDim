@@ -8,80 +8,57 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Creado por Equipo 2
- *
- *Arturo Amador Paulino
- *Monserrat Lira Sorcia
- *Jose Rodrigo Narvaez Berlanga
- *Jorge Alexis Rubio Sumano
- *
+ * <p>
+ * Arturo Amador Paulino
+ * Monserrat Lira Sorcia
+ * Jose Rodrigo Narvaez Berlanga
+ * Jorge Alexis Rubio Sumano
  */
 
-class Personaje extends Objeto{
+public class Nave extends Objeto {
 
-    private TextureRegion jettTextureCompleta;
-    TextureRegion[][] texturaPersonaje;
+    private TextureRegion naveTextureCompleta;
+    private TextureRegion[][] texturaNave;
     private Animation<TextureRegion> spriteAnimado;
-    protected EstadoMovimiento estadoMovimiento = EstadoMovimiento.QUIETO;
+    protected Personaje.EstadoMovimiento estadoMovimiento = EstadoMovimiento.ACTIVO;
     private float timerAnimacion;
     private float x;
     private float y;
-    private int life;
+    //Medidas nave sprite
+    protected int ANCHO = 1400/5; //280
+    protected int ALTO = 225;
 
-
-    public Personaje(float x, float y, int life){
-        this.life = life;
+    public Nave(float x, float y){
         this.x = x;
         this.y = y;
-        jettTextureCompleta = new TextureRegion(new Texture("Personaje/jett_completo.png"));
+        naveTextureCompleta = new TextureRegion(new Texture("Objetos_varios/nave_completa.png"));
 
-        //Divide en 4 frames 63x100
-        texturaPersonaje = jettTextureCompleta.split(63,100);
+        //Divide en 4 frames 280*250
+        texturaNave = naveTextureCompleta.split(ANCHO,ALTO);
 
         //Se crea la animacion con tiempo de 0.25 segundos entre frames
-        spriteAnimado = new Animation(0.1f, texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1]);
+        spriteAnimado = new Animation(0.1f, texturaNave[0][3], texturaNave[0][2], texturaNave[0][1], texturaNave[0][0]);
 
         //Animación infinita
         spriteAnimado.setPlayMode(Animation.PlayMode.LOOP);
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
         timerAnimacion = 0;
         // Crea el sprite con el personaje quieto (idle)
-        sprite = new Sprite(texturaPersonaje[0][0]);    // QUIETO
+        sprite = new Sprite(texturaNave[0][0]);    // QUIETO
         sprite.setPosition(x,y);    // Posición inicial
-    }
-
-    //return the current life of the character
-    public int getLife(){
-        return this.life;
-    }
-
-    // return the current life after recive a attack
-    public int damage(double damage){
-        this.life -= damage;
-        return this.life;
     }
 
     public void dibujar(SpriteBatch batch, float tiempo){
         // Dibuja el personaje dependiendo del estadoMovimiento
         switch (estadoMovimiento) {
-            case MOV_DERECHA:
-            case MOV_IZQUIERDA:
+            case ACTIVO:
                 timerAnimacion += tiempo;
                 // Frame que se dibujará
                 TextureRegion region = spriteAnimado.getKeyFrame(timerAnimacion, true);
-                if (estadoMovimiento==EstadoMovimiento.MOV_IZQUIERDA) {
-                    if (!region.isFlipX()) {
-                        region.flip(true,false);
-                    }
-                } else {
-                    if (region.isFlipX()) {
-                        region.flip(true,false);
-                    }
-                }
                 batch.draw(region,x,y);
                 break;
-            case QUIETO:
-            case INICIANDO:
-                batch.draw(texturaPersonaje[0][0], x, y);
+            case PROPULSOR:
+                batch.draw(texturaNave[0][5], x, y);
                 break;
         }
     }
@@ -114,11 +91,6 @@ class Personaje extends Objeto{
         sprite.setX(x);
         sprite.setY(y);
     }
-
-    public void recolectarObjetos(){
-
-    }
-
 
 
 }

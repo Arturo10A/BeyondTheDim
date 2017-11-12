@@ -147,11 +147,5 @@ public class Enemy extends Objeto{
     public float getPositionX(){return this.x;}
     public float getPositionY(){return this.y;}
 
-    public enum EstadoMovimiento {
-        INICIANDO,
-        QUIETO,
-        MOV_IZQUIERDA,
-        MOV_DERECHA,
-    }
 
 }
