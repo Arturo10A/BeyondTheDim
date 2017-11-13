@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
@@ -75,14 +76,16 @@ class PantallaJuego extends Pantalla {
     //Timers to control enemys
     private float time_enemy;
 
-
-    //Life string
-
+    //Historia
+    private Texture texturaItemHistoria;
 
     //BALA
     private ArrayList<Bullet> bullets;
     private static final float SWT = 0.3f;
     private float shootTimer;
+    private boolean cambiarDireccion = true;
+    private float bulletX;
+    private float bulletY;
 
     private SpacialBox obj1;
 
@@ -98,6 +101,7 @@ class PantallaJuego extends Pantalla {
         texturaBtnPausa = new Texture("Botones/button_pause.png");
         textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
         textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.png");
+        texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
     }
 
     private void cargarMusica(){
@@ -126,6 +130,8 @@ class PantallaJuego extends Pantalla {
         bullets = new ArrayList<Bullet>();
         shootTimer = 0;
 
+
+
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
@@ -148,12 +154,14 @@ class PantallaJuego extends Pantalla {
                 Touchpad pad = (Touchpad) actor;
 
                 //Control de Sprites
-                if (pad.getKnobPercentX() > 0.20) {
-                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-                } else if (pad.getKnobPercentX() < -0.20) {
-                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-                } else if (pad.getKnobPercentX() == 0) {
-                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+                if(cambiarDireccion) {
+                    if (pad.getKnobPercentX() > 0.20) {
+                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+                    } else if (pad.getKnobPercentX() < -0.20) {
+                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+                    } else if (pad.getKnobPercentX() == 0) {
+                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+                    }
                 }
                 //Restricciones de movimiento(paredes)
                 //Right
@@ -253,6 +261,7 @@ class PantallaJuego extends Pantalla {
         batch.begin();
         music.setVolume(0.2f);
         music.play();
+
         escenaJuego.draw();
         batch.end();
         escenaJuego.act(Gdx.graphics.getDeltaTime());
@@ -306,6 +315,9 @@ class PantallaJuego extends Pantalla {
         for (Bullet bullet : bullets) {
             bullet.render(batch);
         }
+        //Items
+        batch.draw(texturaItemHistoria, ANCHO*0.80f, ALTO*0.17f,
+                texturaItemHistoria.getWidth()*0.20f,texturaItemHistoria.getHeight()*0.20f);
 
     }
 
@@ -340,58 +352,39 @@ class PantallaJuego extends Pantalla {
     private void logicaDisparo(float delta) {
         //*******************************************************Logica Disparo*******************************************************
         shootTimer += delta;
-        Vector2 v = new Vector2(gunJoystick.getKnobPercentX(), gunJoystick.getKnobPercentY());
-        float angle = v.angle();
+        bulletX = Math.round(gunJoystick.getKnobPercentX());
+        bulletY = Math.round(gunJoystick.getKnobPercentY());
+        //Disparo derecha
+        //System.out.println(gunJoystick.getKnobPercentY());
 
-        if (((angle > 337.5 && angle < 360) || (angle > 0 && angle < 22.5)) && shootTimer >= SWT) {
-            shootTimer = 0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), 1, 0));
-            shoot.play();
+        if(gunJoystick.getKnobPercentX() > 0.50 && shootTimer>=SWT){
+            shootTimer=0;
+            //cambiarDireccion = false;
+            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,1,gunJoystick.getKnobPercentY()));
+            System.out.println("Hola1******************");
         }
-        if ((angle < 337.5 && angle > 292.5) && shootTimer >= SWT) {
-            shootTimer = 0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), 1, -1));
-            shoot.play();
+        if(gunJoystick.getKnobPercentX() < -0.50 && shootTimer>=SWT){
+            shootTimer=0;
+            //cambiarDireccion = false;
+            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,-1,gunJoystick.getKnobPercentY()));
+            System.out.println("Hola2******************");
         }
-        if ((angle < 292.5 && angle > 247.5) && shootTimer >= SWT) {
-            shootTimer = 0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), 0, -1));
-            shoot.play();
+
+        if(gunJoystick.getKnobPercentY() > 0.50 && shootTimer>=SWT){
+            shootTimer=0;
+            //cambiarDireccion = false;
+            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),1));
+            System.out.println("Hola3******************");
         }
-        if ((angle < 247.5 && angle > 202.5) && shootTimer >= SWT) {
-            shootTimer = 0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), -1, -1));
-            shoot.play();
+
+        if(gunJoystick.getKnobPercentY() < -0.50 && shootTimer>=SWT){
+            shootTimer=0;
+            //cambiarDireccion= false;
+            //bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),0,-1));
+            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),-1));
+            System.out.println("Hola4******************");
         }
-        if ((angle < 202.5 && angle > 157.5) && shootTimer >= SWT) {
-            shootTimer = 0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), -1, 0));
-            shoot.play();
-        }
-        if ((angle < 157.5 && angle > 112.5) && shootTimer >= SWT) {
-            shootTimer = 0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), -1, 1));
-            shoot.play();
-        }
-        if ((angle < 112.5 && angle > 67.5) && shootTimer >= SWT) {
-            shootTimer = 0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), 0, 1));
-            shoot.play();
-        }
-        if ((angle < 67.5 && angle > 22.5) && shootTimer >= SWT) {
-            shootTimer = 0;
-            bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), 1, 1));
-            shoot.play();
-        }
-/*
-        //Modificar
-        ArrayList<Bullet> bulletsRemove = new ArrayList<Bullet>();
-        for (Bullet bullet : bullets) {
-            bullet.update(delta);
-            if (bullet.removeB) {
-                bulletsRemove.add(bullet);
-            }
-        }*/
+
         //bullets.removeAll(bulletsRemove);
         for(int i = bullets.size()-1;i>=0;i--){
             bullets.get(i).update(delta);
@@ -399,7 +392,7 @@ class PantallaJuego extends Pantalla {
                 bullets.remove(i);
             }
         }
-        Gdx.app.log("Logica balas", "Tamaño" + bullets.size());
+        //Gdx.app.log("Logica balas", "Tamaño" + bullets.size());
     }
 
 

@@ -108,6 +108,7 @@ class Personaje extends Objeto{
         this.estadoMovimiento = estadoMovimiento;
     }
 
+
     public void mover (float dx, float dy){
         x += dx;
         y += dy;
