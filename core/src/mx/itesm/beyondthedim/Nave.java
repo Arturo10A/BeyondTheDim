@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -25,16 +26,16 @@ public class Nave extends Objeto {
     private float x;
     private float y;
     //Medidas nave sprite
-    protected int ANCHO = 1400/5; //280
-    protected int ALTO = 225;
+    protected float ANCHO = 1400/5; //280
+    protected float ALTO = 225;
 
     public Nave(float x, float y){
         this.x = x;
         this.y = y;
         naveTextureCompleta = new TextureRegion(new Texture("Objetos_varios/nave_completa.png"));
 
-        //Divide en 4 frames 280*250
-        texturaNave = naveTextureCompleta.split(ANCHO,ALTO);
+        //Divide en 4 frames 280*225
+        texturaNave = naveTextureCompleta.split(280,225);
 
         //Se crea la animacion con tiempo de 0.25 segundos entre frames
         spriteAnimado = new Animation(0.1f, texturaNave[0][3], texturaNave[0][2], texturaNave[0][1], texturaNave[0][0]);
@@ -48,7 +49,7 @@ public class Nave extends Objeto {
         sprite.setPosition(x,y);    // Posición inicial
     }
 
-    public void dibujar(SpriteBatch batch, float tiempo){
+    public void dibujar(SpriteBatch batch, float tiempo, float ancho, float alto){
         // Dibuja el personaje dependiendo del estadoMovimiento
         switch (estadoMovimiento) {
             case ACTIVO:
@@ -58,7 +59,9 @@ public class Nave extends Objeto {
                 batch.draw(region,x,y);
                 break;
             case PROPULSOR:
-                batch.draw(texturaNave[0][5], x, y);
+                ANCHO-=ancho;
+                ALTO-=alto;
+                batch.draw(texturaNave[0][4], x, y, ANCHO, ALTO);
                 break;
         }
     }
@@ -92,5 +95,8 @@ public class Nave extends Objeto {
         sprite.setY(y);
     }
 
-
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
 }

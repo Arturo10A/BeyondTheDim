@@ -38,10 +38,14 @@ class PantallaMenu extends Pantalla {
 
     //Nave
     private Nave nave;
+    private float anchoNave;
+    private float altoNave;
+    float posAltoNave = 0.20f;
 
     private Texture fondoPantalla;
     private Music music;
     private boolean musicOn;
+    private boolean play = false;
 
     public PantallaMenu(Juego juego, Music musicMenu) {
         this.juego = juego;
@@ -65,7 +69,7 @@ class PantallaMenu extends Pantalla {
     }
 
     private void cargarNave() {
-        nave = new Nave(ANCHO/2-280/2,ALTO*0.20f);
+        nave = new Nave(ANCHO/2-280/2,ALTO*posAltoNave);
         nave.setEstadoMovimiento(Objeto.EstadoMovimiento.ACTIVO);
     }
 
@@ -101,9 +105,13 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***PANTALLA JUEGO***");
+                /*Quitar
                 music.stop();
                 music.dispose();
                 juego.setScreen(new PantallaJuego(juego));
+                */
+                play = true;
+                nave.setEstadoMovimiento(Objeto.EstadoMovimiento.PROPULSOR);
             }
         });
         escenaMenu.addActor(btnPlay);
@@ -166,10 +174,27 @@ class PantallaMenu extends Pantalla {
         borrarPantalla(1.0f,1.0f,1.0f);
         batch.setProjectionMatrix(camara.combined);
         escenaMenu.draw();
-        batch.begin();
-        nave.dibujar(batch,Gdx.graphics.getDeltaTime());
-        batch.end();
-
+        if(!play) {
+            altoNave = 0;
+            altoNave = 0;
+            batch.begin();
+            nave.dibujar(batch, Gdx.graphics.getDeltaTime(), anchoNave, altoNave);
+            batch.end();
+        }else{
+            altoNave += 1f;
+            anchoNave += 1f;
+            posAltoNave += (altoNave*altoNave)*0.0001f;
+            batch.begin();
+            nave.setPosition(ANCHO/2-nave.ANCHO/2,ALTO*posAltoNave);
+            nave.dibujar(batch, Gdx.graphics.getDeltaTime(), anchoNave, altoNave);
+            batch.end();
+        }
+        if(nave.ANCHO < 0 || nave.ALTO < 0){
+            music.stop();
+            music.dispose();
+            juego.setScreen(new PantallaJuego(juego));
+            this.dispose();
+        }
     }
 
 
@@ -191,6 +216,6 @@ class PantallaMenu extends Pantalla {
 
     @Override
     public void dispose() {
-
+        
     }
 }
