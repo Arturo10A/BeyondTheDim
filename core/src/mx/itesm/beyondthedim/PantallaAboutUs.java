@@ -25,11 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 class PantallaAboutUs extends Pantalla {
 
     private final Juego juego;
-    private Texture ecenario;  //Imagen del ecenario
     private Texture texturaFondoPantallaAyudad; //Fondo del ecenario
     private Texto texto; // Variable que asignara todos los textos que deasemos mostrar en la pantalla
-    private Stage ecenaAyuda; /* Variable encargada de dibujar todo nuestro escenario */
-    private Texture texturaBtnGoBack; //Boton de regresp
+    private Stage ecenaAyuda; // Variable encargada de dibujar todo nuestro escenario
+    private Texture texturaBtnGoBack;
     private Music music;
 
 

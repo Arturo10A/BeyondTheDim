@@ -27,18 +27,10 @@ public class boss extends Objeto {
 
         bossTexture      = new Texture("Personaje/jett.png");
 
-
         //texturaPersonaje = bossTexture.split(63,100);
-
         //spriteAnimation = new Animation(0.1f, texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1]);
-
         //spriteAnimation.setPlayMode(Animation.PlayMode.LOOP);
-
-
-
-
         //timerAnimation = 0;
-
        //sprite.setPosition(x,y);    // Posición inicial
 
     }

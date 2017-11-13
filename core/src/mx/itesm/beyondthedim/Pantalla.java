@@ -45,15 +45,13 @@ public abstract class Pantalla implements Screen {
     public Pantalla(){
 
         camara = new OrthographicCamera(ANCHO,ALTO);
-
-
         world = new World(new Vector2(0,0f),false);
         b2dr = new Box2DDebugRenderer();
-
         camara.position.set(ANCHO/2,ALTO/2,0);
         camara.update();
         vista = new StretchViewport(ANCHO,ALTO,camara);
         batch = new SpriteBatch();
+
     }
 
     protected void borrarPantalla(){

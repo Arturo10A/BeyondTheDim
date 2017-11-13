@@ -39,6 +39,7 @@ class PantallaJuego extends Pantalla {
     private final Juego juego;
     private Texture textureEscenario;
     private Texture textureEscenarioAbierto;
+
     //
     private float DX = 28;
     private int pasos = 20;
@@ -383,7 +384,8 @@ class PantallaJuego extends Pantalla {
             bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), 1, 1));
             shoot.play();
         }
-/*
+
+        /*
         //Modificar
         ArrayList<Bullet> bulletsRemove = new ArrayList<Bullet>();
         for (Bullet bullet : bullets) {
@@ -443,7 +445,7 @@ class PantallaJuego extends Pantalla {
     }
 
 
-    private class EscenaPausa extends Stage {
+    class EscenaPausa extends Stage {
 
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
             // Crear triángulo transparente

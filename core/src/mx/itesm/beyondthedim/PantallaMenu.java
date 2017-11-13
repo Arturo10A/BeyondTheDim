@@ -45,6 +45,10 @@ class PantallaMenu extends Pantalla {
         this.music = musicMenu;
     }
 
+    public PantallaMenu(Juego juego) {
+        this.juego = juego;
+    }
+
     @Override
     public void show() {
 

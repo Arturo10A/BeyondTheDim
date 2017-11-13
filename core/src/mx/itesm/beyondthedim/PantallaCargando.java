@@ -1,13 +1,18 @@
 package mx.itesm.beyondthedim;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 /**
  * Creado por Equipo 2
@@ -21,15 +26,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 
-class PantallaCargando implements Screen {
+class PantallaCargando extends Pantalla {
 
     private final Juego juego;
     private Texture texturafondo;
-    private SpriteBatch batch;
-
-    //Camara
-    private OrthographicCamera camara;
-    private Viewport vista;
+    private Stage escena;
 
     //Tiempo
     private float tiempo = 0;
@@ -38,54 +39,46 @@ class PantallaCargando implements Screen {
         this.juego =  juego;
     }
 
-    @Override
-    public void show() {
-        inicializarCamara();
 
-        texturafondo = new Texture("Logo/logo.png");
-        batch = new SpriteBatch();
+    private void cargarTexturas(){
+        texturafondo = new Texture("Logo/xd.png");
+    }
+
+    private void crearEscena(){
+        escena = new Stage(vista);
+
+        TextureRegionDrawable backWall = new TextureRegionDrawable(new TextureRegion(texturafondo));
+        com.badlogic.gdx.scenes.scene2d.ui.Image back = new com.badlogic.gdx.scenes.scene2d.ui.Image (backWall);
+        back.setPosition(ANCHO/2-back.getWidth()/2,ALTO/2-back.getHeight()/2);
+
+        escena.addActor(back);
 
 
     }
 
-    private void inicializarCamara() {
-        //Camara
-        camara = new OrthographicCamera(1280,720);
-        camara.position.set((1380-825)/2 ,(720-331)/1,0);
-        camara.update();
-        vista = new FitViewport(640,360, camara);
+
+    @Override
+    public void show() {
+        cargarTexturas();
+        crearEscena();
+
     }
 
     @Override
     public void render(float delta) {
 
-        borrarPantalla();
+        borrarPantalla(0,0,0);
         batch.setProjectionMatrix(camara.combined);
-        batch.begin();
-        batch.draw(texturafondo,0,0);
-        batch.end();
 
-        //Tiempo
+        batch.begin();
+        escena.draw();
+        batch.end();
 
         tiempo += Gdx.graphics.getDeltaTime();
 
         if (tiempo >= 1){
-
-            juego.setScreen(new PantallaMenu(juego, null));
-
+            juego.setScreen(new PantallaMenu(juego));
         }
-
-    }
-
-    private void borrarPantalla() {
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-        vista.update(width,height);
 
     }
 
@@ -96,11 +89,6 @@ class PantallaCargando implements Screen {
 
     @Override
     public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
 
     }
 

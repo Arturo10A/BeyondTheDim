@@ -2,18 +2,22 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
@@ -23,16 +27,7 @@ import java.util.ArrayList;
 
 public class EscenarioBoss extends  Pantalla {
 
-
     private final Juego juego;
-
-    private Texture texturaBtnGoBack;
-    private Texture textureEscenario;
-
-    //Joystick
-    private Touchpad movJoystick;
-    private Touchpad gunJoystick;
-
 
     //Jett start
     private  Personaje personaje;
@@ -40,32 +35,41 @@ public class EscenarioBoss extends  Pantalla {
     //Jett Speed
     private int DX_PERSONAJE=5;
     private int DY_PERSONAJE =5;
-
+    //Arreglo de balas
+    private ArrayList<Bullet> bullets;
+    private static final float SWT = 0.3f;
+    private float shootTimer;
+    private float timeBala;
 
     //BOSS
     private boss boss;
     float Bosstimer = 0;
     double bossShot = 100;
     double bossShotFollow = 0.0;
-
-
-    //Escenario
-    private Stage escenaJuego;
-
-
-    //Arreglo de balas
-    private ArrayList<Bullet> bullets;
-    private static final float SWT = 0.3f;
-    private float shootTimer;
-
-
+    //Arreglo balas de Jefe
     private ArrayList<Bullet> BossBullets;
+
+    //Escenario y Texturas
+    private Texture texturaBtnGoBack;
+    private Texture textureEscenario;
+    private Stage escenaJuego;
+    //Escena de Pausa
+    private PantallaJuego.EscenaPausa escenaPausa;
+
+    //Joystick
+    private Touchpad movJoystick;
+    private Touchpad gunJoystick;
+
+    //Estado del juego
+    private EstadoJuego estado = EstadoJuego.JUGANDO;
+
+
+
+
+
 
 
     private Texto texto;
-
-    private float timeBala;
-
 
     private Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
 
@@ -83,23 +87,29 @@ public class EscenarioBoss extends  Pantalla {
 
         bullets = new ArrayList<Bullet>();
         shootTimer=0;
-
         BossBullets = new ArrayList<Bullet>();
 
         logicaJoystick();
 
-        TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(texturaBtnGoBack));
-        ImageButton btnGoBack = new ImageButton(trdGoBack);
-        btnGoBack.setPosition(ANCHO-btnGoBack.getWidth()-5,ALTO-btnGoBack.getHeight()-5);
-        escenaJuego.addActor(btnGoBack);
+        TextureRegionDrawable trdPausa = new TextureRegionDrawable(new TextureRegion(texturaBtnGoBack));
+        ImageButton btnPausa = new ImageButton(trdPausa);
+        btnPausa.setPosition(ANCHO-btnPausa.getWidth()-5,ALTO-btnPausa.getHeight()-5);
+        escenaJuego.addActor(btnPausa);
 
 
-        btnGoBack.addListener(new ClickListener(){
+        btnPausa.addListener(new ClickListener(){
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                juego.setScreen(new PantallaMenu(juego, null));
+                // Se pausa el juego
+                estado = estado==EstadoJuego.PAUSADO?EstadoJuego.JUGANDO:EstadoJuego.PAUSADO;
+                if (estado==EstadoJuego.PAUSADO) {
+                    // Activar escenaPausa y pasarle el control
+                    if (escenaPausa==null) {
+                    }
+                    Gdx.input.setInputProcessor(escenaPausa);
+                }
             }
 
         });
@@ -437,6 +447,60 @@ public class EscenarioBoss extends  Pantalla {
 
     @Override
     public void dispose() {
+
+    }
+
+
+    private class EscenaPausa extends Stage {
+
+        public EscenaPausa(Viewport vista, SpriteBatch batch) {
+            // Crear triángulo transparente
+            //ESTo se tiene que cambiar!!!!!!!!!!!!!!!!!!!!
+            Pixmap pixmap = new Pixmap((int) (ANCHO * 0.7f), (int) (ALTO * 0.8f), Pixmap.Format.RGBA8888);
+            pixmap.setColor(255, 102, 102, 0.65f);
+            pixmap.fillTriangle(0, pixmap.getHeight(), pixmap.getWidth(), pixmap.getHeight(), pixmap.getWidth() / 2, 0);
+            Texture texturaTriangulo = new Texture(pixmap);
+            pixmap.dispose();
+            Image imgTriangulo = new Image(texturaTriangulo);
+            imgTriangulo.setPosition(0.15f * ANCHO, 0.1f * ALTO);
+            this.addActor(imgTriangulo);
+
+            // Salir
+            Texture texturaBtnSalir = new Texture("Objetos_varios/btnSalir.png");
+            TextureRegionDrawable trdSalir = new TextureRegionDrawable(
+                    new TextureRegion(texturaBtnSalir));
+            ImageButton btnSalir = new ImageButton(trdSalir);
+            btnSalir.setPosition(ANCHO/2-btnSalir.getWidth()/2, ALTO*0.2f);
+            btnSalir.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Regresa al menú
+                    
+                    juego.setScreen(new PantallaMenu(juego, null));
+                }
+            });
+            this.addActor(btnSalir);
+
+            // Continuar
+            Texture texturabtnReintentar = new Texture("Objetos_varios/btnContinuar.png");
+            TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
+                    new TextureRegion(texturabtnReintentar));
+            ImageButton btnReintentar = new ImageButton(trdReintentar);
+            btnReintentar.setPosition(ANCHO/2-btnReintentar.getWidth()/2, ALTO*0.5f);
+            btnReintentar.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Continuar el juego
+                    estado = EstadoJuego.JUGANDO;
+                    // Regresa el control a la pantalla
+                    Gdx.input.setInputProcessor(escenaJuego);
+                }
+            });
+            this.addActor(btnReintentar);
+
+        }
+
+
 
     }
 }
