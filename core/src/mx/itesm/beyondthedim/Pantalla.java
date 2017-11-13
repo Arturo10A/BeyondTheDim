@@ -34,10 +34,6 @@ public abstract class Pantalla implements Screen {
     //Todas las pantallas tiene una cámara y la vista
     protected OrthographicCamera camara;
     protected Viewport vista;
-    //Betacolliders
-    protected Box2DDebugRenderer b2dr;
-    protected World world;
-    protected Body player;
 
     //Todas las pantallas sibujan
     protected SpriteBatch batch;
@@ -47,8 +43,7 @@ public abstract class Pantalla implements Screen {
         camara = new OrthographicCamera(ANCHO,ALTO);
 
 
-        world = new World(new Vector2(0,0f),false);
-        b2dr = new Box2DDebugRenderer();
+
 
         camara.position.set(ANCHO/2,ALTO/2,0);
         camara.update();
@@ -84,30 +79,12 @@ public abstract class Pantalla implements Screen {
     @Override
     public void hide() {
         dispose();
-
         /// Libera los recursos asignados por cada pantalla
     }
 
     public void update(float delta){
-        world.step(1/60f,6,2);
 
     }
 
-    public Body createObject(float x, float y){
-        Body pBody;
-        BodyDef def = new BodyDef();
-        def.type = BodyDef.BodyType.DynamicBody;
-        def.position.set(x,y);
-        def.fixedRotation = true;
-        pBody = world.createBody(def);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.PPM / 2, Constants.PPM /2);
-
-        pBody.createFixture(shape,1.0f);
-        shape.dispose();
-
-        return pBody;
-    }
 
 }

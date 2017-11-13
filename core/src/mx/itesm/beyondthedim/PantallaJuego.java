@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
@@ -48,6 +50,8 @@ class PantallaJuego extends Pantalla {
 
     //Jett start
     private Personaje personaje;
+    private Personaje obstacle;
+
     private int vidaPersonaje = 1000;
     //Jett Speed
     private int DX_PERSONAJE = 5;
@@ -87,7 +91,6 @@ class PantallaJuego extends Pantalla {
     private float bulletX;
     private float bulletY;
 
-    private SpacialBox obj1;
 
     //Music
     private Music music;
@@ -165,7 +168,11 @@ class PantallaJuego extends Pantalla {
                 }
                 //Restricciones de movimiento(paredes)
                 //Right
-                if (personaje.getPositionX() >= 1120 && movJoystick.getKnobPercentX() > 0) {
+                if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
+
+                    personaje.mover(-2, DY_PERSONAJE * pad.getKnobPercentY());
+                }
+                if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
 
                     personaje.mover(-1, DY_PERSONAJE * pad.getKnobPercentY());
                 }
@@ -185,7 +192,19 @@ class PantallaJuego extends Pantalla {
 
                     personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), 10);
                 } else {
-                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), DY_PERSONAJE * pad.getKnobPercentY());
+
+                    Rectangle rp = personaje.getSprite().getBoundingRectangle();
+
+                    Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+                    Gdx.app.log("Choque",rp.toString()+","+ro.toString());
+                    rp.setX(rp.getX()+10);
+                    if(! rp.overlaps(ro)){
+                        Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+                        personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), DY_PERSONAJE * pad.getKnobPercentY());
+                    } else{
+                        Gdx.app.log("Choque ","NO SE PUEDE");
+                    }
+
                 }
             }
         });
@@ -227,12 +246,13 @@ class PantallaJuego extends Pantalla {
         cargarMusica();
         //Crear personaje
         personaje = new Personaje(ANCHO / 4, ALTO / 2, vidaPersonaje);
+        obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, vidaPersonaje);
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
-        enemy_list.add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
-        enemy_list.add(new Enemy(ANCHO - 300, ALTO / 4, 100, 1));
-        enemy_list.add(new Enemy(ANCHO - 50, ALTO / 2, 100, 1));
+      //  enemy_list.add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+       // enemy_list.add(new Enemy(ANCHO - 300, ALTO / 4, 100, 1));
+       // enemy_list.add(new Enemy(ANCHO - 50, ALTO / 2, 100, 1));
         //
         Gdx.input.setInputProcessor(escenaJuego);
         //Gdx.input.setInputProcessor(new ProcesadorEventos());
@@ -299,11 +319,13 @@ class PantallaJuego extends Pantalla {
 
     private void dibujarObjetos() {
         batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
-        player = createObject(personaje.getPositionX(),personaje.getPositionY());
-        obj1 = new SpacialBox(world,"LOCO",personaje.getPositionX(),personaje.getPositionY());
+
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
+        obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
+
+
         //Enemigos
         for (Enemy ene : enemy_list) {
             ene.render(batch, Gdx.graphics.getDeltaTime());
@@ -398,10 +420,7 @@ class PantallaJuego extends Pantalla {
 
     private void logicaMovimiento(float delta) {
         //*******************************************************Logica enemigos*******************************************************{
-        System.out.println("x: "+movJoystick.getKnobPercentX());
-        System.out.println("y: "+movJoystick.getKnobPercentY());
-        if(movJoystick.getKnobPercentX()!=0.000000000 && movJoystick.getKnobPercentY()!=0.000000000) {
-            System.out.println("ENTRA");
+        if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
             personaje.mover(DX_PERSONAJE * movJoystick.getKnobPercentX(), DY_PERSONAJE * movJoystick.getKnobPercentY());
         }
     }
