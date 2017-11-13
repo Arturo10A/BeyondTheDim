@@ -39,7 +39,6 @@ class PantallaJuego extends Pantalla {
     private final Juego juego;
     private Texture textureEscenario;
     private Texture textureEscenarioAbierto;
-
     //
     private float DX = 28;
     private int pasos = 20;
@@ -384,8 +383,7 @@ class PantallaJuego extends Pantalla {
             bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(), 1, 1));
             shoot.play();
         }
-
-        /*
+/*
         //Modificar
         ArrayList<Bullet> bulletsRemove = new ArrayList<Bullet>();
         for (Bullet bullet : bullets) {
@@ -444,8 +442,7 @@ class PantallaJuego extends Pantalla {
 
     }
 
-
-    class EscenaPausa extends Stage {
+    private class EscenaPausa extends Stage {
 
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
             // Crear triángulo transparente
@@ -476,7 +473,7 @@ class PantallaJuego extends Pantalla {
             this.addActor(btnSalir);
 
             // Continuar
-            Texture texturabtnReintentar = new Texture("Objetos_varios/btnContinuar.png");
+            Texture texturabtnReintentar = new Texture("Botones/button_back_2.png");
             TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
                     new TextureRegion(texturabtnReintentar));
             ImageButton btnReintentar = new ImageButton(trdReintentar);

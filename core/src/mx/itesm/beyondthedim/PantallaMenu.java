@@ -36,9 +36,16 @@ class PantallaMenu extends Pantalla {
     private Texture texturaBtnInstructions;
     private Texto texto;
 
+    //Nave
+    private Nave nave;
+    private float anchoNave;
+    private float altoNave;
+    float posAltoNave = 0.20f;
+
     private Texture fondoPantalla;
     private Music music;
     private boolean musicOn;
+    private boolean play = false;
 
     public PantallaMenu(Juego juego, Music musicMenu) {
         this.juego = juego;
@@ -54,6 +61,7 @@ class PantallaMenu extends Pantalla {
 
         cargarTexturas(); //Carga imagenes
         crearEcenaMenu(); //Crea la escena
+        cargarNave();
         if(music == null) {
             cargarMusica();
         }
@@ -62,6 +70,11 @@ class PantallaMenu extends Pantalla {
         batch = new SpriteBatch();
         texto = new Texto();
 
+    }
+
+    private void cargarNave() {
+        nave = new Nave(ANCHO/2-280/2,ALTO*posAltoNave);
+        nave.setEstadoMovimiento(Objeto.EstadoMovimiento.ACTIVO);
     }
 
     private void cargarMusica(){
@@ -90,15 +103,19 @@ class PantallaMenu extends Pantalla {
         //Boton jugar
         TextureRegionDrawable trdPlay = new TextureRegionDrawable(new TextureRegion(texturaBtnJugar));
         ImageButton btnPlay = new ImageButton(trdPlay);
-        btnPlay.setPosition(ANCHO/2-(btnPlay.getWidth()/2),ALTO*0.23f);
+        btnPlay.setPosition(ANCHO/2-(btnPlay.getWidth()/2),ALTO*0.20f);
         btnPlay.addListener( new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***PANTALLA JUEGO***");
+                /*Quitar
                 music.stop();
                 music.dispose();
                 juego.setScreen(new PantallaJuego(juego));
+                */
+                play = true;
+                nave.setEstadoMovimiento(Objeto.EstadoMovimiento.PROPULSOR);
             }
         });
         escenaMenu.addActor(btnPlay);
@@ -117,7 +134,7 @@ class PantallaMenu extends Pantalla {
             }
         });
         escenaMenu.addActor(btnSettings);
-
+        /*
         //Boton instruciones
         TextureRegionDrawable trdIntruction = new TextureRegionDrawable(new TextureRegion(texturaBtnInstructions));
         ImageButton btnIntruction = new ImageButton(trdIntruction);
@@ -135,7 +152,7 @@ class PantallaMenu extends Pantalla {
 
         });
         escenaMenu.addActor(btnIntruction);
-
+        */
         //Boton aboutUS
         TextureRegionDrawable trdAboutUs = new TextureRegionDrawable(new TextureRegion(texturaBtnAyuda));
         ImageButton btnAboutUs = new ImageButton(trdAboutUs);
@@ -153,19 +170,35 @@ class PantallaMenu extends Pantalla {
 
         });
         escenaMenu.addActor(btnAboutUs);
+
     }
 
     @Override
     public void render(float delta) {
         borrarPantalla(1.0f,1.0f,1.0f);
         batch.setProjectionMatrix(camara.combined);
-
-
-
-        batch.begin();
         escenaMenu.draw();
-        batch.end();
-
+        if(!play) {
+            altoNave = 0;
+            altoNave = 0;
+            batch.begin();
+            nave.dibujar(batch, Gdx.graphics.getDeltaTime(), anchoNave, altoNave);
+            batch.end();
+        }else{
+            altoNave += 1f;
+            anchoNave += 1f;
+            posAltoNave += (altoNave*altoNave)*0.0001f;
+            batch.begin();
+            nave.setPosition(ANCHO/2-nave.ANCHO/2,ALTO*posAltoNave);
+            nave.dibujar(batch, Gdx.graphics.getDeltaTime(), anchoNave, altoNave);
+            batch.end();
+        }
+        if(nave.ANCHO < 0 || nave.ALTO < 0){
+            music.stop();
+            music.dispose();
+            juego.setScreen(new PantallaJuego(juego));
+            this.dispose();
+        }
     }
 
 

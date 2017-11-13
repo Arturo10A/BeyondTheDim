@@ -40,4 +40,15 @@ public class Objeto {
         sprite.draw(batch);
     }
 
+    public enum EstadoMovimiento {
+        //Personajes
+        INICIANDO,
+        QUIETO,
+        MOV_IZQUIERDA,
+        MOV_DERECHA,
+        //Nave
+        ACTIVO,
+        PROPULSOR,
+    }
+
 }
