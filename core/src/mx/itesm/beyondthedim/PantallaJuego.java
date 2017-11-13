@@ -448,7 +448,7 @@ class PantallaJuego extends Pantalla {
             super(vista,batch);
             //ESTo se tiene que cambiar!!!!!!!!!!!!!!!!!!!!
             Pixmap pixmap = new Pixmap((int) (ANCHO), (int) (ALTO), Pixmap.Format.RGBA8888);
-            pixmap.setColor(255, 255, 255, 0.5f);
+            pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.4f );
             pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
             Texture texturaRectangulo = new Texture(pixmap);
             pixmap.dispose();
@@ -457,7 +457,7 @@ class PantallaJuego extends Pantalla {
             this.addActor(imgRectangulo);
 
             // Salir
-            Texture texturaBtnSalir = new Texture("Objetos_varios/btnSalir.png");
+            Texture texturaBtnSalir = new Texture("Botones/button_inicio.png");
             TextureRegionDrawable trdSalir = new TextureRegionDrawable(
                     new TextureRegion(texturaBtnSalir));
             ImageButton btnSalir = new ImageButton(trdSalir);
@@ -473,7 +473,7 @@ class PantallaJuego extends Pantalla {
             this.addActor(btnSalir);
 
             // Continuar
-            Texture texturabtnReintentar = new Texture("Objetos_varios/btnContinuar.png");
+            Texture texturabtnReintentar = new Texture("Botones/button_back_2.png");
             TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
                     new TextureRegion(texturabtnReintentar));
             ImageButton btnReintentar = new ImageButton(trdReintentar);
