@@ -2,6 +2,7 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -51,6 +52,7 @@ class PantallaJuego extends Pantalla {
     //Jett start
     private Personaje personaje;
     private Personaje obstacle;
+    private ShapeRenderer shape;
 
     private int vidaPersonaje = 1000;
     //Jett Speed
@@ -133,7 +135,7 @@ class PantallaJuego extends Pantalla {
         bullets = new ArrayList<Bullet>();
         shootTimer = 0;
 
-
+        shape = new ShapeRenderer();
 
         //*******************************************************Joysticks*******************************************************
         //Texturas
@@ -195,7 +197,9 @@ class PantallaJuego extends Pantalla {
 
                     Rectangle rp = personaje.getSprite().getBoundingRectangle();
 
+
                     Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+
                     Gdx.app.log("Choque",rp.toString()+","+ro.toString());
                     rp.setX(rp.getX()+10);
                     if(! rp.overlaps(ro)){
@@ -204,6 +208,8 @@ class PantallaJuego extends Pantalla {
                     } else{
                         Gdx.app.log("Choque ","NO SE PUEDE");
                     }
+
+
 
                 }
             }
@@ -242,10 +248,12 @@ class PantallaJuego extends Pantalla {
         //Cargar escena
         cargarTexturas();
 
+
         crearEscena();
         cargarMusica();
         //Crear personaje
         personaje = new Personaje(ANCHO / 4, ALTO / 2, vidaPersonaje);
+
         obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, vidaPersonaje);
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
@@ -320,9 +328,14 @@ class PantallaJuego extends Pantalla {
     private void dibujarObjetos() {
         batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
 
+        shape.begin(ShapeRenderer.ShapeType.Line);
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
+        shape.setColor(Color.RED);
+        shape.rect(100,100,40,70);
+        System.out.println("Esta en: "+ personaje.getPositionX());
+
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
 
 
@@ -341,6 +354,7 @@ class PantallaJuego extends Pantalla {
         batch.draw(texturaItemHistoria, ANCHO*0.80f, ALTO*0.17f,
                 texturaItemHistoria.getWidth()*0.20f,texturaItemHistoria.getHeight()*0.20f);
 
+        shape.end();
     }
 
     private void sistemaColisionesBala() {
