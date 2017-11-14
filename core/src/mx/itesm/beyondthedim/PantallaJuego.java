@@ -153,67 +153,67 @@ class PantallaJuego extends Pantalla {
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
         //Listener joystick movimiento
-        movJoystick.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Touchpad pad = (Touchpad) actor;
-
-                //Control de Sprites
-                if(cambiarDireccion) {
-                    if (pad.getKnobPercentX() > 0.20) {
-                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-                    } else if (pad.getKnobPercentX() < -0.20) {
-                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-                    } else if (pad.getKnobPercentX() == 0) {
-                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-                    }
-                }
-                //Restricciones de movimiento(paredes)
-                //Right
-                if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
-
-                    personaje.mover(-2, DY_PERSONAJE * pad.getKnobPercentY());
-                }
-                if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
-
-                    personaje.mover(-1, DY_PERSONAJE * pad.getKnobPercentY());
-                }
-                //Left
-                else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
-
-                    personaje.mover(10, DY_PERSONAJE * pad.getKnobPercentY());
-
-                }
-                //TOP
-                else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0) {
-
-                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), -10);
-                }
-                //Bottom
-                else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0) {
-
-                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), 10);
-                } else {
-
-                    Rectangle rp = personaje.getSprite().getBoundingRectangle();
-
-
-                    Rectangle ro = obstacle.getSprite().getBoundingRectangle();
-
-                    Gdx.app.log("Choque",rp.toString()+","+ro.toString());
-                    rp.setX(rp.getX()+10);
-                    if(! rp.overlaps(ro)){
-                        Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
-                        personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), DY_PERSONAJE * pad.getKnobPercentY());
-                    } else{
-                        Gdx.app.log("Choque ","NO SE PUEDE");
-                    }
-
-
-
-                }
-            }
-        });
+//        movJoystick.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                Touchpad pad = (Touchpad) actor;
+//
+//                //Control de Sprites
+//                if(cambiarDireccion) {
+//                    if (pad.getKnobPercentX() > 0.20) {
+//                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+//                    } else if (pad.getKnobPercentX() < -0.20) {
+//                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+//                    } else if (pad.getKnobPercentX() == 0) {
+//                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+//                    }
+//                }
+//                //Restricciones de movimiento(paredes)
+//                //Right
+//                if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
+//
+//                    personaje.mover(-2, DY_PERSONAJE * pad.getKnobPercentY());
+//                }
+//                if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
+//
+//                    personaje.mover(-1, DY_PERSONAJE * pad.getKnobPercentY());
+//                }
+//                //Left
+//                else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
+//
+//                    personaje.mover(10, DY_PERSONAJE * pad.getKnobPercentY());
+//
+//                }
+//                //TOP
+//                else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0) {
+//
+//                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), -10);
+//                }
+//                //Bottom
+//                else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0) {
+//
+//                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), 10);
+//                } else {
+//
+//                    Rectangle rp = personaje.getSprite().getBoundingRectangle();
+//
+//
+//                    Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+//
+//                    Gdx.app.log("Choque",rp.toString()+","+ro.toString());
+//                    rp.setX(rp.getX()+10);
+//                    if(! rp.overlaps(ro)){
+//                        Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+//                        personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), DY_PERSONAJE * pad.getKnobPercentY());
+//                    } else{
+//                        Gdx.app.log("Choque ","NO SE PUEDE");
+//                    }
+//
+//
+//
+//                }
+//            }
+//        });
         //
         escenaJuego = new Stage(vista);
         escenaJuego.addActor(movJoystick);
@@ -296,6 +296,8 @@ class PantallaJuego extends Pantalla {
         escenaJuego.draw();
         //***************Enemigos***************
         if(estado==EstadoJuego.JUGANDO) {
+            logicaMovimiento(delta);
+
             logicaEnemigo(delta);
             //***************Balas***************
             logicaDisparo(delta);
@@ -328,13 +330,11 @@ class PantallaJuego extends Pantalla {
     private void dibujarObjetos() {
         batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
 
-        shape.begin(ShapeRenderer.ShapeType.Line);
-
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
-        shape.setColor(Color.RED);
-        shape.rect(100,100,40,70);
-        System.out.println("Esta en: "+ personaje.getPositionX());
+
+        System.out.println("Esta ena: "+ personaje.sprite.getBoundingRectangle().getX());
+
 
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
 
@@ -354,7 +354,6 @@ class PantallaJuego extends Pantalla {
         batch.draw(texturaItemHistoria, ANCHO*0.80f, ALTO*0.17f,
                 texturaItemHistoria.getWidth()*0.20f,texturaItemHistoria.getHeight()*0.20f);
 
-        shape.end();
     }
 
     private void sistemaColisionesBala() {
@@ -442,10 +441,34 @@ class PantallaJuego extends Pantalla {
 
 
     private void logicaMovimiento(float delta) {
+        Rectangle rp = personaje.getSprite().getBoundingRectangle();
+
+        shape.begin(ShapeRenderer.ShapeType.Line);
+        shape.setColor(Color.RED);
+
+
+        Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+
+        Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
+
+        float ang = v.angle();
+        double angle = ang*Math.PI/180.0;
         //*******************************************************Logica enemigos*******************************************************{
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
-            personaje.mover(DX_PERSONAJE * movJoystick.getKnobPercentX(), DY_PERSONAJE * movJoystick.getKnobPercentY());
+
+            Gdx.app.log("Choque",rp.toString()+","+ro.toString());
+//            rp.setX(personaje.getPositionX()+movJoystick.getKnobPercentX()*1000);
+//            rp.setY(personaje.getPositionY()+movJoystick.getKnobPercentY()*1000);
+            shape.rect(personaje.getPositionX()+ (float)(Math.cos(angle)*10), personaje.getPositionY ()+(float)(Math.sin(angle)*10),40,70);
+            if(! rp.overlaps(ro)){
+                Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+                personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+            } else{
+                Gdx.app.log("Choque ","NO SE PUEDE");
+            }
+
         }
+        shape.end();
     }
 
     private void logicaEnemigo(float delta) {

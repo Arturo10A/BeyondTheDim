@@ -113,6 +113,7 @@ class Personaje extends Objeto{
         x += dx;
         y += dy;
         sprite.setX(x);
+
         sprite.setY(y);
     }
 
