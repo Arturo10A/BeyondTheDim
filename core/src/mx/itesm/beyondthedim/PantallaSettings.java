@@ -33,9 +33,13 @@ class PantallaSettings extends Pantalla {
     private Stage escenaSettings;
     //Textura botones
     private Texture textureGoBack;
+    private Texture textureButtonMusicOn;
+    private Texture textureButtonMusicOff;
+    private Texture textureButtonMusic;
     //
     private SpriteBatch batch;
     private Music music;
+    private boolean musicOn = true;
 
     public PantallaSettings(Juego juego, Music music) {
         this.juego = juego;
@@ -44,8 +48,12 @@ class PantallaSettings extends Pantalla {
 
     public void cargarTextura(){
 
-        textureBackground = new Texture("Stage/settings.png");
+        textureBackground = new Texture("Stage/fondo_estrellas.png");
         textureGoBack = new Texture("Botones/button_back_2.png");
+        textureButtonMusicOff = new Texture("Botones/settings_button_off.png");
+        textureButtonMusicOn = new Texture("Botones/settings_button_on.png");
+        textureButtonMusic = new Texture("Botones/button_music.png");
+        //textureButtonMusic = new Texture("Botones/settings_button_on.png");
 
     }
 
@@ -72,17 +80,33 @@ class PantallaSettings extends Pantalla {
             }
         });
 
+        //Boton música
+        TextureRegionDrawable trdMusic = new TextureRegionDrawable(new TextureRegion(textureButtonMusic));
+        ImageButton btnMusic = new ImageButton(trdMusic);
+        btnMusic.setPosition(ANCHO/2-btnMusic.getWidth()/2,ALTO/2-btnMusic.getHeight()/2);
+
+        btnMusic.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(musicOn){
+                    music.pause();
+                    textureButtonMusic = textureButtonMusicOff;
+                    musicOn = false;
+                }else{
+                    textureButtonMusic = textureButtonMusicOn;
+                    music.play();
+                    musicOn = true;
+                }
+            }
+        });
 
         //Agregar Actore -> siempre agregar el fondo primero
         escenaSettings.addActor(backImage);
         escenaSettings.addActor(btnGoBack);
+        escenaSettings.addActor(btnMusic);
 
 
     }
-
-
-
-
 
     @Override
     public void show() {
@@ -102,7 +126,18 @@ class PantallaSettings extends Pantalla {
 
         batch.begin();
         escenaSettings.draw();
+        batch.draw(textureButtonMusic, ANCHO/2-textureButtonMusic.getWidth()/2,ALTO/2-textureButtonMusic.getHeight()/2);
         batch.end();
+
+        batch.begin();
+        batch.draw(textureButtonMusic, ANCHO/2-textureButtonMusic.getWidth()/2,ALTO/2-textureButtonMusic.getHeight()/2);
+        batch.end();
+
+        if(musicOn){
+            textureButtonMusic = textureButtonMusicOn;
+        }else{
+            textureButtonMusic = textureButtonMusicOff;
+        }
 
     }
 

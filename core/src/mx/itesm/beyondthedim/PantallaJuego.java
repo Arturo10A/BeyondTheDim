@@ -388,37 +388,46 @@ class PantallaJuego extends Pantalla {
     private void logicaDisparo(float delta) {
         //*******************************************************Logica Disparo*******************************************************
         shootTimer += delta;
-        bulletX = Math.round(gunJoystick.getKnobPercentX());
-        bulletY = Math.round(gunJoystick.getKnobPercentY());
         //Disparo derecha
         //System.out.println(gunJoystick.getKnobPercentY());
 
         if(gunJoystick.getKnobPercentX() > 0.50 && shootTimer>=SWT){
             shootTimer=0;
-            //cambiarDireccion = false;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,1,gunJoystick.getKnobPercentY()));
+            shoot.play();
             System.out.println("Hola1******************");
         }
         if(gunJoystick.getKnobPercentX() < -0.50 && shootTimer>=SWT){
             shootTimer=0;
-            //cambiarDireccion = false;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,-1,gunJoystick.getKnobPercentY()));
+            shoot.play();
             System.out.println("Hola2******************");
         }
 
         if(gunJoystick.getKnobPercentY() > 0.50 && shootTimer>=SWT){
             shootTimer=0;
-            //cambiarDireccion = false;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),1));
+            shoot.play();
             System.out.println("Hola3******************");
         }
 
         if(gunJoystick.getKnobPercentY() < -0.50 && shootTimer>=SWT){
             shootTimer=0;
-            //cambiarDireccion= false;
-            //bullets.add(new Bullet(personaje.getPositionX(), personaje.getPositionY(),0,-1));
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),-1));
+            shoot.play();
             System.out.println("Hola4******************");
+        }
+        if(gunJoystick.getKnobPercentY() == 0 && gunJoystick.getKnobPercentX()==0){
+            cambiarDireccion = true;
+        }else{
+            cambiarDireccion = false;
+            if(personaje.getEstadoMovimiento()!= Objeto.EstadoMovimiento.QUIETO) {
+                if (gunJoystick.getKnobPercentX() > 0.20) {
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+                } else if (gunJoystick.getKnobPercentX() < -0.20) {
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+                }
+            }
         }
 
         //bullets.removeAll(bulletsRemove);
