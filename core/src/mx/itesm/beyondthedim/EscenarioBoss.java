@@ -54,7 +54,6 @@ public class EscenarioBoss extends  Pantalla {
     private Texture textureEscenario;
     private Stage escenaJuego;
     //Escena de Pausa
-    private PantallaJuego.EscenaPausa escenaPausa;
 
     //Joystick
     private Touchpad movJoystick;
@@ -62,6 +61,7 @@ public class EscenarioBoss extends  Pantalla {
 
     //Estado del juego
     private EstadoJuego estado = EstadoJuego.JUGANDO;
+    private EscenaPausa escenaPausa;
 
 
 
@@ -103,13 +103,16 @@ public class EscenarioBoss extends  Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 // Se pausa el juego
-                estado = estado==EstadoJuego.PAUSADO?EstadoJuego.JUGANDO:EstadoJuego.PAUSADO;
-                if (estado==EstadoJuego.PAUSADO) {
-                    // Activar escenaPausa y pasarle el control
-                    if (escenaPausa==null) {
-                    }
-                    Gdx.input.setInputProcessor(escenaPausa);
+
+
+                // Activar escenaPausa y pasarle el control
+                if (escenaPausa == null){
+                    escenaPausa = new EscenaPausa(vista,batch);
                 }
+                estado = estado==EstadoJuego.PAUSADO?EstadoJuego.JUGANDO:EstadoJuego.PAUSADO;
+
+
+
             }
 
         });
@@ -377,7 +380,7 @@ public class EscenarioBoss extends  Pantalla {
         }
     }
 
-    public void collisiones(boss Boss){
+    private void collisiones(boss Boss){
 
 
         for (int bala = 0; bala < bullets.size(); bala++) {
@@ -403,34 +406,37 @@ public class EscenarioBoss extends  Pantalla {
 
         escenaJuego.draw();
 
-        //boss.teleport(personaje);
-        if (boss.getLife() > 0){
+        if (estado == EstadoJuego.JUGANDO){
 
-            boss.atack(personaje);
-            for (Bullet bullet: bullets) {
-                boss.isUnderAtack(bullet,personaje);
+            //boss.teleport(personaje);
+            if (boss.getLife() > 0){
+
+                boss.atack(personaje);
+                for (Bullet bullet: bullets) {
+                    boss.isUnderAtack(bullet,personaje);
+                }
+                collisiones(boss);
+                bossSpecialAtack(delta, personaje, boss);
+
             }
-            collisiones(boss);
-            bossSpecialAtack(delta, personaje, boss);
-           
-        }
-        else {
-            BossBullets.clear();
-        }
-
-
-        dibujarObjetos();
-        dibujarEscena();
-        logicaDisparo(delta);
-
-
-        if(timeBala >= 100.0){
-            for (int i = 0; i < bullets.size()-4; i++) {
-                bullets.remove(i);
+            else {
+                BossBullets.clear();
             }
-            timeBala = 0;
-        }else {
-            timeBala++;
+
+
+            dibujarObjetos();
+            dibujarEscena();
+            logicaDisparo(delta);
+
+
+            if(timeBala >= 100.0){
+                for (int i = 0; i < bullets.size()-4; i++) {
+                    bullets.remove(i);
+                }
+                timeBala = 0;
+            }else {
+                timeBala++;
+            }
         }
 
     }
@@ -475,14 +481,13 @@ public class EscenarioBoss extends  Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     // Regresa al menú
-                    
                     juego.setScreen(new PantallaMenu(juego, null));
                 }
             });
             this.addActor(btnSalir);
 
             // Continuar
-            Texture texturabtnReintentar = new Texture("Objetos_varios/btnContinuar.png");
+            Texture texturabtnReintentar = new Texture("Botones/button_back_2.png");
             TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
                     new TextureRegion(texturabtnReintentar));
             ImageButton btnReintentar = new ImageButton(trdReintentar);

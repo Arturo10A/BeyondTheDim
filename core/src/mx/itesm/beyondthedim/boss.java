@@ -54,7 +54,7 @@ public class boss extends Objeto {
         this.y +=  ((float) ((target.getPositionY() - this.getPositionY()) * 0.02));
 
         if (distancePersonaje(target) < 100){
-            target.damage(0.1);
+            target.damage(10);
         }
 
     }
