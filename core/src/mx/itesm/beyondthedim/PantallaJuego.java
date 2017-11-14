@@ -219,12 +219,12 @@ class PantallaJuego extends Pantalla {
         escenaJuego.addActor(movJoystick);
         escenaJuego.addActor(gunJoystick);
         movJoystick.setColor(1, 1, 1, 0.7f);
-        //*******************************************************Boton GOBACK -> check variable and conflic agins problems*******************************************************
+        //*******************************************************Boton Pausa -> check variable and conflic agins problems*******************************************************
         TextureRegionDrawable trdPausa = new TextureRegionDrawable(new TextureRegion(texturaBtnPausa));
         ImageButton btnPausa = new ImageButton(trdPausa);
         btnPausa.setPosition(ANCHO - btnPausa.getWidth() - 5, ALTO - btnPausa.getHeight() - 5);
         escenaJuego.addActor(btnPausa);
-        //Listener boton goBack
+        //Listener boton pausa
         btnPausa.addListener(new ClickListener() {
 
             @Override
@@ -394,27 +394,23 @@ class PantallaJuego extends Pantalla {
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,1,gunJoystick.getKnobPercentY()));
             shoot.play();
-            System.out.println("Hola1******************");
         }
         if(gunJoystick.getKnobPercentX() < -0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,-1,gunJoystick.getKnobPercentY()));
             shoot.play();
-            System.out.println("Hola2******************");
         }
 
         if(gunJoystick.getKnobPercentY() > 0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),1));
             shoot.play();
-            System.out.println("Hola3******************");
         }
 
         if(gunJoystick.getKnobPercentY() < -0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),-1));
             shoot.play();
-            System.out.println("Hola4******************");
         }
         if(gunJoystick.getKnobPercentY() == 0 && gunJoystick.getKnobPercentX()==0){
             cambiarDireccion = true;
@@ -504,7 +500,6 @@ class PantallaJuego extends Pantalla {
 
         public EscenaPausa(Viewport vista, SpriteBatch batch) {
             super(vista,batch);
-            //ESTo se tiene que cambiar!!!!!!!!!!!!!!!!!!!!
             Pixmap pixmap = new Pixmap((int) (ANCHO), (int) (ALTO), Pixmap.Format.RGBA8888);
             pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.4f );
             pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
