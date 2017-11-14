@@ -53,6 +53,7 @@ class PantallaJuego extends Pantalla {
     private Personaje personaje;
     private Personaje obstacle;
     private ShapeRenderer shape;
+    private ShapeRenderer shape2;
 
     private int vidaPersonaje = 1000;
     //Jett Speed
@@ -136,6 +137,8 @@ class PantallaJuego extends Pantalla {
         shootTimer = 0;
 
         shape = new ShapeRenderer();
+
+        shape2 = new ShapeRenderer();
 
         //*******************************************************Joysticks*******************************************************
         //Texturas
@@ -296,8 +299,10 @@ class PantallaJuego extends Pantalla {
         escenaJuego.draw();
         //***************Enemigos***************
         if(estado==EstadoJuego.JUGANDO) {
+            batch.begin();
             logicaMovimiento(delta);
 
+            batch.end();
             logicaEnemigo(delta);
             //***************Balas***************
             logicaDisparo(delta);
@@ -333,7 +338,8 @@ class PantallaJuego extends Pantalla {
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
 
-        System.out.println("Esta ena: "+ personaje.sprite.getBoundingRectangle().getX());
+        System.out.println("Sprite Jett en X: "+ personaje.sprite.getBoundingRectangle().getX());
+        System.out.println("Sprite Jett en Y: "+ personaje.sprite.getBoundingRectangle().getY());
 
 
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
@@ -438,12 +444,11 @@ class PantallaJuego extends Pantalla {
 
     private void logicaMovimiento(float delta) {
         Rectangle rp = personaje.getSprite().getBoundingRectangle();
+        Rectangle ro = obstacle.getSprite().getBoundingRectangle();
 
+        shape.setProjectionMatrix(camara.combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
         shape.setColor(Color.RED);
-
-
-        Rectangle ro = obstacle.getSprite().getBoundingRectangle();
 
         Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
 
@@ -453,9 +458,13 @@ class PantallaJuego extends Pantalla {
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
 
             Gdx.app.log("Choque",rp.toString()+","+ro.toString());
-//            rp.setX(personaje.getPositionX()+movJoystick.getKnobPercentX()*1000);
-//            rp.setY(personaje.getPositionY()+movJoystick.getKnobPercentY()*1000);
-            shape.rect(personaje.getPositionX()+ (float)(Math.cos(angle)*10), personaje.getPositionY ()+(float)(Math.sin(angle)*10),40,70);
+            rp.setX(personaje.getPositionX()+ (float)(Math.cos(angle)*10));
+            rp.setY(personaje.getPositionY()+ (float)(Math.sin(angle)*10));
+
+            shape.rect(personaje.getPositionX()+ (float)(Math.cos(angle)*10), personaje.getPositionY()+ (float)(Math.sin(angle)*10),40,70);
+
+            System.out.println("rp x = "+ rp.getX()+" y"+ rp.getY());
+            System.out.println("ro x = "+ ro.getX()+" y"+ ro.getY());
             if(! rp.overlaps(ro)){
                 Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
                 personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
@@ -464,7 +473,9 @@ class PantallaJuego extends Pantalla {
             }
 
         }
+
         shape.end();
+        shape2.end();
     }
 
     private void logicaEnemigo(float delta) {
