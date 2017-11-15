@@ -43,7 +43,7 @@ public class LoseScreen extends Pantalla{
     }
 
     public void cargarTexturas(){
-        background = new Texture("Stage/fondo_lose.png");
+        background = new Texture("Stage/fondo_lose.jpg");
         backButtonInicio = new Texture("Botones/button_inicio.png");
         backButtonReload = new Texture("Botones/button_back_2.png");
     }

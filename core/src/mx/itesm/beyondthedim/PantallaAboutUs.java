@@ -73,7 +73,7 @@ class PantallaAboutUs extends Pantalla {
         texturaBtnGoBack = new Texture("Botones/button_back_2.png");
         texturaBotonCasco = new Texture("Botones/button_casco_aboutUs.png");
         //Fondo para este ecenario
-        texturaFondoPantallaAyudad = new Texture("Stage/about_pantalla.png");
+        texturaFondoPantallaAyudad = new Texture("Stage/about_pantalla.jpg");
         //Registros
         texturaRodrigo = new Texture("Stage/AboutUs/registro_rodrigo.png");
         texturaMonserrat = new Texture("Stage/AboutUs/registro_monse.png");
@@ -230,7 +230,12 @@ class PantallaAboutUs extends Pantalla {
 
     @Override
     public void dispose() {
-
+        texturaFondoPantallaAyudad.dispose();
+        texturaBotonCasco.dispose();
+        texturaRodrigo.dispose();
+        texturaMonserrat.dispose();
+        texturaArturo.dispose();
+        texturaJorge.dispose();
     }
 
     private class EscenaInfo extends Stage {

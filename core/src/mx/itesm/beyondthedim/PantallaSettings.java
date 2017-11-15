@@ -50,7 +50,7 @@ class PantallaSettings extends Pantalla {
 
     public void cargarTextura(){
 
-        textureBackground = new Texture("Stage/fondo_estrellas.png");
+        textureBackground = new Texture("Stage/fondo_estrellas.jpg");
         textureGoBack = new Texture("Botones/button_back_2.png");
         textureButtonMusicOff = new Texture("Botones/settings_button_off.png");
         textureButtonMusicOn = new Texture("Botones/settings_button_on.png");

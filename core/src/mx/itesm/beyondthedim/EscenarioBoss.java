@@ -74,7 +74,7 @@ public class EscenarioBoss extends  Pantalla {
 
     private void cargarTexturas(){
         texturaBtnGoBack = new Texture("Botones/button_pause.png");
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
+        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
     }
 
     private void crearEscena(){
