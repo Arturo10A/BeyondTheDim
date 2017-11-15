@@ -36,6 +36,10 @@ public class Objeto {
                 && y>=sprite.getY() && y<=sprite.getY()+sprite.getHeight();
     }
 
+    public Sprite getSprite(){
+        return sprite;
+    }
+
     public void dibujar(SpriteBatch batch) {
         sprite.draw(batch);
     }

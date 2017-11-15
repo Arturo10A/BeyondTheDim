@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 class Bullet {
     private float lifeTime;
     private float lifeTimer;
-    public static final int SPEED=400;
+    public static final int SPEED=600;
     private static Texture texture;
     public int damage =20;
 
@@ -51,13 +51,19 @@ class Bullet {
 
     public void update (float deltaTime)
     {
+
+        x += SPEED*deltaTime*dx;
+        y += SPEED*deltaTime*dy;
+        //System.out.println("dx = " + dx);
+        //System.out.println("dy = " + dy);
+        /*
         if(dx==0 || dy==0){
             x+= (SPEED*1.5*deltaTime*dx);
             y+= (SPEED*1.5*deltaTime*dy);
         }else{
             x+= SPEED*deltaTime*(dx);
             y+= SPEED*deltaTime*(dy);
-        }
+        }*/
 
     }
 

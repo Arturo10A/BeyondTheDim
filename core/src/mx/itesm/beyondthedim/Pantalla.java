@@ -51,7 +51,6 @@ public abstract class Pantalla implements Screen {
         camara.update();
         vista = new StretchViewport(ANCHO,ALTO,camara);
         batch = new SpriteBatch();
-
     }
 
     protected void borrarPantalla(){

@@ -108,16 +108,19 @@ class Personaje extends Objeto{
         this.estadoMovimiento = estadoMovimiento;
     }
 
+
     public void mover (float dx, float dy){
         x += dx;
         y += dy;
         sprite.setX(x);
+
         sprite.setY(y);
     }
 
     public void recolectarObjetos(){
 
     }
+
 
 
 
