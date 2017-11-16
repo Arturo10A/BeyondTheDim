@@ -43,6 +43,7 @@ class PantallaJuego extends Pantalla {
     private final Juego juego;
     private Texture textureEscenario;
     private Texture textureEscenarioAbierto;
+
     //
     private float DX = 28;
     private int pasos = 20;
@@ -54,6 +55,8 @@ class PantallaJuego extends Pantalla {
     private Personaje obstacle;
     private ShapeRenderer shape;
     private ShapeRenderer shape2;
+
+
 
     private int vidaPersonaje = 1000;
     //Jett Speed
@@ -316,17 +319,7 @@ class PantallaJuego extends Pantalla {
             music.dispose();
             juego.setScreen(new LoseScreen(juego));
         }
-        //***************Ganar***************
-        if (enemy_list.isEmpty()){
-            textureEscenario = textureEscenarioAbierto;
-
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                music.stop();
-                music.dispose();
-                //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new EscenarioBoss(juego));
-            }
-        }
+        //***************Ganar**************//
         if(estado==EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
@@ -337,13 +330,7 @@ class PantallaJuego extends Pantalla {
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
-
-        System.out.println("Sprite Jett en X: "+ personaje.sprite.getBoundingRectangle().getX());
-        System.out.println("Sprite Jett en Y: "+ personaje.sprite.getBoundingRectangle().getY());
-
-
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
-
 
         //Enemigos
         for (Enemy ene : enemy_list) {
@@ -444,38 +431,58 @@ class PantallaJuego extends Pantalla {
 
     private void logicaMovimiento(float delta) {
         Rectangle rp = personaje.getSprite().getBoundingRectangle();
+        rp.setX(personaje.getPositionX()+17);
+        rp.setY(personaje.getPositionY());
+        rp.setWidth(30);
+        rp.setHeight(20);
+
+        //Boundings
         Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+        Rectangle muroN = new Rectangle(0,ALTO-120,ANCHO,120);
+        Rectangle muroO = new Rectangle(0,0,120,ALTO);
+        Rectangle muroS = new Rectangle(0,0,ANCHO,120);
+        Rectangle muroEN = new Rectangle(1160,ALTO-300,120,300);
+        Rectangle muroES = new Rectangle(1160,0,120,300);
+        Rectangle puertaE = new Rectangle(1160,300,120,120);
 
         shape.setProjectionMatrix(camara.combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
         shape.setColor(Color.RED);
+        shape.rect(rp.getX(),rp.getY(),rp.getWidth(),rp.getHeight());
+
+        shape2.setProjectionMatrix(camara.combined);
+        shape2.begin(ShapeRenderer.ShapeType.Line);
+        shape2.setColor(Color.BLUE);
+        shape2.rect(puertaE.getX(),puertaE.getY(),puertaE.getWidth(),puertaE.getHeight());
+
 
         Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
-
         float ang = v.angle();
         double angle = ang*Math.PI/180.0;
+
+        if (enemy_list.isEmpty()){
+            textureEscenario = textureEscenarioAbierto;
+            puertaE.setSize(10);
+            shape2.rect(puertaE.getX(),puertaE.getY(),puertaE.getWidth(),puertaE.getHeight());
+            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+                music.stop();
+                music.dispose();
+                //juego.setScreen(new PantallaMenu(juego, false));
+                juego.setScreen(new EscenarioBoss(juego));
+            }
+        }
         //*******************************************************Logica enemigos*******************************************************{
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
+            rp.setX(rp.getX()+ (float)(Math.cos(angle)*20));
+            rp.setY(rp.getY()+ (float)(Math.sin(angle)*20));
 
-            Gdx.app.log("Choque",rp.toString()+","+ro.toString());
-            rp.setX(personaje.getPositionX()+ (float)(Math.cos(angle)*10));
-            rp.setY(personaje.getPositionY()+ (float)(Math.sin(angle)*10));
-
-            shape.rect(personaje.getPositionX()+ (float)(Math.cos(angle)*10), personaje.getPositionY()+ (float)(Math.sin(angle)*10),40,70);
-
-            System.out.println("rp x = "+ rp.getX()+" y"+ rp.getY());
-            System.out.println("ro x = "+ ro.getX()+" y"+ ro.getY());
-            if(! rp.overlaps(ro)){
-                Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+            if((!rp.overlaps(muroN))&&(!rp.overlaps(ro))&&(!rp.overlaps(muroO))&&(!rp.overlaps(muroS))&(!rp.overlaps(muroEN))&&(!rp.overlaps(muroES))&&(!rp.overlaps(puertaE))   ){
                 personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
-            } else{
-                Gdx.app.log("Choque ","NO SE PUEDE");
             }
-
         }
 
-        shape.end();
         shape2.end();
+        shape.end();
     }
 
     private void logicaEnemigo(float delta) {
