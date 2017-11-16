@@ -108,8 +108,8 @@ class PantallaJuego extends Pantalla {
 
     public void cargarTexturas() {
         texturaBtnPausa = new Texture("Botones/button_pause.png");
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
-        textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.png");
+        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
+        textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
         texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
         cuadroDialogo = new Texture("test.png");
         cuadroDialogo2 = new Texture ("test2.png");
@@ -256,7 +256,7 @@ class PantallaJuego extends Pantalla {
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
-      //  enemy_list.add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        enemy_list.add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
        // enemy_list.add(new Enemy(ANCHO - 300, ALTO / 4, 100, 1));
        // enemy_list.add(new Enemy(ANCHO - 50, ALTO / 2, 100, 1));
         //
@@ -373,7 +373,7 @@ class PantallaJuego extends Pantalla {
         //Empezar en -1 y terminar en 0
         for (int j = enemy_list.size() - 1; j >=0 ; j--) {
             for (int i = bullets.size() - 1; i>=0; i--) {
-                if (bullets.get(i).distance(enemy_list.get(j)) < 15) {
+                if (bullets.get(i).distance(enemy_list.get(j)) < 50) {
                     enemy_list.get(j).receiveDamage(20);
                     enemy_list.get(j).goBack();
                     bullets.remove(i);
