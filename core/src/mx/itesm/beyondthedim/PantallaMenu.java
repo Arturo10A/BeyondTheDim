@@ -87,7 +87,6 @@ class PantallaMenu extends Pantalla {
         texturaBtnJugar = new Texture("Botones/button_play.png");
         texturaBtnAyuda = new Texture("Botones/button_about-us.png");
         texturaBtnSettings = new Texture("Botones/button_settings.png");
-        texturaBtnInstructions = new Texture("Botones/button_instructions.png");
         fondoPantalla = new Texture("Stage/MenuFondo.png");
     }
 
@@ -196,7 +195,7 @@ class PantallaMenu extends Pantalla {
         if(nave.ANCHO < 0 || nave.ALTO < 0){
             music.stop();
             music.dispose();
-            juego.setScreen(new PantallaJuego(juego));
+            juego.setScreen(new PantallaTutorial(juego));
             this.dispose();
         }
     }

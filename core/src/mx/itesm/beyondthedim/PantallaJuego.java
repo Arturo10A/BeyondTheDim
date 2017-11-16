@@ -10,15 +10,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.collision.BoundingBox;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.audio.Music;
@@ -54,8 +51,8 @@ class PantallaJuego extends Pantalla {
     private Personaje obstacle;
     private ShapeRenderer shape;
     private ShapeRenderer shape2;
-
     private int vidaPersonaje = 1000;
+
     //Jett Speed
     private int DX_PERSONAJE = 5;
     private int DY_PERSONAJE = 5;
@@ -91,15 +88,21 @@ class PantallaJuego extends Pantalla {
     private static final float SWT = 0.3f;
     private float shootTimer;
     private boolean cambiarDireccion = true;
-    private float bulletX;
-    private float bulletY;
+
+    private Texture cuadroDialogo;
+    private Texture cuadroDialogo2;
 
 
     //Music
     private Music music;
     private Sound shoot;
 
-    public PantallaJuego(Juego juego) {
+    public PantallaJuego(Juego juego, Personaje personaje) {
+        this.juego = juego;
+        this.personaje = personaje;
+    }
+
+    public PantallaJuego(Juego juego){
         this.juego = juego;
     }
 
@@ -108,24 +111,16 @@ class PantallaJuego extends Pantalla {
         textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
         textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.png");
         texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+        cuadroDialogo = new Texture("test.png");
+        cuadroDialogo2 = new Texture ("test2.png");
     }
 
     private void cargarMusica(){
         music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
         music.setLooping(true);
         music.play();
-
         shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
     }
-    /*
-    public void createEnemy(float delta) {
-
-        if (delta >= 10.0) {
-            System.out.println("Enemy created");
-            delta = 0;
-        }
-
-    }*/
 
     public void crearEscena() {
 
@@ -145,7 +140,6 @@ class PantallaJuego extends Pantalla {
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
         skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
-
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
@@ -155,6 +149,7 @@ class PantallaJuego extends Pantalla {
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
+        movJoystick.moveBy(10,20);
         //Listener joystick movimiento
 //        movJoystick.addListener(new ChangeListener() {
 //            @Override
@@ -292,7 +287,6 @@ class PantallaJuego extends Pantalla {
         batch.begin();
         music.setVolume(0.2f);
         music.play();
-
         escenaJuego.draw();
         batch.end();
         escenaJuego.act(Gdx.graphics.getDeltaTime());
@@ -316,6 +310,17 @@ class PantallaJuego extends Pantalla {
             music.dispose();
             juego.setScreen(new LoseScreen(juego));
         }
+
+        System.out.println(Gdx.graphics.getDeltaTime());
+
+        if (Gdx.graphics.getDeltaTime() >= 10){
+            cuadroDialogo = cuadroDialogo2;
+        }
+
+
+
+
+
         //***************Ganar***************
         if (enemy_list.isEmpty()){
             textureEscenario = textureEscenarioAbierto;
@@ -324,7 +329,7 @@ class PantallaJuego extends Pantalla {
                 music.stop();
                 music.dispose();
                 //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new EscenarioBoss(juego));
+                juego.setScreen(new EscenarioBoss(juego,personaje));
             }
         }
         if(estado==EstadoJuego.PAUSADO){
@@ -337,12 +342,13 @@ class PantallaJuego extends Pantalla {
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
-
-        System.out.println("Sprite Jett en X: "+ personaje.sprite.getBoundingRectangle().getX());
-        System.out.println("Sprite Jett en Y: "+ personaje.sprite.getBoundingRectangle().getY());
-
-
+        //System.out.println("Sprite Jett en X: "+ personaje.sprite.getBoundingRectangle().getX());
+        //System.out.println("Sprite Jett en Y: "+ personaje.sprite.getBoundingRectangle().getY());
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
+
+        batch.draw(cuadroDialogo,Pantalla.ANCHO/2- cuadroDialogo.getWidth()/2,Pantalla.ALTO - cuadroDialogo.getHeight());
+
+
 
 
         //Enemigos
@@ -391,11 +397,8 @@ class PantallaJuego extends Pantalla {
     }
 
     private void logicaDisparo(float delta) {
-        //*******************************************************Logica Disparo*******************************************************
         shootTimer += delta;
         //Disparo derecha
-        //System.out.println(gunJoystick.getKnobPercentY());
-
         if(gunJoystick.getKnobPercentX() > 0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,1,gunJoystick.getKnobPercentY()));
@@ -406,13 +409,11 @@ class PantallaJuego extends Pantalla {
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,-1,gunJoystick.getKnobPercentY()));
             shoot.play();
         }
-
         if(gunJoystick.getKnobPercentY() > 0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),1));
             shoot.play();
         }
-
         if(gunJoystick.getKnobPercentY() < -0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),-1));
@@ -479,7 +480,6 @@ class PantallaJuego extends Pantalla {
     }
 
     private void logicaEnemigo(float delta) {
-        //*******************************************************Logica enemigos*******************************************************{
         float enemyPosAncho = 0;
         float enemyPosAlto = 0;
         for (Enemy ene : enemy_list) {
@@ -488,8 +488,6 @@ class PantallaJuego extends Pantalla {
             enemyPosAlto += ene.sprite.getHeight() / 2;
             ene.doDamage(this.personaje);
         }
-
-        //createEnemy(delta);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,11 +22,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
+import javax.xml.soap.Text;
+
 /**
- * Created by Arturo on 03/11/17.
+ * Created by Arturo on 15/11/17.
  */
 
-public class EscenarioBoss extends  Pantalla {
+public class PantallaTutorial extends  Pantalla {
 
     private final Juego juego;
     //Jett start
@@ -38,13 +41,6 @@ public class EscenarioBoss extends  Pantalla {
     private static final float SWT = 0.3f;
     private float shootTimer;
     private float timeBala;
-    //BOSS
-    private boss boss;
-    float Bosstimer = 0;
-    double bossShot = 100;
-    double bossShotFollow = 0.0;
-    //Arreglo balas de Jefe
-    private ArrayList<Bullet> BossBullets;
     //Escenario y Texturas
     private Texture texturaBtnGoBack;
     private Texture textureEscenario;
@@ -61,32 +57,46 @@ public class EscenarioBoss extends  Pantalla {
     //Sonidos
     private Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
 
+    //Icono de vida
+    private Texture vidaIcono;
 
-    public EscenarioBoss(Juego juego, Personaje personaje){
+
+    //Cuadros de dialogo
+    private Texture cuadro1;
+    private Texture cuadro2;
+    private Texture cuadro3;
+    private Texture cuadro4;
+    private Texture cuadro5;
+    private Texture cuadro6;
+    //Timer dialogos
+    private int timerDialogo;
+
+
+    public PantallaTutorial(Juego juego){
         this.juego = juego;
-        this.personaje = personaje;
     }
 
     private void cargarTexturas(){
         texturaBtnGoBack = new Texture("Botones/button_pause.png");
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.png");
+        textureEscenario = new Texture("Stage/fondo_nivel_uno_abierto.png");
+        vidaIcono = new Texture("iconLife.png");
+        cuadro1 = new Texture("test.png");
+        cuadro2 = new Texture("test2.png");
+        cuadro3 = new Texture("test3.png");
+        cuadro4 = new Texture("test4.png");
+        cuadro5 = new Texture("test5.png");
+        cuadro6 = new Texture("test6.png");
     }
 
     private void crearEscena(){
         escenaJuego = new Stage(vista);
-
-
         bullets = new ArrayList<Bullet>();
         shootTimer=0;
-        BossBullets = new ArrayList<Bullet>();
-
         logicaJoystick();
-
         TextureRegionDrawable trdPausa = new TextureRegionDrawable(new TextureRegion(texturaBtnGoBack));
         ImageButton btnPausa = new ImageButton(trdPausa);
         btnPausa.setPosition(ANCHO-btnPausa.getWidth()-5,ALTO-btnPausa.getHeight()-5);
         escenaJuego.addActor(btnPausa);
-
 
         btnPausa.addListener(new ClickListener(){
 
@@ -154,7 +164,7 @@ public class EscenarioBoss extends  Pantalla {
                 }
             }
         });
-        //
+
         escenaJuego = new Stage(vista);
         escenaJuego.addActor(movJoystick);
         escenaJuego.addActor(gunJoystick);
@@ -165,34 +175,42 @@ public class EscenarioBoss extends  Pantalla {
     public void show() {
         cargarTexturas();
         crearEscena();
+
+        personaje = new Personaje(ANCHO / 4, ALTO / 2, 1000);
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+
         Gdx.input.setInputProcessor(escenaJuego);
-        boss = new boss(ANCHO/2,ALTO/2,100);
+        personaje = new Personaje(ANCHO / 4, ALTO / 2, 1000);
         texto = new Texto();
     }
 
     private void dibujarEscena() {
         batch.begin();
         escenaJuego.draw();
+        personaje.dibujar(batch);
+
         batch.end();
         escenaJuego.act(Gdx.graphics.getDeltaTime());
+
         escenaJuego.draw();
+
+
     }
 
     private void dibujarObjetos() {
         batch.begin();
         batch.draw(textureEscenario, Pantalla.ANCHO/2- textureEscenario.getWidth()/2, Pantalla.ALTO/2- textureEscenario.getHeight()/2);
-        if (boss.getLife() > 0){
-            boss.dibujar(batch);
-        }
+
+
+
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
         //Vida
         if (personaje.getLife() > 0) {
-            String lifeString = "Vida: " + personaje.getLife();
+            String lifeString = "" + personaje.getLife();
             texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
         }else {
-            String lifeString = "vida 0";
+            String lifeString = "0";
             texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
             juego.setScreen(new LoseScreen(juego));
         }
@@ -200,10 +218,11 @@ public class EscenarioBoss extends  Pantalla {
         for (Bullet bullet: bullets){
             bullet.render(batch);
         }
-        //Balas de jefe
-        for (Bullet bullet: BossBullets){
-            bullet.render(batch);
-        }
+
+        batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
+
+        batch.draw(cuadro1,Pantalla.ANCHO/2- cuadro1.getWidth()/2,Pantalla.ALTO - cuadro1.getHeight());
+
         batch.end();
     }
 
@@ -261,89 +280,7 @@ public class EscenarioBoss extends  Pantalla {
         bullets.removeAll(bulletsRemove);
     }
 
-    private void bossSpecialAtack(float delta, Personaje target, boss boss){
 
-        Bosstimer += delta;
-        bossShotFollow += delta;
-        if (boss.getLife() < 80){
-            bossShot = 3.0;
-        }
-        else if(boss.getLife() < 60){
-            bossShot = 2.0;
-        }
-        else if(boss.getLife() < 30){
-            bossShot = 1.0;
-        }
-        else if(boss.getLife() < 10){
-            bossShot = 0.1;
-        }
-        if (Bosstimer >= bossShot) {
-            Bosstimer = 0;
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 0));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, -1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, -1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, -1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 0));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 1));
-        }
-        //Diparar al objetivo mientras lo sigue
-        if (bossShotFollow > 0.2){
-            bossShotFollow = 0;
-            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 1));
-            }
-            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, -1));
-            }
-            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 1));
-            }
-            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, -1));
-            }
-
-            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() == personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 0));
-            }
-
-            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() == personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 0));
-            }
-            if (boss.getPositionX() == personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, -1));
-            }
-            if (boss.getPositionX() == personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
-            }
-        }
-        ArrayList<Bullet> BoosbulletsRemove = new ArrayList<Bullet>();
-        for(Bullet bullet : BossBullets){
-            bullet.update(delta);
-            if (bullet.removeB){
-                BoosbulletsRemove.add(bullet);
-            }
-        }
-        BossBullets.removeAll(BoosbulletsRemove);
-        for (int i = 0; i < BossBullets.size(); i++) {
-            if (BossBullets.get(i).distanceJett(personaje) < 25){
-                System.out.println("** JETT EN PROBLEMAS **");
-                personaje.damage(1);
-                BossBullets.remove(i);
-            }
-        }
-    }
-
-    private void collisiones(boss Boss){
-        for (int bala = 0; bala < bullets.size(); bala++) {
-            if (bullets.get(bala).distanceBoss(Boss) < 100){
-                Boss.Damege(1);
-                bullets.remove(bala);
-            }
-        }
-    }
 
 
     @Override
@@ -358,18 +295,41 @@ public class EscenarioBoss extends  Pantalla {
 
         escenaJuego.draw();
 
+        timerDialogo += Gdx.graphics.getDeltaTime();
+
+        timerDialogo += 1;
+        if (timerDialogo >= 120 && timerDialogo < 300){
+            cuadro1 = cuadro2;
+        }
+
+        if (timerDialogo >= 300 && timerDialogo < 400){
+            cuadro1 = cuadro3;
+        }
+
+        if (timerDialogo >= 400 && timerDialogo < 500 && personaje.getEstadoMovimiento() != Objeto.EstadoMovimiento.QUIETO){
+            cuadro1 = cuadro4;
+        }
+
+        if (timerDialogo >= 500 && timerDialogo < 600 &&bullets.size() > 1){
+            cuadro1 = cuadro5;
+        }
+
+        if(timerDialogo >= 600 && timerDialogo < 2000){
+            cuadro1 = cuadro6;
+        }
+
+        if (timerDialogo >= 700){
+
+            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+
+                //juego.setScreen(new PantallaMenu(juego, false));
+                juego.setScreen(new PantallaJuego(juego, personaje));
+            }
+
+        }
+
         if (estado == EstadoJuego.JUGANDO){
-            if (boss.getLife() > 0){
-                boss.atack(personaje);
-                for (Bullet bullet: bullets) {
-                    boss.isUnderAtack(bullet,personaje);
-                }
-                collisiones(boss);
-                bossSpecialAtack(delta, personaje, boss);
-            }
-            else {
-                BossBullets.clear();
-            }
+
             dibujarObjetos();
             dibujarEscena();
             logicaDisparo(delta);

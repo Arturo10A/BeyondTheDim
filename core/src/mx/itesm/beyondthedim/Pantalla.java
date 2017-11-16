@@ -99,7 +99,7 @@ public abstract class Pantalla implements Screen {
         pBody = world.createBody(def);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Constants.PPM / 2, Constants.PPM /2);
+        //shape.setAsBox(Constants.PPM / 2, Constants.PPM /2);
 
         pBody.createFixture(shape,1.0f);
         shape.dispose();

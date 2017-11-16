@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 
 public class boss extends Objeto {
-
     Texture bossTexture;
     TextureRegion texturaPersonaje;
     public Animation<TextureRegion> spriteAnimation;
@@ -19,14 +18,11 @@ public class boss extends Objeto {
     protected float y;
     private int life;
     private int teleportCont = 0;
-
     public boss(float x, float y, int life){
         this.x    = x;
         this.y    = y;
         this.life = life;
-
-        bossTexture      = new Texture("Personaje/jett.png");
-
+        bossTexture = new Texture("Personaje/jett.png");
         //texturaPersonaje = bossTexture.split(63,100);
         //spriteAnimation = new Animation(0.1f, texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1]);
         //spriteAnimation.setPlayMode(Animation.PlayMode.LOOP);
@@ -79,25 +75,13 @@ public class boss extends Objeto {
                     this.y = bulletY + 101;
                 }
             }
-
             teleportCont += 1;
-
         }
         else if (teleportCont >= 3 && teleportCont <= 10 && this.life < 10){
             teleportCont += 1;
         }else {
             teleportCont = 0;
         }
-    }
-
-
-    public void teleport(Personaje personaje){
-        //Do something
-        /*x = personaje.getPositionX();
-        y = personaje.getPositionY();
-
-        this.x = x+80;
-        this.y = y;*/
     }
 
     protected float getPositionX(){
@@ -109,7 +93,6 @@ public class boss extends Objeto {
     }
 
     public boolean collisonBullet(Bullet bullet){
-
         if (distance(bullet) < 100)
             return true;
         return false;

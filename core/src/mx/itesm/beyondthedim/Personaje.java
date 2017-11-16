@@ -27,6 +27,27 @@ class Personaje extends Objeto{
     private float y;
     private int life;
 
+    public  Personaje(float x, float y){
+        this.x = x;
+        this.y = y;
+        this.life = 10;
+        jettTextureCompleta = new TextureRegion(new Texture("Personaje/jett_completo.png"));
+
+        //Divide en 4 frames 63x100
+        texturaPersonaje = jettTextureCompleta.split(63,100);
+
+        //Se crea la animacion con tiempo de 0.25 segundos entre frames
+        spriteAnimado = new Animation(0.1f, texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1]);
+
+        //Animación infinita
+        spriteAnimado.setPlayMode(Animation.PlayMode.LOOP);
+        // Inicia el timer que contará tiempo para saber qué frame se dibuja
+        timerAnimacion = 0;
+        // Crea el sprite con el personaje quieto (idle)
+        sprite = new Sprite(texturaPersonaje[0][0]);    // QUIETO
+        sprite.setPosition(x,y);    // Posición inicial
+    }
+
 
     public Personaje(float x, float y, int life){
         this.life = life;
@@ -96,6 +117,13 @@ class Personaje extends Objeto{
 
     public float getPositionY(){
         return y;
+    }
+
+
+
+    public  void setPosition(float x, float y){
+        this.x = x;
+        this.y = y;
     }
 
     // Accesor de estadoMovimiento
