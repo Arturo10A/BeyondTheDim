@@ -12,7 +12,7 @@ package mx.itesm.beyondthedim;
 public class PantallaCuartoD extends Pantalla {
 
     public PantallaCuartoD(Juego juego){
-        
+
     }
 
     @Override
