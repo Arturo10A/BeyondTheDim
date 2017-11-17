@@ -44,6 +44,7 @@ public class Juego extends Game {
     private boolean cambiarDireccion = true;
 	private Music music;
     protected boolean musicOn = true;
+    protected boolean musicaCargada = false;
 	protected boolean juegoIniciado = false;
     private float enemyPosAncho = 0;
     private float enemyPosAlto = 0;
@@ -57,6 +58,7 @@ public class Juego extends Game {
 
 	public void iniciarJuego(float ANCHO, float ALTO){
 	    vidaPersonaje = 1000;
+	    juegoIniciado = true;
         personaje = new Personaje(ANCHO / 9.5f, ALTO / 2f, vidaPersonaje);
         bullets = new ArrayList<Bullet>();
         shootTimer = 0;
@@ -78,7 +80,12 @@ public class Juego extends Game {
 
     //Musica
     public void setMusic(Music music){
+        if(this.music != null) {
+            this.music.stop();
+            this.music.dispose();
+        }
         this.music = music;
+        musicaCargada = true;
     }
     public Music getMusic(){
         return this.music;

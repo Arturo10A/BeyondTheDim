@@ -47,26 +47,6 @@ class PantallaMenu extends Pantalla {
     public PantallaMenu(Juego juego) {
         this.juego = juego;
     }
-
-    @Override
-    public void show() {
-
-        cargarTexturas(); //Carga imagenes
-        crearEcenaMenu(); //Crea la escena
-        cargarNave();
-        if(juego.juegoIniciado || juego.getMusic() == null) {
-            cargarMusica();
-        }
-        if(juego.musicOn){
-            juego.getMusic().play();
-        }
-        Gdx.input.setInputProcessor(escenaMenu);
-
-        batch = new SpriteBatch();
-        texto = new Texto();
-
-    }
-
     private void cargarNave() {
         nave = new Nave(ANCHO/2-280/2,ALTO*posAltoNave);
         nave.setEstadoMovimiento(Objeto.EstadoMovimiento.ACTIVO);
@@ -76,7 +56,6 @@ class PantallaMenu extends Pantalla {
         //music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3"));
         juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3")));
         //music.setLooping(true);
-        juego.getMusic().setLooping(true);
         //music.playAnimacionNave();
     }
 
@@ -105,11 +84,11 @@ class PantallaMenu extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                juego.getMusic().stop();
                 Gdx.app.log("clicked","***PANTALLA JUEGO***");
                 playAnimacionNave = true;
                 nave.setEstadoMovimiento(Objeto.EstadoMovimiento.PROPULSOR);
                 juego.setEstadoJuego(EstadoJuego.JUGANDO);
-                juego.juegoIniciado = true;
                 juego.iniciarJuego(ANCHO,ALTO);
             }
         });
@@ -166,6 +145,25 @@ class PantallaMenu extends Pantalla {
         });
         escenaMenu.addActor(btnAboutUs);
 
+    }
+
+    @Override
+    public void show() {
+
+        cargarTexturas(); //Carga imagenes
+        crearEcenaMenu(); //Crea la escena
+        cargarNave();
+        if(!juego.musicaCargada) {
+            cargarMusica();
+        }
+        if(juego.musicOn){
+            juego.getMusic().setLooping(true);
+            juego.getMusic().play();
+        }
+        Gdx.input.setInputProcessor(escenaMenu);
+
+        batch = new SpriteBatch();
+        texto = new Texto();
     }
 
     @Override

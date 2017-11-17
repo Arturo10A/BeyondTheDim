@@ -112,6 +112,7 @@ public abstract class Pantalla implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     // Regresa al menú
                     juego.getMusic().stop();
+                    juego.musicaCargada = false;
                     juego.setScreen(new PantallaMenu(juego));
                 }
             });
