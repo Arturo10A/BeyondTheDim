@@ -23,6 +23,7 @@ class Personaje extends Objeto{
     private Animation<TextureRegion> spriteAnimado;
     protected EstadoMovimiento estadoMovimiento = EstadoMovimiento.QUIETO;
     private float timerAnimacion;
+    private float speed =5;
     private float x;
     private float y;
     private int life;
@@ -138,8 +139,8 @@ class Personaje extends Objeto{
 
 
     public void mover (float dx, float dy){
-        x += dx;
-        y += dy;
+        x += dx*speed;
+        y += dy*speed;
         sprite.setX(x);
 
         sprite.setY(y);

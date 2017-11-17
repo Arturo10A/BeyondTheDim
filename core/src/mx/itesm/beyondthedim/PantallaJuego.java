@@ -10,12 +10,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.audio.Music;
@@ -51,8 +54,10 @@ class PantallaJuego extends Pantalla {
     private Personaje obstacle;
     private ShapeRenderer shape;
     private ShapeRenderer shape2;
-    private int vidaPersonaje = 1000;
 
+
+
+    private int vidaPersonaje = 1000;
     //Jett Speed
     private int DX_PERSONAJE = 5;
     private int DY_PERSONAJE = 5;
@@ -119,8 +124,18 @@ class PantallaJuego extends Pantalla {
         music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
         music.setLooping(true);
         music.play();
+
         shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
     }
+    /*
+    public void createEnemy(float delta) {
+
+        if (delta >= 10.0) {
+            System.out.println("Enemy created");
+            delta = 0;
+        }
+
+    }*/
 
     public void crearEscena() {
 
@@ -140,6 +155,7 @@ class PantallaJuego extends Pantalla {
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
         skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
@@ -149,7 +165,6 @@ class PantallaJuego extends Pantalla {
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
-        movJoystick.moveBy(10,20);
         //Listener joystick movimiento
 //        movJoystick.addListener(new ChangeListener() {
 //            @Override
@@ -287,6 +302,7 @@ class PantallaJuego extends Pantalla {
         batch.begin();
         music.setVolume(0.2f);
         music.play();
+
         escenaJuego.draw();
         batch.end();
         escenaJuego.act(Gdx.graphics.getDeltaTime());
@@ -310,28 +326,7 @@ class PantallaJuego extends Pantalla {
             music.dispose();
             juego.setScreen(new LoseScreen(juego));
         }
-
-        System.out.println(Gdx.graphics.getDeltaTime());
-
-        if (Gdx.graphics.getDeltaTime() >= 10){
-            cuadroDialogo = cuadroDialogo2;
-        }
-
-
-
-
-
-        //***************Ganar***************
-        if (enemy_list.isEmpty()){
-            textureEscenario = textureEscenarioAbierto;
-
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                music.stop();
-                music.dispose();
-                //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new EscenarioBoss(juego,personaje));
-            }
-        }
+        //***************Ganar**************//
         if(estado==EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
@@ -342,14 +337,7 @@ class PantallaJuego extends Pantalla {
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
-        //System.out.println("Sprite Jett en X: "+ personaje.sprite.getBoundingRectangle().getX());
-        //System.out.println("Sprite Jett en Y: "+ personaje.sprite.getBoundingRectangle().getY());
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
-
-        batch.draw(cuadroDialogo,Pantalla.ANCHO/2- cuadroDialogo.getWidth()/2,Pantalla.ALTO - cuadroDialogo.getHeight());
-
-
-
 
         //Enemigos
         for (Enemy ene : enemy_list) {
@@ -397,8 +385,11 @@ class PantallaJuego extends Pantalla {
     }
 
     private void logicaDisparo(float delta) {
+        //*******************************************************Logica Disparo*******************************************************
         shootTimer += delta;
         //Disparo derecha
+        //System.out.println(gunJoystick.getKnobPercentY());
+
         if(gunJoystick.getKnobPercentX() > 0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,1,gunJoystick.getKnobPercentY()));
@@ -409,11 +400,13 @@ class PantallaJuego extends Pantalla {
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,-1,gunJoystick.getKnobPercentY()));
             shoot.play();
         }
+
         if(gunJoystick.getKnobPercentY() > 0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),1));
             shoot.play();
         }
+
         if(gunJoystick.getKnobPercentY() < -0.50 && shootTimer>=SWT){
             shootTimer=0;
             bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),-1));
@@ -445,29 +438,53 @@ class PantallaJuego extends Pantalla {
 
     private void logicaMovimiento(float delta) {
         Rectangle rp = personaje.getSprite().getBoundingRectangle();
+        rp.setX(personaje.getPositionX()+17);
+        rp.setY(personaje.getPositionY());
+        rp.setWidth(30);
+        rp.setHeight(20);
+
+        //Boundings
         Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+        Rectangle muroN = new Rectangle(0,ALTO-120,ANCHO,120);
+        Rectangle muroO = new Rectangle(0,0,120,ALTO);
+        Rectangle muroS = new Rectangle(0,0,ANCHO,120);
+        Rectangle muroEN = new Rectangle(1160,ALTO-300,120,300);
+        Rectangle muroES = new Rectangle(1160,0,120,300);
+        Rectangle puertaE = new Rectangle(1160,300,120,120);
 
         shape.setProjectionMatrix(camara.combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
         shape.setColor(Color.RED);
+        shape.rect(rp.getX(),rp.getY(),rp.getWidth(),rp.getHeight());
+
+        shape2.setProjectionMatrix(camara.combined);
+        shape2.begin(ShapeRenderer.ShapeType.Line);
+        shape2.setColor(Color.BLUE);
+        shape2.rect(puertaE.getX(),puertaE.getY(),puertaE.getWidth(),puertaE.getHeight());
+
 
         Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
 
         float ang = v.angle();
         double angle = ang*Math.PI/180.0;
+
+        if (enemy_list.isEmpty()){
+            textureEscenario = textureEscenarioAbierto;
+            puertaE.setSize(10);
+            shape2.rect(puertaE.getX(),puertaE.getY(),puertaE.getWidth(),puertaE.getHeight());
+            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+                music.stop();
+                music.dispose();
+                //juego.setScreen(new PantallaMenu(juego, false));
+                juego.setScreen(new EscenarioBoss(juego));
+            }
+        }
         //*******************************************************Logica enemigos*******************************************************{
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
+            rp.setX(rp.getX()+ (float)(Math.cos(angle)*20));
+            rp.setY(rp.getY()+ (float)(Math.sin(angle)*20));
 
-            Gdx.app.log("Choque",rp.toString()+","+ro.toString());
-            rp.setX(personaje.getPositionX()+ (float)(Math.cos(angle)*10));
-            rp.setY(personaje.getPositionY()+ (float)(Math.sin(angle)*10));
-
-            shape.rect(personaje.getPositionX()+ (float)(Math.cos(angle)*10), personaje.getPositionY()+ (float)(Math.sin(angle)*10),40,70);
-
-            System.out.println("rp x = "+ rp.getX()+" y"+ rp.getY());
-            System.out.println("ro x = "+ ro.getX()+" y"+ ro.getY());
-            if(! rp.overlaps(ro)){
-                Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+            if((!rp.overlaps(muroN))&&(!rp.overlaps(ro))&&(!rp.overlaps(muroO))&&(!rp.overlaps(muroS))&(!rp.overlaps(muroEN))&&(!rp.overlaps(muroES))&&(!rp.overlaps(puertaE))   ){
                 personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
             } else{
                 Gdx.app.log("Choque ","NO SE PUEDE");
@@ -477,9 +494,11 @@ class PantallaJuego extends Pantalla {
 
         shape.end();
         shape2.end();
+        shape.end();
     }
 
     private void logicaEnemigo(float delta) {
+        //*******************************************************Logica enemigos*******************************************************{
         float enemyPosAncho = 0;
         float enemyPosAlto = 0;
         for (Enemy ene : enemy_list) {
@@ -488,6 +507,8 @@ class PantallaJuego extends Pantalla {
             enemyPosAlto += ene.sprite.getHeight() / 2;
             ene.doDamage(this.personaje);
         }
+
+        //createEnemy(delta);
     }
 
     @Override
