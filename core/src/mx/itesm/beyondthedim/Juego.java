@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+
+import java.util.ArrayList;
 
 /**
  * Creado por Equipo 2
@@ -30,44 +33,68 @@ public class Juego extends Game {
 	//Asset Manager
 	private final AssetManager assetManager;
 	//Variables del juego
+    private Personaje personaje;
+    private int vidaPersonaje;
+    private ArrayList<Bullet> bullets;
+    private Sound shoot;
+    private static final float SWT = 0.3f;
+    private float shootTimer;
+    private float timeBala;
 	private EstadoJuego estadoJuego;
+    private boolean cambiarDireccion = true;
 	private Music music;
-	private Personaje personaje;
-	private int vidaPersonaje = 1000;
-	protected boolean musicOn = true;
+    protected boolean musicOn = true;
 	protected boolean juegoIniciado = false;
-
+    private float enemyPosAncho = 0;
+    private float enemyPosAlto = 0;
+    //Enemy block
+    private ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
 
 
 	public Juego(){
 		assetManager = new AssetManager();
 	}
 
-	public void createPersonaje(float ANCHO, float ALTO){
+	public void iniciarJuego(float ANCHO, float ALTO){
+	    vidaPersonaje = 1000;
         personaje = new Personaje(ANCHO / 9.5f, ALTO / 2f, vidaPersonaje);
+        bullets = new ArrayList<Bullet>();
+        shootTimer = 0;
+        shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
     }
 
+    //Personaje
 	public Personaje getPersonaje(){
 	    return personaje;
     }
 
+    //EstadoJuego
 	public void setEstadoJuego(EstadoJuego estadoJuego){
 	    this.estadoJuego = estadoJuego;
     }
-
     public EstadoJuego getEstadoJuego(){
 	    return this.estadoJuego;
     }
 
+    //Musica
     public void setMusic(Music music){
         this.music = music;
     }
-
     public Music getMusic(){
         return this.music;
     }
 
-	@Override
+    //Balas
+    public ArrayList<Bullet> getBullets(){
+        return bullets;
+    }
+
+    //Enemigos
+    public ArrayList<Enemy> getEnemy_list() {
+        return enemy_list;
+    }
+
+    @Override
 	public void create () {
 		// Lo preparamos para que cargue mapas
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
@@ -84,7 +111,7 @@ public class Juego extends Game {
 		assetManager.clear();
 	}
 
-    public void controlJoystickMovimiento(SpriteBatch batch, Touchpad pad, Touchpad movJoystick,boolean cambiarDireccion, Personaje obstacle) {
+    public void controlJoystickMovimiento(SpriteBatch batch, Touchpad pad, Touchpad movJoystick, Personaje obstacle) {
         if(cambiarDireccion) {
             if (pad.getKnobPercentX() > 0.20) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
@@ -124,6 +151,94 @@ public class Juego extends Game {
             } else{
                 Gdx.app.log("Choque ","NO SE PUEDE");
             }
+        }
+    }
+
+    public void logicaDisparo(float delta, Touchpad gunJoystick, SpriteBatch batch){
+        //****************************************Logica Disparo*****************************************
+        shootTimer += delta;
+        //Disparo derecha
+        //System.out.println(gunJoystick.getKnobPercentY());
+
+        if(gunJoystick.getKnobPercentX() > 0.50 && shootTimer>=SWT){
+            shootTimer=0;
+            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,1,gunJoystick.getKnobPercentY()));
+            shoot.play();
+        }
+        if(gunJoystick.getKnobPercentX() < -0.50 && shootTimer>=SWT){
+            shootTimer=0;
+            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,-1,gunJoystick.getKnobPercentY()));
+            shoot.play();
+        }
+
+        if(gunJoystick.getKnobPercentY() > 0.50 && shootTimer>=SWT){
+            shootTimer=0;
+            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),1));
+            shoot.play();
+        }
+
+        if(gunJoystick.getKnobPercentY() < -0.50 && shootTimer>=SWT){
+            shootTimer=0;
+            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),-1));
+            shoot.play();
+        }
+        if(gunJoystick.getKnobPercentY() == 0 && gunJoystick.getKnobPercentX()==0){
+            cambiarDireccion = true;
+        }else{
+            cambiarDireccion = false;
+            if(personaje.getEstadoMovimiento()!= Objeto.EstadoMovimiento.QUIETO) {
+                if (gunJoystick.getKnobPercentX() > 0.20) {
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+                } else if (gunJoystick.getKnobPercentX() < -0.20) {
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+                }
+            }
+        }
+
+        for(int i = bullets.size()-1;i>=0;i--){
+            bullets.get(i).update(delta);
+            if(bullets.get(i).removeB){
+                bullets.remove(i);
+            }
+        }
+    }
+
+    public void sistemaColisionesBala() {
+        //**************************************Check colision system***************************************
+        //Empezar en -1 y terminar en 0
+        for (int j = enemy_list.size() - 1; j >=0 ; j--) {
+            for (int i = bullets.size() - 1; i>=0; i--) {
+                if (bullets.get(i).distance(enemy_list.get(j)) < 50) {
+                    enemy_list.get(j).receiveDamage(20);
+                    enemy_list.get(j).goBack();
+                    bullets.remove(i);
+                    if (enemy_list.get(j).isDead()) {
+                        enemy_list.remove(j);
+                        break;
+                    }
+                }
+            }
+        }
+        //Cambiar timeBala a timer
+        if (timeBala >= 100.0) {
+            for (int i = 0; i < bullets.size() - 4; i++) {
+                bullets.remove(i);
+            }
+            timeBala = 0;
+        } else {
+            timeBala++;
+        }
+    }
+
+    public void logicaEnemigo(float delta) {
+        //****************************************Logica enemigos********************************************{
+        enemyPosAlto = 0;
+        enemyPosAncho = 0;
+        for (Enemy ene : enemy_list) {
+            ene.attack(personaje, enemyPosAncho, enemyPosAlto);
+            enemyPosAncho += ene.sprite.getWidth() / 2;
+            enemyPosAlto += ene.sprite.getHeight() / 2;
+            ene.doDamage(this.personaje);
         }
     }
 }

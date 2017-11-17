@@ -44,7 +44,6 @@ class PantallaCuartoA extends Pantalla {
     private final Juego juego;
     private Texture textureEscenario;
     private Texture textureEscenarioAbierto;
-
     //Jett start
     private Personaje personaje;
     private Personaje obstacle;
@@ -52,8 +51,7 @@ class PantallaCuartoA extends Pantalla {
     private ShapeRenderer shape2;
     //
     private int vidaPersonaje = 1000;
-    //Enemy block
-    ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
+
     //Escenario
     private Stage escenaJuego;
     private EscenaPausa escenaPausa;
@@ -64,17 +62,9 @@ class PantallaCuartoA extends Pantalla {
     //Texto
     private Texto texto;
     //Variable of control
-    private float timeBala;
+
     //Historia
     private Texture texturaItemHistoria;
-    //BALA
-    private ArrayList<Bullet> bullets;
-    private static final float SWT = 0.3f;
-    private float shootTimer;
-    private boolean cambiarDireccion = true;
-    //Music
-    //private Music music;
-    private Sound shoot;
 
     //Constructores
     public PantallaCuartoA(Juego juego) {
@@ -86,8 +76,8 @@ class PantallaCuartoA extends Pantalla {
         //Escenario
         escenaJuego = new Stage(vista);
         //Bala
-        bullets = new ArrayList<Bullet>();
-        shootTimer = 0;
+        //bullets = new ArrayList<Bullet>();
+        //shootTimer = 0;
         shape = new ShapeRenderer();
         shape2 = new ShapeRenderer();
         //*******************************************************Joysticks*******************************************************
@@ -112,7 +102,7 @@ class PantallaCuartoA extends Pantalla {
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.controlJoystickMovimiento(batch, pad, movJoystick, cambiarDireccion, obstacle);
+                juego.controlJoystickMovimiento(batch, pad, movJoystick, obstacle);
             }
         });
         //
@@ -155,8 +145,6 @@ class PantallaCuartoA extends Pantalla {
     private void cargarMusica(){
         juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
         juego.getMusic().setLooping(true);
-
-        shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
     }
     @Override
     public void show() {
@@ -175,7 +163,7 @@ class PantallaCuartoA extends Pantalla {
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
-        enemy_list.add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
        // enemy_list.add(new Enemy(ANCHO - 300, ALTO / 4, 100, 1));
        // enemy_list.add(new Enemy(ANCHO - 50, ALTO / 2, 100, 1));
         //
@@ -197,14 +185,14 @@ class PantallaCuartoA extends Pantalla {
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
 
         //Enemigos
-        for (Enemy ene : enemy_list) {
+        for (Enemy ene : juego.getEnemy_list()) {
             ene.render(batch, Gdx.graphics.getDeltaTime());
         }
         //Vida
         String lifeString = "Vida: " + personaje.getLife();
         texto.mostrarMensaje(batch, lifeString, 98, Pantalla.ALTO / 1.03f);
         //Balas
-        for (Bullet bullet : bullets) {
+        for (Bullet bullet : juego.getBullets()) {
             bullet.render(batch);
         }
         //Items
@@ -213,82 +201,7 @@ class PantallaCuartoA extends Pantalla {
 
     }
     //
-    private void sistemaColisionesBala() {
-        //**************************************Check colision system***************************************
-        //Empezar en -1 y terminar en 0
-        for (int j = enemy_list.size() - 1; j >=0 ; j--) {
-            for (int i = bullets.size() - 1; i>=0; i--) {
-                if (bullets.get(i).distance(enemy_list.get(j)) < 50) {
-                    enemy_list.get(j).receiveDamage(20);
-                    enemy_list.get(j).goBack();
-                    bullets.remove(i);
 
-                    if (enemy_list.get(j).isDead()) {
-                        enemy_list.remove(j);
-                        break;
-                    }
-                }
-            }
-        }
-        //Cambiar timeBala a timer
-        if (timeBala >= 100.0) {
-            for (int i = 0; i < bullets.size() - 4; i++) {
-                bullets.remove(i);
-            }
-            timeBala = 0;
-        } else {
-            timeBala++;
-        }
-    }
-    //
-    private void logicaDisparo(float delta) {
-        //****************************************Logica Disparo*****************************************
-        shootTimer += delta;
-        //Disparo derecha
-        //System.out.println(gunJoystick.getKnobPercentY());
-
-        if(gunJoystick.getKnobPercentX() > 0.50 && shootTimer>=SWT){
-            shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,1,gunJoystick.getKnobPercentY()));
-            shoot.play();
-        }
-        if(gunJoystick.getKnobPercentX() < -0.50 && shootTimer>=SWT){
-            shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,-1,gunJoystick.getKnobPercentY()));
-            shoot.play();
-        }
-
-        if(gunJoystick.getKnobPercentY() > 0.50 && shootTimer>=SWT){
-            shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),1));
-            shoot.play();
-        }
-
-        if(gunJoystick.getKnobPercentY() < -0.50 && shootTimer>=SWT){
-            shootTimer=0;
-            bullets.add(new Bullet(personaje.getPositionX()+17, personaje.getPositionY()+28,gunJoystick.getKnobPercentX(),-1));
-            shoot.play();
-        }
-        if(gunJoystick.getKnobPercentY() == 0 && gunJoystick.getKnobPercentX()==0){
-            cambiarDireccion = true;
-        }else{
-            cambiarDireccion = false;
-            if(personaje.getEstadoMovimiento()!= Objeto.EstadoMovimiento.QUIETO) {
-                if (gunJoystick.getKnobPercentX() > 0.20) {
-                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-                } else if (gunJoystick.getKnobPercentX() < -0.20) {
-                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-                }
-            }
-        }
-
-        for(int i = bullets.size()-1;i>=0;i--){
-            bullets.get(i).update(delta);
-            if(bullets.get(i).removeB){
-                bullets.remove(i);
-            }
-        }
-    }
     //
     private void logicaMovimiento(float delta) {
         Rectangle rp = personaje.getSprite().getBoundingRectangle();
@@ -321,7 +234,7 @@ class PantallaCuartoA extends Pantalla {
         float ang = v.angle();
         double angle = ang*Math.PI/180.0;
         //*******************************************Logica enemigos*******************************************
-        if (enemy_list.isEmpty()){
+        if (juego.getEnemy_list().isEmpty()){
             textureEscenario = textureEscenarioAbierto;
             puertaE.setSize(10);
             shape2.rect(puertaE.getX(),puertaE.getY(),puertaE.getWidth(),puertaE.getHeight());
@@ -344,17 +257,7 @@ class PantallaCuartoA extends Pantalla {
         shape.end();
     }
     //
-    private void logicaEnemigo(float delta) {
-        //****************************************Logica enemigos********************************************{
-        float enemyPosAncho = 0;
-        float enemyPosAlto = 0;
-        for (Enemy ene : enemy_list) {
-            ene.attack(personaje, enemyPosAncho, enemyPosAlto);
-            enemyPosAncho += ene.sprite.getWidth() / 2;
-            enemyPosAlto += ene.sprite.getHeight() / 2;
-            ene.doDamage(this.personaje);
-        }
-    }
+
     @Override
     public void render(float delta) {
         borrarPantalla(0, 0, 0);
@@ -377,11 +280,11 @@ class PantallaCuartoA extends Pantalla {
             batch.begin();
             logicaMovimiento(delta);
             batch.end();
-            logicaEnemigo(delta);
+            juego.logicaEnemigo(delta);
             //***************Balas***************
-            logicaDisparo(delta);
+            juego.logicaDisparo(delta, gunJoystick, batch);
             //***************Colision Bala/Enemigo***************
-            sistemaColisionesBala();
+            juego.sistemaColisionesBala();
         }
         //*****************************************Ganar/Perder**************************************
         //***************Perder***************
@@ -389,7 +292,7 @@ class PantallaCuartoA extends Pantalla {
             juego.setScreen(new LoseScreen(juego));
         }
         //***************Ganar***************
-        if (enemy_list.isEmpty()){
+        if (juego.getEnemy_list().isEmpty()){
             textureEscenario = textureEscenarioAbierto;
 
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
