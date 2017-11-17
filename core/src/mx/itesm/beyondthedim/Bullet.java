@@ -1,8 +1,13 @@
 package mx.itesm.beyondthedim;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+
+import java.util.ArrayList;
 
 /**
  * Creado por Equipo 2
@@ -125,6 +130,8 @@ class Bullet {
         return distance;
 
     }
+
+
 
 
 }

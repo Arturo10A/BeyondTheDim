@@ -90,7 +90,7 @@ class PantallaInstruciones extends Pantalla  {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***GO BACK***");
-                juego.setScreen(new PantallaMenu(juego, music));
+                juego.setScreen(new PantallaMenu(juego));
             }
         });
 

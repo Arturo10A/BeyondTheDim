@@ -45,14 +45,13 @@ class PantallaAboutUs extends Pantalla {
     private EscenaInfo escenaInfoJo;
     private boolean dibujarEscenaInfo=false;
     private Texture texturaBtnGoBack; //Boton de regresp
-    private Music music;
+    //private Music music;
     private char turno;
 
 
 
-    public PantallaAboutUs(Juego juego, Music music) {
+    public PantallaAboutUs(Juego juego) {
         this.juego = juego;
-        this.music = music;
     }
 
     @Override
@@ -95,7 +94,7 @@ class PantallaAboutUs extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***GO BACK***");
-                juego.setScreen(new PantallaMenu(juego,music));
+                juego.setScreen(new PantallaMenu(juego));
             }
         });
 

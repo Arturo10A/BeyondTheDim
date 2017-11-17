@@ -1,7 +1,6 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -43,44 +42,21 @@ class PantallaMenu extends Pantalla {
     float posAltoNave = 0.20f;
 
     private Texture fondoPantalla;
-    private Music music;
-    private boolean musicOn;
-    private boolean play = false;
-
-    public PantallaMenu(Juego juego, Music musicMenu) {
-        this.juego = juego;
-        this.music = musicMenu;
-    }
+    private boolean playAnimacionNave = false;
 
     public PantallaMenu(Juego juego) {
         this.juego = juego;
     }
-
-    @Override
-    public void show() {
-
-        cargarTexturas(); //Carga imagenes
-        crearEcenaMenu(); //Crea la escena
-        cargarNave();
-        if(music == null) {
-            cargarMusica();
-        }
-        Gdx.input.setInputProcessor(escenaMenu);
-
-        batch = new SpriteBatch();
-        texto = new Texto();
-
-    }
-
     private void cargarNave() {
         nave = new Nave(ANCHO/2-280/2,ALTO*posAltoNave);
         nave.setEstadoMovimiento(Objeto.EstadoMovimiento.ACTIVO);
     }
 
     private void cargarMusica(){
-        music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3"));
-        music.setLooping(true);
-        music.play();
+        //music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3"));
+        juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3")));
+        //music.setLooping(true);
+        //music.playAnimacionNave();
     }
 
     private void cargarTexturas() {
@@ -108,14 +84,13 @@ class PantallaMenu extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                juego.getMusic().stop();
                 Gdx.app.log("clicked","***PANTALLA JUEGO***");
-                /*Quitar
-                music.stop();
-                music.dispose();
-                juego.setScreen(new PantallaJuego(juego));
-                */
-                play = true;
+                playAnimacionNave = true;
                 nave.setEstadoMovimiento(Objeto.EstadoMovimiento.PROPULSOR);
+                juego.setEstadoJuego(EstadoJuego.JUGANDO);
+                juego.iniciarJuego(ANCHO,ALTO);
+
             }
         });
         escenaMenu.addActor(btnPlay);
@@ -130,7 +105,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA Settings***");
-                juego.setScreen(new PantallaSettings(juego, music));
+                juego.setScreen(new PantallaSettings(juego));
             }
         });
         escenaMenu.addActor(btnSettings);
@@ -164,7 +139,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA PANTALLA***");
-                juego.setScreen(new PantallaAboutUs(juego, music));
+                juego.setScreen(new PantallaAboutUs(juego));
             }
 
 
@@ -174,11 +149,30 @@ class PantallaMenu extends Pantalla {
     }
 
     @Override
+    public void show() {
+
+        cargarTexturas(); //Carga imagenes
+        crearEcenaMenu(); //Crea la escena
+        cargarNave();
+        if(!juego.musicaCargada) {
+            cargarMusica();
+        }
+        if(juego.musicOn){
+            juego.getMusic().setLooping(true);
+            juego.getMusic().play();
+        }
+        Gdx.input.setInputProcessor(escenaMenu);
+
+        batch = new SpriteBatch();
+        texto = new Texto();
+    }
+
+    @Override
     public void render(float delta) {
         borrarPantalla(1.0f,1.0f,1.0f);
         batch.setProjectionMatrix(camara.combined);
         escenaMenu.draw();
-        if(!play) {
+        if(!playAnimacionNave) {
             altoNave = 0;
             altoNave = 0;
             batch.begin();
@@ -194,9 +188,8 @@ class PantallaMenu extends Pantalla {
             batch.end();
         }
         if(nave.ANCHO < 0 || nave.ALTO < 0){
-            music.stop();
-            music.dispose();
-            juego.setScreen(new PantallaTutorial(juego));
+            juego.getMusic().stop();
+            juego.setScreen(new PantallaCuartoA(juego));
             this.dispose();
         }
     }
