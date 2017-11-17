@@ -80,7 +80,7 @@ public class PantallaTutorial extends  Pantalla {
     private void cargarTexturas(){
         texturaBtnGoBack = new Texture("Botones/button_pause.png");
         texturaBtnSkip = new Texture("Botones/button_back_2.png");
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
+        textureEscenario = new Texture("Stage/tutorial.jpg");
         vidaIcono = new Texture("iconLife.png");
         cuadro1 = new Texture("test.png");
         cuadro2 = new Texture("test2.png");
