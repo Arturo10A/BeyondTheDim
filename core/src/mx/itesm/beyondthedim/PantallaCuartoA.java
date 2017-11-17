@@ -49,22 +49,12 @@ public class PantallaCuartoA  extends Pantalla implements Niveles{
     private Personaje obstacle;
     private ShapeRenderer shape;
     private ShapeRenderer shape2;
-    //
-    private int vidaPersonaje = 1000;
-
     //Escenario
     private Stage escenaJuego;
-    private EscenaPausa escenaPausa;
-    private Texture texturaBtnPausa; //Boton de regreso
+    private Texture texturaBtnPausa;
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
-    //Texto
-    private Texto texto;
-    //Variable of control
-
-    //Historia
-    private Texture texturaItemHistoria;
 
     //Constructores
     public PantallaCuartoA(Juego juego) {
@@ -72,12 +62,10 @@ public class PantallaCuartoA  extends Pantalla implements Niveles{
         this.personaje = juego.getPersonaje();
     }
 
+    @Override
     public void crearEscena() {
         //Escenario
         escenaJuego = new Stage(vista);
-        //Bala
-        //bullets = new ArrayList<Bullet>();
-        //shootTimer = 0;
         shape = new ShapeRenderer();
         shape2 = new ShapeRenderer();
         //*******************************************************Joysticks*******************************************************
@@ -123,29 +111,26 @@ public class PantallaCuartoA  extends Pantalla implements Niveles{
                 // Se pausa el juego
                 //estado = estado==EstadoJuego.PAUSADO?EstadoJuego.JUGANDO:EstadoJuego.PAUSADO;
                 juego.setEstadoJuego(EstadoJuego.PAUSADO);
-                if (juego.getEstadoJuego()==EstadoJuego.PAUSADO) {
-                    // Activar escenaPausa y pasarle el control
-                    if (escenaPausa==null) {
-                        escenaPausa = new EscenaPausa(vista, batch, juego, escenaJuego);
-                    }
-                    Gdx.input.setInputProcessor(escenaPausa);
-                }
             }
 
         });
     }
 
     //********************Cargar*******************
+    @Override
     public void cargarTexturas() {
         texturaBtnPausa = new Texture("Botones/button_pause.png");
         textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
         textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
-        texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+        //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
     }
-    private void cargarMusica(){
+
+    @Override
+    public void cargarMusica(){
         juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
         juego.getMusic().setLooping(true);
     }
+
     @Override
     public void show() {
         //Cargar escena
@@ -156,52 +141,14 @@ public class PantallaCuartoA  extends Pantalla implements Niveles{
             juego.getMusic().setVolume(0.2f);
             juego.getMusic().play();
         }
-        //Crear personaje
-
-
-        obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, vidaPersonaje);
+        obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, 1000);
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
         crearEnemigos();
-       // enemy_list.add(new Enemy(ANCHO - 300, ALTO / 4, 100, 1));
-       // enemy_list.add(new Enemy(ANCHO - 50, ALTO / 2, 100, 1));
-        //
         Gdx.input.setInputProcessor(escenaJuego);
-        //Gdx.input.setInputProcessor(new ProcesadorEventos());
-
-        texto = new Texto();
     }
     //***********************************************Metodos de render**********************************************
-    private void dibujarObjetos() {
-        batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
-
-        //Personaje Jett
-        personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
-
-        System.out.println("Sprite Jett en X: "+ personaje.sprite.getBoundingRectangle().getX());
-        System.out.println("Sprite Jett en Y: "+ personaje.sprite.getBoundingRectangle().getY());
-
-        obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
-
-        //Enemigos
-        for (Enemy ene : juego.getEnemy_list()) {
-            ene.render(batch, Gdx.graphics.getDeltaTime());
-        }
-        //Vida
-        String lifeString = "Vida: " + personaje.getLife();
-        texto.mostrarMensaje(batch, lifeString, 98, Pantalla.ALTO / 1.03f);
-        //Balas
-        for (Bullet bullet : juego.getBullets()) {
-            bullet.render(batch);
-        }
-        //Items
-        batch.draw(texturaItemHistoria, ANCHO*0.80f, ALTO*0.17f,
-                texturaItemHistoria.getWidth()*0.20f,texturaItemHistoria.getHeight()*0.20f);
-
-    }
-    //
-
     //
     private void logicaMovimiento(float delta) {
         Rectangle rp = personaje.getSprite().getBoundingRectangle();
@@ -265,24 +212,22 @@ public class PantallaCuartoA  extends Pantalla implements Niveles{
         //HUD
         batch.setProjectionMatrix(camara.combined);
         escenaJuego.draw();
-        //*******************************************Dibujar Objetos*******************************************
+        //Dibujar Objetos
         batch.begin();
-        dibujarObjetos();
+        juego.dibujarObjetos(batch, textureEscenario, obstacle);
         batch.end();
-        //*****************************************Dibujar escena del juego******************************************
+        //Dibujar escena del juego
         batch.begin();
         escenaJuego.draw();
         batch.end();
         escenaJuego.act(Gdx.graphics.getDeltaTime());
         escenaJuego.draw();
-        //***************Jugar***************
+        //Jugar
         jugar(delta);
-        //*****************************************Ganar/Perder**************************************
-        //***************Perder***************
+        //Ganar/Perder
         perder();
-        //***************Ganar***************
         ganar();
-        //***************Pausa***************
+        //Pausa
         pausa();
     }
 
@@ -329,8 +274,13 @@ public class PantallaCuartoA  extends Pantalla implements Niveles{
 
     @Override
     public void pausa() {
-        if(juego.getEstadoJuego()==EstadoJuego.PAUSADO){
-            escenaPausa.draw();
+        if (juego.getEstadoJuego()==EstadoJuego.PAUSADO) {
+            // Activar escenaPausa y pasarle el control
+            if (juego.escenaPausa==null) {
+                juego.escenaPausa = new EscenaPausa(vista, batch, juego, escenaJuego);
+            }
+            juego.escenaPausa.draw();
+            Gdx.input.setInputProcessor(juego.escenaPausa);
         }
     }
 

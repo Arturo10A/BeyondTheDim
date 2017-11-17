@@ -90,6 +90,7 @@ class PantallaMenu extends Pantalla {
                 nave.setEstadoMovimiento(Objeto.EstadoMovimiento.PROPULSOR);
                 juego.setEstadoJuego(EstadoJuego.JUGANDO);
                 juego.iniciarJuego(ANCHO,ALTO);
+
             }
         });
         escenaMenu.addActor(btnPlay);

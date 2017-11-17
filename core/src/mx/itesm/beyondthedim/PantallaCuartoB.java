@@ -73,4 +73,19 @@ public class PantallaCuartoB extends Pantalla implements Niveles{
     public void generarLimites() {
 
     }
+
+    @Override
+    public void cargarTexturas() {
+
+    }
+
+    @Override
+    public void cargarMusica() {
+
+    }
+
+    @Override
+    public void crearEscena() {
+
+    }
 }

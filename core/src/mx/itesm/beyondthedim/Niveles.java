@@ -22,4 +22,11 @@ public interface Niveles {
     public void jugar(float delta);
 
     public void generarLimites();
+
+    public void cargarTexturas();
+
+    public void cargarMusica();
+
+    public void crearEscena();
+
 }

@@ -48,8 +48,12 @@ public class Juego extends Game {
 	protected boolean juegoIniciado = false;
     private float enemyPosAncho = 0;
     private float enemyPosAlto = 0;
+    private Texto texto;
+    protected Pantalla.EscenaPausa escenaPausa;
     //Enemy block
     private ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
+    //Historia
+    private Texture texturaItemHistoria;
 
 
 	public Juego(){
@@ -63,6 +67,7 @@ public class Juego extends Game {
         bullets = new ArrayList<Bullet>();
         shootTimer = 0;
         shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
+        texto = new Texto();
     }
 
     //Personaje
@@ -247,5 +252,30 @@ public class Juego extends Game {
             enemyPosAlto += ene.sprite.getHeight() / 2;
             ene.doDamage(this.personaje);
         }
+    }
+
+    public void dibujarObjetos(SpriteBatch batch, Texture textureEscenario, Personaje obstacle){
+        batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
+
+        //Personaje Jett
+        personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
+
+        obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
+
+        //Enemigos
+        for (Enemy ene : this.getEnemy_list()) {
+            ene.render(batch, Gdx.graphics.getDeltaTime());
+        }
+        //Vida
+        String lifeString = "Vida: " + personaje.getLife();
+        texto.mostrarMensaje(batch, lifeString, 98, Pantalla.ALTO / 1.03f);
+        //Balas
+        for (Bullet bullet : this.getBullets()) {
+            bullet.render(batch);
+        }
+        /*
+        //Items
+        batch.draw(texturaItemHistoria, ANCHO*0.80f, ALTO*0.17f,
+                texturaItemHistoria.getWidth()*0.20f,texturaItemHistoria.getHeight()*0.20f);*/
     }
 }
