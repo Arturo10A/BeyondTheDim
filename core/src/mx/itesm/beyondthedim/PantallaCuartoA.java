@@ -39,15 +39,11 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
  */
 
 class PantallaCuartoA extends Pantalla {
+
     //Imagen del ecenario
     private final Juego juego;
     private Texture textureEscenario;
     private Texture textureEscenarioAbierto;
-    //
-    private float DX = 28;
-    private int pasos = 20;
-    private float timerPasos = 0;
-    private boolean nivelTerminado = false;
 
     //Jett start
     private Personaje personaje;
@@ -56,54 +52,34 @@ class PantallaCuartoA extends Pantalla {
     private ShapeRenderer shape2;
     //
     private int vidaPersonaje = 1000;
-    //Jett Speed
-    private int DX_PERSONAJE = 5;
-    private int DY_PERSONAJE = 5;
-    //
-    private EstadoJuego estado = EstadoJuego.JUGANDO;
     //Enemy block
-    private int damageEnemigo = 10;
     ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
     //Escenario
     private Stage escenaJuego;
     private EscenaPausa escenaPausa;
     private Texture texturaBtnPausa; //Boton de regreso
-
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
-
     //Texto
     private Texto texto;
-
     //Variable of control
     private float timeBala;
-
-
-    //Timers to control enemys
-    private float time_enemy;
-
     //Historia
     private Texture texturaItemHistoria;
-
     //BALA
     private ArrayList<Bullet> bullets;
     private static final float SWT = 0.3f;
     private float shootTimer;
     private boolean cambiarDireccion = true;
-    private float bulletX;
-    private float bulletY;
     //Music
-    private Music music;
+    //private Music music;
     private Sound shoot;
 
     //Constructores
     public PantallaCuartoA(Juego juego) {
         this.juego = juego;
-    }
-    public PantallaCuartoA(Juego juego, Personaje personaje){
-        this.juego = juego;
-        this.personaje = personaje;
+        this.personaje = juego.getPersonaje();
     }
 
     public void crearEscena() {
@@ -136,46 +112,7 @@ class PantallaCuartoA extends Pantalla {
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                if(cambiarDireccion) {
-                    if (pad.getKnobPercentX() > 0.20) {
-                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-                    } else if (pad.getKnobPercentX() < -0.20) {
-                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-                    } else if (pad.getKnobPercentX() == 0) {
-                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-                    }
-                }
-                //Restricciones de movimiento(paredes)
-                //Right
-                if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
-                    personaje.mover(-2, DY_PERSONAJE * pad.getKnobPercentY());
-                }
-                if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
-                    personaje.mover(-1, DY_PERSONAJE * pad.getKnobPercentY());
-                }
-                //Left
-                else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
-                    personaje.mover(10, DY_PERSONAJE * pad.getKnobPercentY());
-                }
-                //TOP
-                else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0) {
-                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), -10);
-                }
-                //Bottom
-                else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0) {
-                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), 10);
-                } else {
-                    Rectangle rp = personaje.getSprite().getBoundingRectangle();
-                    Rectangle ro = obstacle.getSprite().getBoundingRectangle();
-                    Gdx.app.log("Choque",rp.toString()+","+ro.toString());
-                    rp.setX(rp.getX()+10);
-                    if(! rp.overlaps(ro)){
-                        Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
-                        personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), DY_PERSONAJE * pad.getKnobPercentY());
-                    } else{
-                        Gdx.app.log("Choque ","NO SE PUEDE");
-                    }
-                }
+                juego.controlJoystickMovimiento(batch, pad, movJoystick, cambiarDireccion, obstacle);
             }
         });
         //
@@ -194,11 +131,12 @@ class PantallaCuartoA extends Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Se pausa el juego
-                estado = estado==EstadoJuego.PAUSADO?EstadoJuego.JUGANDO:EstadoJuego.PAUSADO;
-                if (estado==EstadoJuego.PAUSADO) {
+                //estado = estado==EstadoJuego.PAUSADO?EstadoJuego.JUGANDO:EstadoJuego.PAUSADO;
+                juego.setEstadoJuego(EstadoJuego.PAUSADO);
+                if (juego.getEstadoJuego()==EstadoJuego.PAUSADO) {
                     // Activar escenaPausa y pasarle el control
                     if (escenaPausa==null) {
-                        escenaPausa = new EscenaPausa(vista, batch);
+                        escenaPausa = new EscenaPausa(vista, batch, juego, escenaJuego);
                     }
                     Gdx.input.setInputProcessor(escenaPausa);
                 }
@@ -206,6 +144,7 @@ class PantallaCuartoA extends Pantalla {
 
         });
     }
+
     //********************Cargar*******************
     public void cargarTexturas() {
         texturaBtnPausa = new Texture("Botones/button_pause.png");
@@ -214,9 +153,8 @@ class PantallaCuartoA extends Pantalla {
         texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
     }
     private void cargarMusica(){
-        music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
-        music.setLooping(true);
-        music.play();
+        juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
+        juego.getMusic().setLooping(true);
 
         shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
     }
@@ -226,8 +164,12 @@ class PantallaCuartoA extends Pantalla {
         cargarTexturas();
         crearEscena();
         cargarMusica();
+        if(juego.musicOn){
+            juego.getMusic().setVolume(0.2f);
+            juego.getMusic().play();
+        }
         //Crear personaje
-        personaje = new Personaje(ANCHO / 4, ALTO / 2, vidaPersonaje);
+
 
         obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, vidaPersonaje);
         //personaje.sprite.getBoundingRectangle(
@@ -252,9 +194,7 @@ class PantallaCuartoA extends Pantalla {
         System.out.println("Sprite Jett en X: "+ personaje.sprite.getBoundingRectangle().getX());
         System.out.println("Sprite Jett en Y: "+ personaje.sprite.getBoundingRectangle().getY());
 
-
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
-
 
         //Enemigos
         for (Enemy ene : enemy_list) {
@@ -381,14 +321,11 @@ class PantallaCuartoA extends Pantalla {
         float ang = v.angle();
         double angle = ang*Math.PI/180.0;
         //*******************************************Logica enemigos*******************************************
-
         if (enemy_list.isEmpty()){
             textureEscenario = textureEscenarioAbierto;
             puertaE.setSize(10);
             shape2.rect(puertaE.getX(),puertaE.getY(),puertaE.getWidth(),puertaE.getHeight());
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                music.stop();
-                music.dispose();
                 //juego.setScreen(new PantallaMenu(juego, false));
                 juego.setScreen(new EscenarioBoss(juego));
             }
@@ -431,14 +368,12 @@ class PantallaCuartoA extends Pantalla {
         batch.end();
         //*****************************************Dibujar escena del juego******************************************
         batch.begin();
-        music.setVolume(0.2f);
-        music.play();
         escenaJuego.draw();
         batch.end();
         escenaJuego.act(Gdx.graphics.getDeltaTime());
         escenaJuego.draw();
         //***************Enemigos***************
-        if(estado==EstadoJuego.JUGANDO) {
+        if(juego.getEstadoJuego()==EstadoJuego.JUGANDO) {
             batch.begin();
             logicaMovimiento(delta);
             batch.end();
@@ -451,8 +386,6 @@ class PantallaCuartoA extends Pantalla {
         //*****************************************Ganar/Perder**************************************
         //***************Perder***************
         if (personaje.getLife() <= 0) {
-            music.stop();
-            music.dispose();
             juego.setScreen(new LoseScreen(juego));
         }
         //***************Ganar***************
@@ -460,13 +393,11 @@ class PantallaCuartoA extends Pantalla {
             textureEscenario = textureEscenarioAbierto;
 
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                music.stop();
-                music.dispose();
                 //juego.setScreen(new PantallaMenu(juego, false));
                 juego.setScreen(new EscenarioBoss(juego));
             }
         }
-        if(estado==EstadoJuego.PAUSADO){
+        if(juego.getEstadoJuego()==EstadoJuego.PAUSADO){
             escenaPausa.draw();
         }
     }
@@ -487,53 +418,7 @@ class PantallaCuartoA extends Pantalla {
 
     }
 
-    private class EscenaPausa extends Stage {
 
-        public EscenaPausa(Viewport vista, SpriteBatch batch) {
-            super(vista,batch);
-            Pixmap pixmap = new Pixmap((int) (ANCHO), (int) (ALTO), Pixmap.Format.RGBA8888);
-            pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.4f );
-            pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
-            Texture texturaRectangulo = new Texture(pixmap);
-            pixmap.dispose();
-            Image imgRectangulo = new Image(texturaRectangulo);
-            imgRectangulo.setPosition(0, 0);
-            this.addActor(imgRectangulo);
-
-            // Salir
-            Texture texturaBtnSalir = new Texture("Botones/button_inicio.png");
-            TextureRegionDrawable trdSalir = new TextureRegionDrawable(
-                    new TextureRegion(texturaBtnSalir));
-            ImageButton btnSalir = new ImageButton(trdSalir);
-            btnSalir.setPosition(ANCHO/2-btnSalir.getWidth()/2, ALTO*0.2f);
-            btnSalir.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // Regresa al menú
-                    music.stop();
-                    juego.setScreen(new PantallaMenu(juego, null));
-                }
-            });
-            this.addActor(btnSalir);
-
-            // Continuar
-            Texture texturabtnReintentar = new Texture("Botones/button_back_2.png");
-            TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
-                    new TextureRegion(texturabtnReintentar));
-            ImageButton btnReintentar = new ImageButton(trdReintentar);
-            btnReintentar.setPosition(ANCHO/2-btnReintentar.getWidth()/2, ALTO*0.5f);
-            btnReintentar.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // Continuar el juego
-                    estado = EstadoJuego.JUGANDO;
-                    // Regresa el control a la pantalla
-                    Gdx.input.setInputProcessor(escenaJuego);
-                }
-            });
-            this.addActor(btnReintentar);
-        }
-    }
 
 
 }

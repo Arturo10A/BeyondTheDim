@@ -99,7 +99,7 @@ public class EscenarioBoss extends  Pantalla {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                juego.setScreen(new PantallaMenu(juego, null));
+                juego.setScreen(new PantallaMenu(juego));
             }
 
         });

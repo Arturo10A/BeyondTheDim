@@ -71,7 +71,7 @@ class PantallaCargando implements Screen {
 
         if (tiempo >= 1){
 
-            juego.setScreen(new PantallaMenu(juego, null));
+            juego.setScreen(new PantallaMenu(juego));
 
         }
 

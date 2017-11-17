@@ -40,12 +40,11 @@ class PantallaSettings extends Pantalla {
     private Texture textureButtonMusic;
     //
     private SpriteBatch batch;
-    private Music music;
-    private boolean musicOn = true;
 
-    public PantallaSettings(Juego juego, Music music) {
+    public PantallaSettings(Juego juego) {
         this.juego = juego;
-        this.music = music;
+
+        //this.music = music;
     }
 
     public void cargarTextura(){
@@ -78,7 +77,7 @@ class PantallaSettings extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***GO BACK***");
-                juego.setScreen(new PantallaMenu(juego, music));
+                juego.setScreen(new PantallaMenu(juego));
             }
         });
 
@@ -90,14 +89,14 @@ class PantallaSettings extends Pantalla {
         btnMusic.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(musicOn){
-                    music.pause();
+                if(juego.musicOn){
+                    juego.getMusic().pause();
                     textureButtonMusic = textureButtonMusicOff;
-                    musicOn = false;
+                    juego.musicOn = false;
                 }else{
                     textureButtonMusic = textureButtonMusicOn;
-                    music.play();
-                    musicOn = true;
+                    juego.getMusic().play();
+                    juego.musicOn = true;
                 }
             }
         });
@@ -130,17 +129,14 @@ class PantallaSettings extends Pantalla {
         escenaSettings.draw();
         batch.draw(textureButtonMusic, ANCHO/2-textureButtonMusic.getWidth()/2,ALTO/2-textureButtonMusic.getHeight()/2);
         batch.end();
-
         batch.begin();
         batch.draw(textureButtonMusic, ANCHO/2-textureButtonMusic.getWidth()/2,ALTO/2-textureButtonMusic.getHeight()/2);
         batch.end();
-
-        if(musicOn){
+        if(juego.musicOn){
             textureButtonMusic = textureButtonMusicOn;
         }else{
             textureButtonMusic = textureButtonMusicOff;
         }
-
     }
 
     @Override

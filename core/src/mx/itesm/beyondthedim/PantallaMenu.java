@@ -1,7 +1,6 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -43,13 +42,10 @@ class PantallaMenu extends Pantalla {
     float posAltoNave = 0.20f;
 
     private Texture fondoPantalla;
-    private Music music;
-    private boolean musicOn;
-    private boolean play = false;
+    private boolean playAnimacionNave = false;
 
-    public PantallaMenu(Juego juego, Music musicMenu) {
+    public PantallaMenu(Juego juego) {
         this.juego = juego;
-        this.music = musicMenu;
     }
 
     @Override
@@ -58,8 +54,11 @@ class PantallaMenu extends Pantalla {
         cargarTexturas(); //Carga imagenes
         crearEcenaMenu(); //Crea la escena
         cargarNave();
-        if(music == null) {
+        if(juego.juegoIniciado || juego.getMusic() == null) {
             cargarMusica();
+        }
+        if(juego.musicOn){
+            juego.getMusic().play();
         }
         Gdx.input.setInputProcessor(escenaMenu);
 
@@ -74,9 +73,11 @@ class PantallaMenu extends Pantalla {
     }
 
     private void cargarMusica(){
-        music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3"));
-        music.setLooping(true);
-        music.play();
+        //music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3"));
+        juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-slowmotion.mp3")));
+        //music.setLooping(true);
+        juego.getMusic().setLooping(true);
+        //music.playAnimacionNave();
     }
 
     private void cargarTexturas() {
@@ -105,13 +106,11 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***PANTALLA JUEGO***");
-                /*Quitar
-                music.stop();
-                music.dispose();
-                juego.setScreen(new PantallaCuartoA(juego));
-                */
-                play = true;
+                playAnimacionNave = true;
                 nave.setEstadoMovimiento(Objeto.EstadoMovimiento.PROPULSOR);
+                juego.setEstadoJuego(EstadoJuego.JUGANDO);
+                juego.juegoIniciado = true;
+                juego.createPersonaje(ANCHO,ALTO);
             }
         });
         escenaMenu.addActor(btnPlay);
@@ -126,7 +125,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA Settings***");
-                juego.setScreen(new PantallaSettings(juego, music));
+                juego.setScreen(new PantallaSettings(juego));
             }
         });
         escenaMenu.addActor(btnSettings);
@@ -160,7 +159,7 @@ class PantallaMenu extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***AYUDA PANTALLA***");
-                juego.setScreen(new PantallaAboutUs(juego, music));
+                juego.setScreen(new PantallaAboutUs(juego));
             }
 
 
@@ -174,7 +173,7 @@ class PantallaMenu extends Pantalla {
         borrarPantalla(1.0f,1.0f,1.0f);
         batch.setProjectionMatrix(camara.combined);
         escenaMenu.draw();
-        if(!play) {
+        if(!playAnimacionNave) {
             altoNave = 0;
             altoNave = 0;
             batch.begin();
@@ -190,8 +189,7 @@ class PantallaMenu extends Pantalla {
             batch.end();
         }
         if(nave.ANCHO < 0 || nave.ALTO < 0){
-            music.stop();
-            music.dispose();
+            juego.getMusic().stop();
             juego.setScreen(new PantallaCuartoA(juego));
             this.dispose();
         }
