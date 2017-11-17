@@ -82,6 +82,9 @@ public class Juego extends Game {
     public EstadoJuego getEstadoJuego(){
 	    return this.estadoJuego;
     }
+    public void setVidaPersonaje(int vida){
+        this.vidaPersonaje = vida;
+    }
 
     //Musica
     public void setMusic(Music music){

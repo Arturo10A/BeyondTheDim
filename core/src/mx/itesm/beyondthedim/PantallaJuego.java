@@ -43,7 +43,7 @@ class PantallaJuego extends Pantalla {
     private final Juego juego;
     private Texture textureEscenario;
     private Texture textureEscenarioAbierto;
-    //
+
     private float DX = 28;
     private int pasos = 20;
     private float timerPasos = 0;
@@ -476,7 +476,7 @@ class PantallaJuego extends Pantalla {
                 music.stop();
                 music.dispose();
                 //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new EscenarioBoss(juego));
+                juego.setScreen(new EscenarioBoss(juego, personaje));
             }
         }
         //*******************************************************Logica enemigos*******************************************************{
@@ -550,7 +550,7 @@ class PantallaJuego extends Pantalla {
                 public void clicked(InputEvent event, float x, float y) {
                     // Regresa al menú
                     music.stop();
-                    juego.setScreen(new PantallaMenu(juego, null));
+                    juego.setScreen(new PantallaMenu(juego));
                 }
             });
             this.addActor(btnSalir);

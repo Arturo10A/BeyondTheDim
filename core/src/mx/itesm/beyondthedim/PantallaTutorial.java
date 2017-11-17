@@ -43,6 +43,7 @@ public class PantallaTutorial extends  Pantalla {
     private float timeBala;
     //Escenario y Texturas
     private Texture texturaBtnGoBack;
+    private Texture texturaBtnSkip;
     private Texture textureEscenario;
     private Stage escenaJuego;
     //Escena de Pausa
@@ -78,7 +79,8 @@ public class PantallaTutorial extends  Pantalla {
 
     private void cargarTexturas(){
         texturaBtnGoBack = new Texture("Botones/button_pause.png");
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_abierto.png");
+        texturaBtnSkip = new Texture("Botones/button_back_2.png");
+        textureEscenario = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
         vidaIcono = new Texture("iconLife.png");
         cuadro1 = new Texture("test.png");
         cuadro2 = new Texture("test2.png");
@@ -109,9 +111,23 @@ public class PantallaTutorial extends  Pantalla {
                     escenaPausa = new EscenaPausa(vista,batch);
                 }
                 estado = estado==EstadoJuego.PAUSADO?EstadoJuego.JUGANDO:EstadoJuego.PAUSADO;
+
             }
 
         });
+
+        TextureRegionDrawable trdSkip = new TextureRegionDrawable(new TextureRegion(texturaBtnSkip));
+        ImageButton btnSkip = new ImageButton(trdSkip);
+        btnSkip.setPosition(ANCHO-btnSkip.getWidth(),ALTO-btnSkip.getHeight());
+        btnSkip.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                super.clicked(event,x,y);
+                juego.setScreen(new PantallaCuartoA(juego));
+            }
+        });
+        escenaJuego.addActor(btnSkip);
     }
 
     private void logicaJoystick() {
@@ -318,13 +334,10 @@ public class PantallaTutorial extends  Pantalla {
             cuadro1 = cuadro6;
         }
 
-        if (timerDialogo >= 700){
+        if (timerDialogo >= 1000){
 
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+            juego.setScreen(new PantallaCuartoA(juego));
 
-                //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new PantallaJuego(juego, personaje));
-            }
 
         }
 
@@ -375,16 +388,15 @@ public class PantallaTutorial extends  Pantalla {
             this.addActor(imgTriangulo);
 
             // Salir
-            Texture texturaBtnSalir = new Texture("Objetos_varios/btnSalir.png");
-            TextureRegionDrawable trdSalir = new TextureRegionDrawable(
-                    new TextureRegion(texturaBtnSalir));
+            Texture texturaBtnSalir = new Texture("Botones/button_pause.png");
+            TextureRegionDrawable trdSalir = new TextureRegionDrawable(new TextureRegion(texturaBtnSalir));
             ImageButton btnSalir = new ImageButton(trdSalir);
             btnSalir.setPosition(ANCHO/2-btnSalir.getWidth()/2, ALTO*0.2f);
             btnSalir.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     // Regresa al menú
-                    juego.setScreen(new PantallaMenu(juego, null));
+                    juego.setScreen(new PantallaCuartoA(juego));
                 }
             });
             this.addActor(btnSalir);

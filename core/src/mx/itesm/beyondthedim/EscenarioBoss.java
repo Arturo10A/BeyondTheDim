@@ -424,7 +424,7 @@ public class EscenarioBoss extends  Pantalla {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     // Regresa al menú
-                    juego.setScreen(new PantallaMenu(juego, null));
+                    juego.setScreen(new PantallaMenu(juego));
                 }
             });
             this.addActor(btnSalir);

@@ -187,7 +187,7 @@ public class PantallaCuartoA  extends Pantalla implements Niveles{
             shape2.rect(puertaE.getX(),puertaE.getY(),puertaE.getWidth(),puertaE.getHeight());
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
                 //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new EscenarioBoss(juego));
+                juego.setScreen(new EscenarioBoss(juego, personaje));
             }
         }
         //*******************************************************Logica enemigos*******************************************************{
@@ -260,7 +260,7 @@ public class PantallaCuartoA  extends Pantalla implements Niveles{
 
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
                 //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new EscenarioBoss(juego));
+                juego.setScreen(new EscenarioBoss(juego,personaje));
             }
         }
     }

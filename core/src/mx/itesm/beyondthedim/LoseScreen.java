@@ -71,7 +71,7 @@ public class LoseScreen extends Pantalla{
             }
         });
 
-        //Boton inicio (menu principal)
+        //Boton Reload (menu principal)
         TextureRegionDrawable trdReload = new TextureRegionDrawable(new TextureRegion(backButtonReload));
         ImageButton btnGoBack = new ImageButton(trdReload);
         btnGoBack.setPosition(ANCHO*0.7f,ALTO*0.1f);
@@ -82,7 +82,9 @@ public class LoseScreen extends Pantalla{
                 Gdx.app.log("clicked","***Reload***");
                 lose.stop();
                 lose.dispose();
-                juego.setScreen(new PantallaCuartoA(juego));
+                //juego.setScreen(new PantallaCuartoA(juego));
+                juego.setScreen(new PantallaTutorial(juego));
+                juego.iniciarJuego(ANCHO,ALTO);
             }
         });
 

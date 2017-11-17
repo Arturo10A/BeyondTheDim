@@ -189,7 +189,7 @@ class PantallaMenu extends Pantalla {
         }
         if(nave.ANCHO < 0 || nave.ALTO < 0){
             juego.getMusic().stop();
-            juego.setScreen(new PantallaCuartoA(juego));
+            juego.setScreen(new PantallaTutorial(juego));
             this.dispose();
         }
     }
