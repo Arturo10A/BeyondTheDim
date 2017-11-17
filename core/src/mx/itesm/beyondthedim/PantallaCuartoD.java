@@ -9,7 +9,7 @@ package mx.itesm.beyondthedim;
  * Jorge Alexis Rubio Sumano
  */
 
-public class PantallaCuartoD extends Pantalla {
+public class PantallaCuartoD extends Pantalla implements Niveles{
 
     public PantallaCuartoD(Juego juego){
 
@@ -37,6 +37,36 @@ public class PantallaCuartoD extends Pantalla {
 
     @Override
     public void dispose() {
+
+    }
+
+    @Override
+    public void crearEnemigos() {
+
+    }
+
+    @Override
+    public void ganar() {
+
+    }
+
+    @Override
+    public void perder() {
+
+    }
+
+    @Override
+    public void pausa() {
+
+    }
+
+    @Override
+    public void jugar(float delta) {
+
+    }
+
+    @Override
+    public void generarLimites() {
 
     }
 }

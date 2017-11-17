@@ -9,7 +9,7 @@ package mx.itesm.beyondthedim;
  * Jorge Alexis Rubio Sumano
  */
 
-public class PantallaCuartoC extends Pantalla {
+public class PantallaCuartoC extends Pantalla implements Niveles{
 
     //Personaje
     private Personaje personaje;
@@ -40,6 +40,36 @@ public class PantallaCuartoC extends Pantalla {
 
     @Override
     public void dispose() {
+
+    }
+
+    @Override
+    public void crearEnemigos() {
+
+    }
+
+    @Override
+    public void ganar() {
+
+    }
+
+    @Override
+    public void perder() {
+
+    }
+
+    @Override
+    public void pausa() {
+
+    }
+
+    @Override
+    public void jugar(float delta) {
+
+    }
+
+    @Override
+    public void generarLimites() {
 
     }
 }

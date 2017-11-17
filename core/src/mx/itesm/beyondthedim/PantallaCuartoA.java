@@ -38,7 +38,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
  *
  */
 
-class PantallaCuartoA extends Pantalla {
+public class PantallaCuartoA  extends Pantalla implements Niveles{
 
     //Imagen del ecenario
     private final Juego juego;
@@ -163,7 +163,7 @@ class PantallaCuartoA extends Pantalla {
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        crearEnemigos();
        // enemy_list.add(new Enemy(ANCHO - 300, ALTO / 4, 100, 1));
        // enemy_list.add(new Enemy(ANCHO - 50, ALTO / 2, 100, 1));
         //
@@ -275,34 +275,15 @@ class PantallaCuartoA extends Pantalla {
         batch.end();
         escenaJuego.act(Gdx.graphics.getDeltaTime());
         escenaJuego.draw();
-        //***************Enemigos***************
-        if(juego.getEstadoJuego()==EstadoJuego.JUGANDO) {
-            batch.begin();
-            logicaMovimiento(delta);
-            batch.end();
-            juego.logicaEnemigo(delta);
-            //***************Balas***************
-            juego.logicaDisparo(delta, gunJoystick, batch);
-            //***************Colision Bala/Enemigo***************
-            juego.sistemaColisionesBala();
-        }
+        //***************Jugar***************
+        jugar(delta);
         //*****************************************Ganar/Perder**************************************
         //***************Perder***************
-        if (personaje.getLife() <= 0) {
-            juego.setScreen(new LoseScreen(juego));
-        }
+        perder();
         //***************Ganar***************
-        if (juego.getEnemy_list().isEmpty()){
-            textureEscenario = textureEscenarioAbierto;
-
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new EscenarioBoss(juego));
-            }
-        }
-        if(juego.getEstadoJuego()==EstadoJuego.PAUSADO){
-            escenaPausa.draw();
-        }
+        ganar();
+        //***************Pausa***************
+        pausa();
     }
 
 
@@ -322,6 +303,53 @@ class PantallaCuartoA extends Pantalla {
     }
 
 
+    @Override
+    public void crearEnemigos() {
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+    }
 
+    @Override
+    public void ganar() {
+        if (juego.getEnemy_list().isEmpty()){
+            textureEscenario = textureEscenarioAbierto;
 
+            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+                //juego.setScreen(new PantallaMenu(juego, false));
+                juego.setScreen(new EscenarioBoss(juego));
+            }
+        }
+    }
+
+    @Override
+    public void perder() {
+        if (personaje.getLife() <= 0) {
+            juego.setScreen(new LoseScreen(juego));
+        }
+    }
+
+    @Override
+    public void pausa() {
+        if(juego.getEstadoJuego()==EstadoJuego.PAUSADO){
+            escenaPausa.draw();
+        }
+    }
+
+    @Override
+    public void jugar(float delta) {
+        if(juego.getEstadoJuego()==EstadoJuego.JUGANDO) {
+            batch.begin();
+            logicaMovimiento(delta);
+            batch.end();
+            juego.logicaEnemigo(delta);
+            //***************Balas***************
+            juego.logicaDisparo(delta, gunJoystick, batch);
+            //***************Colision Bala/Enemigo***************
+            juego.sistemaColisionesBala();
+        }
+    }
+
+    @Override
+    public void generarLimites() {
+
+    }
 }
