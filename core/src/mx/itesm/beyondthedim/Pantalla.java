@@ -39,12 +39,7 @@ public abstract class Pantalla implements Screen {
     protected SpriteBatch batch;
 
     public Pantalla(){
-
         camara = new OrthographicCamera(ANCHO,ALTO);
-
-
-
-
         camara.position.set(ANCHO/2,ALTO/2,0);
         camara.update();
         vista = new StretchViewport(ANCHO,ALTO,camara);
@@ -60,16 +55,13 @@ public abstract class Pantalla implements Screen {
     }
 
     protected  void borrarPantalla(float r, float g, float b){
-
         Gdx.gl.glClearColor(r,g,b,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
     }
 
     //Borra la pantalla con el color RGB(r,g,b)
     @Override
     public void resize(int width, int height) {
-
         vista.update(width,height);
         camara.viewportHeight=ALTO;
         camara.viewportWidth=ANCHO;
@@ -79,7 +71,7 @@ public abstract class Pantalla implements Screen {
     @Override
     public void hide() {
         dispose();
-        /// Libera los recursos asignados por cada pantalla
+        ///Libera los recursos asignados por cada pantalla
     }
 
     public void update(float delta){

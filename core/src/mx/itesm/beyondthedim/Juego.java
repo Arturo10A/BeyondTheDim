@@ -25,7 +25,6 @@ public class Juego extends Game {
 
 	//Asset Manager
 	private final AssetManager assetManager;
-
 	public Juego(){
 		assetManager = new AssetManager();
 	}
@@ -35,7 +34,6 @@ public class Juego extends Game {
 		// Lo preparamos para que cargue mapas
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 		setScreen(new PantallaCargando(this));
-
 	}
 
 	public AssetManager getAssetManager() {

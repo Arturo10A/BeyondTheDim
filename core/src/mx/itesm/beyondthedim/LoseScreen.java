@@ -2,7 +2,6 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -83,7 +82,7 @@ public class LoseScreen extends Pantalla{
                 Gdx.app.log("clicked","***Reload***");
                 lose.stop();
                 lose.dispose();
-                juego.setScreen(new PantallaJuego(juego));
+                juego.setScreen(new PantallaCuartoA(juego));
             }
         });
 

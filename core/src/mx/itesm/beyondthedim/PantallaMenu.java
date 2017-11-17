@@ -108,7 +108,7 @@ class PantallaMenu extends Pantalla {
                 /*Quitar
                 music.stop();
                 music.dispose();
-                juego.setScreen(new PantallaJuego(juego));
+                juego.setScreen(new PantallaCuartoA(juego));
                 */
                 play = true;
                 nave.setEstadoMovimiento(Objeto.EstadoMovimiento.PROPULSOR);
@@ -192,7 +192,7 @@ class PantallaMenu extends Pantalla {
         if(nave.ANCHO < 0 || nave.ALTO < 0){
             music.stop();
             music.dispose();
-            juego.setScreen(new PantallaJuego(juego));
+            juego.setScreen(new PantallaCuartoA(juego));
             this.dispose();
         }
     }

@@ -38,12 +38,11 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
  *
  */
 
-class PantallaJuego extends Pantalla {
+class PantallaCuartoA extends Pantalla {
     //Imagen del ecenario
     private final Juego juego;
     private Texture textureEscenario;
     private Texture textureEscenarioAbierto;
-
     //
     private float DX = 28;
     private int pasos = 20;
@@ -55,9 +54,7 @@ class PantallaJuego extends Pantalla {
     private Personaje obstacle;
     private ShapeRenderer shape;
     private ShapeRenderer shape2;
-
-
-
+    //
     private int vidaPersonaje = 1000;
     //Jett Speed
     private int DX_PERSONAJE = 5;
@@ -96,53 +93,27 @@ class PantallaJuego extends Pantalla {
     private boolean cambiarDireccion = true;
     private float bulletX;
     private float bulletY;
-
-
     //Music
     private Music music;
     private Sound shoot;
 
-    public PantallaJuego(Juego juego) {
+    //Constructores
+    public PantallaCuartoA(Juego juego) {
         this.juego = juego;
     }
-
-    public void cargarTexturas() {
-        texturaBtnPausa = new Texture("Botones/button_pause.png");
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
-        textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
-        texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+    public PantallaCuartoA(Juego juego, Personaje personaje){
+        this.juego = juego;
+        this.personaje = personaje;
     }
-
-    private void cargarMusica(){
-        music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
-        music.setLooping(true);
-        music.play();
-
-        shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
-    }
-    /*
-    public void createEnemy(float delta) {
-
-        if (delta >= 10.0) {
-            System.out.println("Enemy created");
-            delta = 0;
-        }
-
-    }*/
 
     public void crearEscena() {
-
         //Escenario
         escenaJuego = new Stage(vista);
-
         //Bala
         bullets = new ArrayList<Bullet>();
         shootTimer = 0;
-
         shape = new ShapeRenderer();
-
         shape2 = new ShapeRenderer();
-
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
@@ -155,71 +126,58 @@ class PantallaJuego extends Pantalla {
         //Joystick pistola
         gunJoystick = new Touchpad(20, estilo);
         gunJoystick.setBounds(ANCHO - 200, 0, 200, 200);
+
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
         //Listener joystick movimiento
-//        movJoystick.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                Touchpad pad = (Touchpad) actor;
-//
-//                //Control de Sprites
-//                if(cambiarDireccion) {
-//                    if (pad.getKnobPercentX() > 0.20) {
-//                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-//                    } else if (pad.getKnobPercentX() < -0.20) {
-//                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-//                    } else if (pad.getKnobPercentX() == 0) {
-//                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-//                    }
-//                }
-//                //Restricciones de movimiento(paredes)
-//                //Right
-//                if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
-//
-//                    personaje.mover(-2, DY_PERSONAJE * pad.getKnobPercentY());
-//                }
-//                if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
-//
-//                    personaje.mover(-1, DY_PERSONAJE * pad.getKnobPercentY());
-//                }
-//                //Left
-//                else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
-//
-//                    personaje.mover(10, DY_PERSONAJE * pad.getKnobPercentY());
-//
-//                }
-//                //TOP
-//                else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0) {
-//
-//                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), -10);
-//                }
-//                //Bottom
-//                else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0) {
-//
-//                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), 10);
-//                } else {
-//
-//                    Rectangle rp = personaje.getSprite().getBoundingRectangle();
-//
-//
-//                    Rectangle ro = obstacle.getSprite().getBoundingRectangle();
-//
-//                    Gdx.app.log("Choque",rp.toString()+","+ro.toString());
-//                    rp.setX(rp.getX()+10);
-//                    if(! rp.overlaps(ro)){
-//                        Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
-//                        personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), DY_PERSONAJE * pad.getKnobPercentY());
-//                    } else{
-//                        Gdx.app.log("Choque ","NO SE PUEDE");
-//                    }
-//
-//
-//
-//                }
-//            }
-//        });
+        movJoystick.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Touchpad pad = (Touchpad) actor;
+                //Control de Sprites
+                if(cambiarDireccion) {
+                    if (pad.getKnobPercentX() > 0.20) {
+                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+                    } else if (pad.getKnobPercentX() < -0.20) {
+                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+                    } else if (pad.getKnobPercentX() == 0) {
+                        personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+                    }
+                }
+                //Restricciones de movimiento(paredes)
+                //Right
+                if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
+                    personaje.mover(-2, DY_PERSONAJE * pad.getKnobPercentY());
+                }
+                if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
+                    personaje.mover(-1, DY_PERSONAJE * pad.getKnobPercentY());
+                }
+                //Left
+                else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
+                    personaje.mover(10, DY_PERSONAJE * pad.getKnobPercentY());
+                }
+                //TOP
+                else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0) {
+                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), -10);
+                }
+                //Bottom
+                else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0) {
+                    personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), 10);
+                } else {
+                    Rectangle rp = personaje.getSprite().getBoundingRectangle();
+                    Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+                    Gdx.app.log("Choque",rp.toString()+","+ro.toString());
+                    rp.setX(rp.getX()+10);
+                    if(! rp.overlaps(ro)){
+                        Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+                        personaje.mover(DX_PERSONAJE * pad.getKnobPercentX(), DY_PERSONAJE * pad.getKnobPercentY());
+                    } else{
+                        Gdx.app.log("Choque ","NO SE PUEDE");
+                    }
+                }
+            }
+        });
         //
         escenaJuego = new Stage(vista);
         escenaJuego.addActor(movJoystick);
@@ -248,13 +206,24 @@ class PantallaJuego extends Pantalla {
 
         });
     }
+    //********************Cargar*******************
+    public void cargarTexturas() {
+        texturaBtnPausa = new Texture("Botones/button_pause.png");
+        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
+        textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
+        texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+    }
+    private void cargarMusica(){
+        music = Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3"));
+        music.setLooping(true);
+        music.play();
 
+        shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
+    }
     @Override
     public void show() {
         //Cargar escena
         cargarTexturas();
-
-
         crearEscena();
         cargarMusica();
         //Crear personaje
@@ -273,64 +242,19 @@ class PantallaJuego extends Pantalla {
 
         texto = new Texto();
     }
-
-    @Override
-    public void render(float delta) {
-
-        borrarPantalla(0, 0, 0);
-        batch.setProjectionMatrix(camara.combined);
-        //If timeBala equals 10 move the enemy to the current location of the character
-        //Start damage
-
-        //HUD
-        batch.setProjectionMatrix(camara.combined);
-        escenaJuego.draw();
-        //*******************************************************Dibujar Objetos*******************************************************
-        batch.begin();
-
-        dibujarObjetos();
-
-        batch.end();
-        //*******************************************************Dibujar escena del juego*******************************************************
-        batch.begin();
-        music.setVolume(0.2f);
-        music.play();
-
-        escenaJuego.draw();
-        batch.end();
-        escenaJuego.act(Gdx.graphics.getDeltaTime());
-        escenaJuego.draw();
-        //***************Enemigos***************
-        if(estado==EstadoJuego.JUGANDO) {
-            batch.begin();
-            logicaMovimiento(delta);
-
-            batch.end();
-            logicaEnemigo(delta);
-            //***************Balas***************
-            logicaDisparo(delta);
-            //***************Colision Bala/Enemigo***************
-            sistemaColisionesBala();
-        }
-        //*******************************************************Ganar/Perder*******************************************************
-        //***************Perder***************
-        if (personaje.getLife() <= 0) {
-            music.stop();
-            music.dispose();
-            juego.setScreen(new LoseScreen(juego));
-        }
-        //***************Ganar**************//
-        if(estado==EstadoJuego.PAUSADO){
-            escenaPausa.draw();
-        }
-    }
-
+    //***********************************************Metodos de render**********************************************
     private void dibujarObjetos() {
         batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
+
+        System.out.println("Sprite Jett en X: "+ personaje.sprite.getBoundingRectangle().getX());
+        System.out.println("Sprite Jett en Y: "+ personaje.sprite.getBoundingRectangle().getY());
+
+
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
+
 
         //Enemigos
         for (Enemy ene : enemy_list) {
@@ -348,9 +272,9 @@ class PantallaJuego extends Pantalla {
                 texturaItemHistoria.getWidth()*0.20f,texturaItemHistoria.getHeight()*0.20f);
 
     }
-
+    //
     private void sistemaColisionesBala() {
-        //*******************************************************Check colision system*******************************************************
+        //**************************************Check colision system***************************************
         //Empezar en -1 y terminar en 0
         for (int j = enemy_list.size() - 1; j >=0 ; j--) {
             for (int i = bullets.size() - 1; i>=0; i--) {
@@ -376,9 +300,9 @@ class PantallaJuego extends Pantalla {
             timeBala++;
         }
     }
-
+    //
     private void logicaDisparo(float delta) {
-        //*******************************************************Logica Disparo*******************************************************
+        //****************************************Logica Disparo*****************************************
         shootTimer += delta;
         //Disparo derecha
         //System.out.println(gunJoystick.getKnobPercentY());
@@ -418,17 +342,14 @@ class PantallaJuego extends Pantalla {
             }
         }
 
-        //bullets.removeAll(bulletsRemove);
         for(int i = bullets.size()-1;i>=0;i--){
             bullets.get(i).update(delta);
             if(bullets.get(i).removeB){
                 bullets.remove(i);
             }
         }
-        //Gdx.app.log("Logica balas", "Tamaño" + bullets.size());
     }
-
-
+    //
     private void logicaMovimiento(float delta) {
         Rectangle rp = personaje.getSprite().getBoundingRectangle();
         rp.setX(personaje.getPositionX()+17);
@@ -459,6 +380,7 @@ class PantallaJuego extends Pantalla {
         Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
         float ang = v.angle();
         double angle = ang*Math.PI/180.0;
+        //*******************************************Logica enemigos*******************************************
 
         if (enemy_list.isEmpty()){
             textureEscenario = textureEscenarioAbierto;
@@ -484,9 +406,9 @@ class PantallaJuego extends Pantalla {
         shape2.end();
         shape.end();
     }
-
+    //
     private void logicaEnemigo(float delta) {
-        //*******************************************************Logica enemigos*******************************************************{
+        //****************************************Logica enemigos********************************************{
         float enemyPosAncho = 0;
         float enemyPosAlto = 0;
         for (Enemy ene : enemy_list) {
@@ -495,9 +417,60 @@ class PantallaJuego extends Pantalla {
             enemyPosAlto += ene.sprite.getHeight() / 2;
             ene.doDamage(this.personaje);
         }
-
-        //createEnemy(delta);
     }
+    @Override
+    public void render(float delta) {
+        borrarPantalla(0, 0, 0);
+        batch.setProjectionMatrix(camara.combined);
+        //HUD
+        batch.setProjectionMatrix(camara.combined);
+        escenaJuego.draw();
+        //*******************************************Dibujar Objetos*******************************************
+        batch.begin();
+        dibujarObjetos();
+        batch.end();
+        //*****************************************Dibujar escena del juego******************************************
+        batch.begin();
+        music.setVolume(0.2f);
+        music.play();
+        escenaJuego.draw();
+        batch.end();
+        escenaJuego.act(Gdx.graphics.getDeltaTime());
+        escenaJuego.draw();
+        //***************Enemigos***************
+        if(estado==EstadoJuego.JUGANDO) {
+            batch.begin();
+            logicaMovimiento(delta);
+            batch.end();
+            logicaEnemigo(delta);
+            //***************Balas***************
+            logicaDisparo(delta);
+            //***************Colision Bala/Enemigo***************
+            sistemaColisionesBala();
+        }
+        //*****************************************Ganar/Perder**************************************
+        //***************Perder***************
+        if (personaje.getLife() <= 0) {
+            music.stop();
+            music.dispose();
+            juego.setScreen(new LoseScreen(juego));
+        }
+        //***************Ganar***************
+        if (enemy_list.isEmpty()){
+            textureEscenario = textureEscenarioAbierto;
+
+            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+                music.stop();
+                music.dispose();
+                //juego.setScreen(new PantallaMenu(juego, false));
+                juego.setScreen(new EscenarioBoss(juego));
+            }
+        }
+        if(estado==EstadoJuego.PAUSADO){
+            escenaPausa.draw();
+        }
+    }
+
 
     @Override
     public void pause() {
