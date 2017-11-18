@@ -7,14 +7,24 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
@@ -54,6 +64,27 @@ public class Juego extends Game {
     private ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
     //Historia
     private Texture texturaItemHistoria;
+    //Limites
+    private ArrayList<Rectangle> limites = new ArrayList<Rectangle>();
+    public boolean limitesGenerados = false;
+    private Rectangle personajeRectangle;
+    //Escenas de Juego
+    private Stage escenaCuartoA;
+    protected boolean cuartoAIniciado = false;
+    private Stage escenaCuartoB;
+    protected boolean cuartoBIniciado = false;
+    private Stage escenaCuartoC;
+    protected boolean cuartoCIniciado = false;
+    private Stage escenaCuartoD;
+    protected boolean cuartoDIniciado = false;
+    private Stage escenaCuartoBossFinal;
+    protected boolean cuartoBossFinalIniciado = false;
+    //Joystick
+    private Touchpad movJoystick;
+    private Touchpad gunJoystick;
+    Texture texturaBtnPausa;
+    private ImageButton btnPausa;
+
 
 
 	public Juego(){
@@ -68,6 +99,67 @@ public class Juego extends Game {
         shootTimer = 0;
         shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
         texto = new Texto();
+        personajeRectangle = personaje.getSprite().getBoundingRectangle();
+        //generarJoysticks();
+        generarBotonPausa();
+    }
+
+    //IniciarEscenas
+    public void iniciarCuartoA(Viewport vista){
+        if(!cuartoAIniciado){
+            escenaCuartoA = new Stage(vista);
+            cuartoAIniciado = true;
+        }
+        generarJoysticks();
+    }
+
+    public void iniciarCuartoB(Viewport vista){
+        if(!cuartoBIniciado){
+            escenaCuartoB = new Stage(vista);
+            cuartoBIniciado = true;
+        }
+        generarJoysticks();
+    }
+
+    public void iniciarCuartoC(Viewport vista){
+        if(!cuartoCIniciado){
+            escenaCuartoC = new Stage(vista);
+            cuartoCIniciado = true;
+        }
+        generarJoysticks();
+    }
+
+    public void iniciarCuartoD(Viewport vista){
+        if(!cuartoDIniciado){
+            escenaCuartoD = new Stage(vista);
+            cuartoDIniciado = true;
+        }
+        generarJoysticks();
+    }
+
+    public void iniciarCuartoBossFinal(Viewport vista){
+        if(!cuartoBossFinalIniciado){
+            escenaCuartoBossFinal = new Stage(vista);
+            cuartoBossFinalIniciado = true;
+        }
+        generarJoysticks();
+    }
+
+    //Get escenas
+    public Stage getEscenaCuartoA(){
+        return escenaCuartoA;
+    }
+    public Stage getEscenaCuartoB(){
+        return escenaCuartoB;
+    }
+    public Stage getEscenaCuartoC(){
+        return escenaCuartoC;
+    }
+    public Stage getEscenaCuartoD(){
+        return escenaCuartoD;
+    }
+    public Stage getEscenaCuartoBossFinal(){
+        return escenaCuartoBossFinal;
     }
 
     //Personaje
@@ -109,6 +201,30 @@ public class Juego extends Game {
         return enemy_list;
     }
 
+    //Limites
+    public ArrayList<Rectangle> getLimites(){
+        return this.limites;
+    }
+    public void addLimites(Rectangle rectangle){
+        this.limites.add(rectangle);
+    }
+    public void clearLimites(){
+        this.limites.clear();
+    }
+
+    //Joysticks
+    public Touchpad getGunJoystick(){
+        return gunJoystick;
+    }
+    public Touchpad getMovJoystick(){
+        return movJoystick;
+    }
+
+    //Boton pausa
+    public ImageButton getBtnPausa(){
+        return btnPausa;
+    }
+
     @Override
 	public void create () {
 		// Lo preparamos para que cargue mapas
@@ -126,7 +242,7 @@ public class Juego extends Game {
 		assetManager.clear();
 	}
 
-    public void controlJoystickMovimiento(SpriteBatch batch, Touchpad pad, Touchpad movJoystick, Personaje obstacle) {
+    public void controlJoystickMovimiento(SpriteBatch batch, Touchpad pad, Personaje obstacle, Camera camara) {
         if(cambiarDireccion) {
             if (pad.getKnobPercentX() > 0.20) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
@@ -167,9 +283,31 @@ public class Juego extends Game {
                 Gdx.app.log("Choque ","NO SE PUEDE");
             }
         }
+
+        //Narvaez Logic
+
+        Rectangle personajeRectangle = personaje.getSprite().getBoundingRectangle();
+        personajeRectangle.setX(personaje.getPositionX()+17);
+        personajeRectangle.setY(personaje.getPositionY());
+        personajeRectangle.setWidth(30);
+        personajeRectangle.setHeight(20);
+
+        Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
+        float ang = v.angle();
+        double angle = ang*Math.PI/180.0;
+        if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
+            personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
+            personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
+
+            if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))   ){
+                personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+            }
+        }
     }
 
-    public void logicaDisparo(float delta, Touchpad gunJoystick, SpriteBatch batch){
+    public void logicaDisparo(float delta, SpriteBatch batch){
         //****************************************Logica Disparo*****************************************
         shootTimer += delta;
         //Disparo derecha
@@ -281,4 +419,56 @@ public class Juego extends Game {
         batch.draw(texturaItemHistoria, ANCHO*0.80f, ALTO*0.17f,
                 texturaItemHistoria.getWidth()*0.20f,texturaItemHistoria.getHeight()*0.20f);*/
     }
+
+
+    public void pausa(Viewport vista, SpriteBatch batch, final Stage escenaJuego) {
+        if (this.getEstadoJuego()==EstadoJuego.PAUSADO) {
+            // Activar escenaPausa y pasarle el control
+            if (this.escenaPausa==null) {
+                this.escenaPausa = new Pantalla.EscenaPausa(vista, batch, this, escenaJuego);
+            }
+            this.escenaPausa.draw();
+            Gdx.input.setInputProcessor(this.escenaPausa);
+        }
+    }
+
+    public void jugar(float delta, SpriteBatch batch){
+        if(this.getEstadoJuego()==EstadoJuego.JUGANDO) {
+            this.logicaEnemigo(delta);
+            //***************Balas***************
+            this.logicaDisparo(delta, batch);
+            //***************Colision Bala/Enemigo***************
+            this.sistemaColisionesBala();
+        }
+    }
+
+    private void generarJoysticks(){
+        movJoystick = null;
+        gunJoystick = null;
+        //Texturas
+        Skin skin = new Skin();
+        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+
+        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
+        estilo.background = skin.getDrawable("padFondo");
+        estilo.knob = skin.getDrawable("padMovimiento");
+        //Joystick pistola
+        gunJoystick = new Touchpad(20, estilo);
+        gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
+
+        //Joystick movimiento
+        movJoystick = new Touchpad(20, estilo);
+        movJoystick.setBounds(0, 0, 200, 200);
+        movJoystick.setColor(1, 1, 1, 0.7f);
+    }
+
+    private void generarBotonPausa(){
+        texturaBtnPausa = new Texture("Botones/button_pause.png");
+        TextureRegionDrawable trdPausa = new TextureRegionDrawable(new TextureRegion(texturaBtnPausa));
+        btnPausa = new ImageButton(trdPausa);
+        btnPausa.setPosition(Pantalla.ANCHO - btnPausa.getWidth() - 5, Pantalla.ALTO - btnPausa.getHeight() - 5);
+    }
+
+
 }

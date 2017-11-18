@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Created by Arturo on 03/11/17.
  */
 
-public class EscenarioBoss extends  Pantalla {
+public class PantallaCuartoEscenarioBoss extends  Pantalla {
 
     private final Juego juego;
     //Jett start
@@ -62,9 +62,9 @@ public class EscenarioBoss extends  Pantalla {
     private Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
 
 
-    public EscenarioBoss(Juego juego, Personaje personaje){
+    public PantallaCuartoEscenarioBoss(Juego juego){
         this.juego = juego;
-        this.personaje = personaje;
+        this.personaje = juego.getPersonaje();
     }
 
     private void cargarTexturas(){
@@ -194,7 +194,7 @@ public class EscenarioBoss extends  Pantalla {
         }else {
             String lifeString = "vida 0";
             texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
-            juego.setScreen(new LoseScreen(juego));
+            juego.setScreen(new PantallaPerder(juego));
         }
         //Balas
         for (Bullet bullet: bullets){
