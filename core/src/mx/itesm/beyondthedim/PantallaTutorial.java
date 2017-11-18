@@ -1,7 +1,6 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,8 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
-
-import javax.xml.soap.Text;
 
 /**
  * Created by Arturo on 15/11/17.
@@ -125,6 +122,7 @@ public class PantallaTutorial extends  Pantalla {
             public void clicked(InputEvent event, float x, float y){
                 super.clicked(event,x,y);
                 juego.setScreen(new PantallaCuartoA(juego));
+                dispose();
             }
         });
         escenaJuego.addActor(btnSkip);
@@ -228,7 +226,7 @@ public class PantallaTutorial extends  Pantalla {
         }else {
             String lifeString = "0";
             texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
-            juego.setScreen(new LoseScreen(juego));
+            juego.setScreen(new PantallaPerder(juego));
         }
         //Balas
         for (Bullet bullet: bullets){

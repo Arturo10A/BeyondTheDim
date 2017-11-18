@@ -88,7 +88,7 @@ public abstract class Pantalla implements Screen {
 
     }
 
-    public class EscenaPausa extends Stage{
+    public static class EscenaPausa extends Stage{
 
         public EscenaPausa(Viewport vista, SpriteBatch batch, final Juego juego, final Stage escenaJuego) {
             super(vista,batch);
@@ -136,6 +136,8 @@ public abstract class Pantalla implements Screen {
             this.addActor(btnReintentar);
         }
     }
+
+
 
 
 }

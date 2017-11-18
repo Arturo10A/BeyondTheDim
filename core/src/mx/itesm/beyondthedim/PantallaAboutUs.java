@@ -29,14 +29,12 @@ class PantallaAboutUs extends Pantalla {
     private final Juego juego;
 
     //Texturas
-    private Texture ecenario;  //Imagen del ecenario
     private Texture texturaFondoPantallaAyudad; //Fondo del ecenario
     private Texture texturaBotonCasco;
     private Texture texturaRodrigo;
     private Texture texturaMonserrat;
     private Texture texturaArturo;
     private Texture texturaJorge;
-    private Texto texto; // Variable que asignara todos los textos que deasemos mostrar en la pantalla
     //Escenarios
     private Stage escenaAyuda; /* Variable encargada de dibujar todo nuestro escenario */
     private EscenaInfo escenaInfoRo;
@@ -64,7 +62,6 @@ class PantallaAboutUs extends Pantalla {
 
         //Boto que deve de ser sustituido
         batch = new SpriteBatch();
-        texto = new Texto();
 
     }
 
@@ -94,6 +91,7 @@ class PantallaAboutUs extends Pantalla {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***GO BACK***");
+                dispose();
                 juego.setScreen(new PantallaMenu(juego));
             }
         });
@@ -229,12 +227,29 @@ class PantallaAboutUs extends Pantalla {
 
     @Override
     public void dispose() {
-        texturaFondoPantallaAyudad.dispose();
+        //Texturas
+        texturaFondoPantallaAyudad.dispose(); //Fondo del ecenario
         texturaBotonCasco.dispose();
         texturaRodrigo.dispose();
         texturaMonserrat.dispose();
         texturaArturo.dispose();
         texturaJorge.dispose();
+        //Escenarios
+        //escenaAyuda.dispose();
+        escenaAyuda.clear();
+        if(escenaInfoMo!=null){
+            escenaInfoRo.dispose();
+        }
+        if(escenaInfoMo!=null){
+            escenaInfoAr.dispose();
+        }
+        if(escenaInfoMo!=null){
+            escenaInfoMo.dispose();
+        }
+        if(escenaInfoMo!=null){
+            escenaInfoJo.dispose();
+        }
+        texturaBtnGoBack.dispose();
     }
 
     private class EscenaInfo extends Stage {

@@ -70,15 +70,18 @@ public class Juego extends Game {
     private Rectangle personajeRectangle;
     //Escenas de Juego
     private Stage escenaCuartoA;
-    protected boolean cuartoAIniciado = false;
+    protected boolean cuartoAIniciado;
     private Stage escenaCuartoB;
-    protected boolean cuartoBIniciado = false;
+    protected boolean cuartoBIniciado;
     private Stage escenaCuartoC;
-    protected boolean cuartoCIniciado = false;
+    protected boolean cuartoCIniciado;
     private Stage escenaCuartoD;
-    protected boolean cuartoDIniciado = false;
+    protected boolean cuartoDIniciado;
     private Stage escenaCuartoBossFinal;
-    protected boolean cuartoBossFinalIniciado = false;
+    protected boolean cuartoBossFinalIniciado;
+    private Stage escenaMenuPausa;
+    private Stage escenaAboutUs;
+    private Stage escenaSettings;
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
@@ -102,6 +105,11 @@ public class Juego extends Game {
         personajeRectangle = personaje.getSprite().getBoundingRectangle();
         //generarJoysticks();
         generarBotonPausa();
+        cuartoAIniciado = false;
+        cuartoBIniciado = false;
+        cuartoCIniciado = false;
+        cuartoDIniciado = false;
+        cuartoBossFinalIniciado = false;
     }
 
     //IniciarEscenas
@@ -109,40 +117,41 @@ public class Juego extends Game {
         if(!cuartoAIniciado){
             escenaCuartoA = new Stage(vista);
             cuartoAIniciado = true;
+            generarJoysticks(escenaCuartoA);
         }
-        generarJoysticks();
     }
 
     public void iniciarCuartoB(Viewport vista){
         if(!cuartoBIniciado){
             escenaCuartoB = new Stage(vista);
             cuartoBIniciado = true;
+            generarJoysticks(escenaCuartoB);
         }
-        generarJoysticks();
+
     }
 
     public void iniciarCuartoC(Viewport vista){
         if(!cuartoCIniciado){
             escenaCuartoC = new Stage(vista);
             cuartoCIniciado = true;
+            generarJoysticks(escenaCuartoC);
         }
-        generarJoysticks();
     }
 
     public void iniciarCuartoD(Viewport vista){
         if(!cuartoDIniciado){
             escenaCuartoD = new Stage(vista);
             cuartoDIniciado = true;
+            generarJoysticks(escenaCuartoD);
         }
-        generarJoysticks();
     }
 
     public void iniciarCuartoBossFinal(Viewport vista){
         if(!cuartoBossFinalIniciado){
             escenaCuartoBossFinal = new Stage(vista);
             cuartoBossFinalIniciado = true;
+            generarJoysticks(escenaCuartoBossFinal);
         }
-        generarJoysticks();
     }
 
     //Get escenas
@@ -442,9 +451,10 @@ public class Juego extends Game {
         }
     }
 
-    private void generarJoysticks(){
+    private void generarJoysticks(Stage escenaJuego){
         movJoystick = null;
         gunJoystick = null;
+        escenaJuego.clear();
         //Texturas
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));

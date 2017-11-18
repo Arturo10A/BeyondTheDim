@@ -2,17 +2,13 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 
@@ -64,10 +60,8 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         escenaJuego.addActor(juego.getMovJoystick());
         escenaJuego.addActor(juego.getGunJoystick());
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
-
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 juego.setEstadoJuego(EstadoJuego.PAUSADO);
@@ -159,16 +153,10 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     public void ganar() {
         if (juego.getEnemy_list().isEmpty()){
             textureEscenario = textureEscenarioAbierto;
-            /*
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new PantallaCuartoEscenarioBoss(juego));
-            }*/
             juego.getLimites().get(5).setSize(10);
-            //shape2.rect(juego.getLimites().get(5).getX(),juego.getLimites().get(5).getY(),juego.getLimites().get(5).getWidth(),juego.getLimites().get(5).getHeight());
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                //juego.setScreen(new PantallaMenu(juego, false));
                 juego.setScreen(new PantallaCuartoB(juego));
+                escenaJuego.clear();
             }
         }
     }

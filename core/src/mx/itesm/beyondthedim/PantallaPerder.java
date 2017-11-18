@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  *
  */
 
-public class LoseScreen extends Pantalla{
+public class PantallaPerder extends Pantalla{
 
     private final Juego juego;
     //Fondo
@@ -37,7 +37,7 @@ public class LoseScreen extends Pantalla{
     //Music
     Music lose = Gdx.audio.newMusic(Gdx.files.internal("Music/lose.mp3"));
 
-    public LoseScreen(Juego juego){
+    public PantallaPerder(Juego juego){
         this.juego = juego;
     }
 

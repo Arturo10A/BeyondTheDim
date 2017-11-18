@@ -109,25 +109,6 @@ class PantallaMenu extends Pantalla {
             }
         });
         escenaMenu.addActor(btnSettings);
-        /*
-        //Boton instruciones
-        TextureRegionDrawable trdIntruction = new TextureRegionDrawable(new TextureRegion(texturaBtnInstructions));
-        ImageButton btnIntruction = new ImageButton(trdIntruction);
-        btnIntruction.setPosition(ANCHO/2-btnIntruction.getWidth()/2,ALTO*0.15f);
-
-        btnIntruction.addListener( new ClickListener(){
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                Gdx.app.log("clicked","***AYUDA Intruciones***");
-                juego.setScreen(new PantallaInstruciones(juego, music));
-            }
-
-
-        });
-        escenaMenu.addActor(btnIntruction);
-        */
         //Boton aboutUS
         TextureRegionDrawable trdAboutUs = new TextureRegionDrawable(new TextureRegion(texturaBtnAyuda));
         ImageButton btnAboutUs = new ImageButton(trdAboutUs);

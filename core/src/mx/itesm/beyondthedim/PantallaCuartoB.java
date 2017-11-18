@@ -152,16 +152,10 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     public void ganar() {
         if (juego.getEnemy_list().isEmpty()){
             textureEscenario = textureEscenarioAbierto;
-            /*
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                //juego.setScreen(new PantallaMenu(juego, false));
-                juego.setScreen(new PantallaCuartoEscenarioBoss(juego));
-            }*/
             juego.getLimites().get(5).setSize(10);
-            //shape2.rect(juego.getLimites().get(5).getX(),juego.getLimites().get(5).getY(),juego.getLimites().get(5).getWidth(),juego.getLimites().get(5).getHeight());
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                //juego.setScreen(new PantallaMenu(juego, false));
                 juego.setScreen(new PantallaCuartoC(juego));
+                escenaJuego.clear();
             }
         }
     }
