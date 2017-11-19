@@ -31,7 +31,6 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     private Texture textureEscenarioAbierto;
     //Jett start
     private Personaje personaje;
-    private Personaje obstacle;
     //Escenario
     private Stage escenaJuego;
     private Texture texturaBtnPausa;
@@ -70,7 +69,14 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         movJoystick.setBounds(0, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
         //Listener joystick movimiento
-        juego.controlJoystickMovimiento(batch, movJoystick,  camara);
+        movJoystick.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Touchpad pad = (Touchpad) actor;
+                //Control de Sprites
+                juego.controlMovPad(batch, pad, movJoystick);
+            }
+        });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
@@ -103,7 +109,6 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         cargarTexturas();
         crearEscena();
         cargarMusica();
-        obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, 1000);
         generarLimites();
         if(juego.musicOn){
             juego.getMusic().setVolume(0.2f);
@@ -123,7 +128,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, obstacle, objetos);
+        juego.dibujarObjetos(batch, textureEscenario, objetos);
         batch.end();
         //Dibujar Objetos
         batch.begin();
@@ -195,7 +200,6 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     @Override
     public void generarLimites() {
         if(juego.getLimites().isEmpty()){
-            juego.addLimites(obstacle.getSprite().getBoundingRectangle());
             juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
             juego.addLimites(new Rectangle(0, 0, 120, ALTO));
             juego.addLimites(new Rectangle(0, 0, ANCHO, 120));

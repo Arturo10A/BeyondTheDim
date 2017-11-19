@@ -2,7 +2,6 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
-
-import javax.xml.soap.Text;
 
 /**
  * Creado por Equipo 2
@@ -33,7 +30,6 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private Texture textureEscenarioAbierto;
     //Jett start
     private Personaje personaje;
-    private Personaje obstacle;
     //Escenario
     private Stage escenaJuego;
     private Texture texturaBtnPausa;
@@ -45,6 +41,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private ObjetoEscenario cpu1;
     private ObjetoEscenario cpu2;
     private ObjetoEscenario cpu3;
+    private ObjetoEscenario cpu4;
 
 
     private Texture cpu  = new Texture("Objetos_varios/cpu_izq.png");
@@ -84,7 +81,14 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         movJoystick.setBounds(0, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
         //Listener joystick movimiento
-        juego.controlJoystickMovimiento(batch, movJoystick, camara);
+        movJoystick.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Touchpad pad = (Touchpad) actor;
+                //Control de Sprites
+                juego.controlMovPad(batch, pad, movJoystick);
+            }
+        });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
@@ -117,7 +121,6 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         cargarTexturas();
         crearEscena();
         cargarMusica();
-        obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, 1);
 
         cpu1 = new ObjetoEscenario(-10,110, cpu);
         cpu2 = new ObjetoEscenario(ANCHO-230 ,110, cpu_der);
@@ -148,7 +151,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, obstacle, objetos);
+        juego.dibujarObjetos(batch, textureEscenario, objetos);
         batch.end();
         //Dibujar Objetos
         batch.begin();
@@ -227,7 +230,6 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     @Override
     public void generarLimites() {
         if(juego.getLimites().isEmpty()){
-            juego.addLimites(obstacle.getSprite().getBoundingRectangle());
             juego.addLimites(cpu1.getSprite().getBoundingRectangle());
             juego.addLimites(cpu2.getSprite().getBoundingRectangle());
             juego.addLimites(cpu3.getSprite().getBoundingRectangle());
