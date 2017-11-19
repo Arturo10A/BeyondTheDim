@@ -179,7 +179,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
     @Override
     public void jugar(float delta) {
-        juego.jugar(delta, batch);
+        juego.jugar(delta, batch, escenaJuego);
     }
 
     @Override

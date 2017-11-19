@@ -59,7 +59,7 @@ public class Juego extends Game {
     private float enemyPosAncho = 0;
     private float enemyPosAlto = 0;
     private Texto texto;
-    protected Pantalla.EscenaPausa escenaPausa;
+    protected PantallaPausa escenaPausa;
     //Enemy block
     private ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
     //Historia
@@ -434,19 +434,24 @@ public class Juego extends Game {
     }
 
 
-    public void pausa(Viewport vista, SpriteBatch batch, final Stage escenaJuego) {
+    public void pausa(Viewport vista, SpriteBatch batch, Stage escenaJuego) {
         if (this.getEstadoJuego()==EstadoJuego.PAUSADO) {
             // Activar escenaPausa y pasarle el control
             if (this.escenaPausa==null) {
-                this.escenaPausa = new Pantalla.EscenaPausa(vista, batch, this, escenaJuego);
+                this.escenaPausa = new PantallaPausa(vista, batch, this, escenaJuego);
+            }else{
+                escenaPausa.setEscenaJuego(escenaJuego);
             }
             this.escenaPausa.draw();
             Gdx.input.setInputProcessor(this.escenaPausa);
         }
     }
 
-    public void jugar(float delta, SpriteBatch batch){
+    public void jugar(float delta, SpriteBatch batch, Stage escenaJuego){
         if(this.getEstadoJuego()==EstadoJuego.JUGANDO) {
+            if(Gdx.input.getInputProcessor()!= escenaJuego) {
+                Gdx.input.setInputProcessor(escenaJuego);
+            }
             this.logicaEnemigo(delta);
             //***************Balas***************
             this.logicaDisparo(delta, batch);
@@ -458,7 +463,6 @@ public class Juego extends Game {
     private void generarJoysticks(Stage escenaJuego){
         movJoystick = null;
         gunJoystick = null;
-        escenaJuego.clear();
         //Texturas
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
