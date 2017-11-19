@@ -346,6 +346,9 @@ public class Juego extends Game {
                 personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
             }
 
+        }else{
+            personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+
         }
     }
 
