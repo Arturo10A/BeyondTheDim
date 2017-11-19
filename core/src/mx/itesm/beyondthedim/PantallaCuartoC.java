@@ -41,6 +41,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private Personaje cpu3;
     private Personaje cpu4;
 
+
+    private TextureRegion cpu  = new TextureRegion(new Texture("Objetos_varios/cpu_izq.png"));
+
     private ArrayList<Personaje> objetos = new ArrayList<Personaje>(5);
 
     //Constructores
@@ -99,7 +102,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         cargarMusica();
         obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, 1);
         cpu1 = new Personaje(100,ALTO / 2,1);
-        //cpu1.setTexture(new TextureRegion(new Texture("Objetos_varios/cpu_izq.png")));
+
         cpu2 = new Personaje(100 ,ALTO / 4,1);
         cpu3 = new Personaje(ANCHO-200, ALTO/2,1);
         cpu4 = new Personaje(ANCHO-200,ALTO/4,1);
@@ -108,6 +111,11 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         objetos.add(cpu2);
         objetos.add(cpu3);
         objetos.add(cpu4);
+
+        cpu1.setTexture(cpu);
+        cpu2.setTexture(cpu);
+        cpu3.setTexture(cpu);
+        cpu4.setTexture(cpu);
 
         generarLimites();
         if(juego.musicOn){

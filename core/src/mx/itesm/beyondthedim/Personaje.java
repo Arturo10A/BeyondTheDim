@@ -71,7 +71,7 @@ class Personaje extends Objeto{
         sprite.setPosition(x,y);    // Posición inicial
     }
 
-    public void setTexture(String textura){
+    public void setTexture(TextureRegion textura){
 
     }
 
