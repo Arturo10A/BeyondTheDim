@@ -2,6 +2,7 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import java.util.ArrayList;
 
 /**
  * Creado por Equipo 2
@@ -36,16 +39,27 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
 
+
+    private Personaje cpu1;
+    private Personaje cpu2;
+    private Personaje cpu3;
+    private Personaje cpu4;
+
+
+    private TextureRegion cpu  = new TextureRegion(new Texture("Objetos_varios/cpu_izq.png"));
+
+    private ArrayList<Personaje> objetos = new ArrayList<Personaje>(5);
+
     //Constructores
     public PantallaCuartoC(Juego juego) {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
+        this.personaje.setPosition(ANCHO/2,60);
         juego.iniciarCuartoC(vista);
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
     }
 
-    @Override
     public void crearEscena() {
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
@@ -90,10 +104,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     }
 
     //********************Cargar*******************
-    @Override
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
-        textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
+        textureEscenario = new Texture("Stage/escenarioC.jpg");
+        textureEscenarioAbierto = new Texture("Stage/escenarioCabierto.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
     }
     @Override
@@ -108,7 +121,23 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         cargarTexturas();
         crearEscena();
         cargarMusica();
-        obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, 1000);
+        obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, 1);
+        cpu1 = new Personaje(100,ALTO / 2,1);
+
+        cpu2 = new Personaje(100 ,ALTO / 4,1);
+        cpu3 = new Personaje(ANCHO-200, ALTO/2,1);
+        cpu4 = new Personaje(ANCHO-200,ALTO/4,1);
+
+        objetos.add(cpu1);
+        objetos.add(cpu2);
+        objetos.add(cpu3);
+        objetos.add(cpu4);
+
+        cpu1.setTexture(cpu);
+        cpu2.setTexture(cpu);
+        cpu3.setTexture(cpu);
+        cpu4.setTexture(cpu);
+
         generarLimites();
         if(juego.musicOn){
             juego.getMusic().setVolume(0.2f);
@@ -128,7 +157,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, obstacle);
+        juego.dibujarObjetos(batch, textureEscenario, obstacle, objetos);
         batch.end();
         //Dibujar Objetos
         batch.begin();
@@ -164,7 +193,13 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     @Override
     public void crearEnemigos() {
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 400, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 300, ALTO / 2, 200, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 400, ALTO / 2, 800, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 500, ALTO / 2, 100, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 600, ALTO / 2, 500, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 700, ALTO / 2, 200, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 800, ALTO / 2, 400, 1));
     }
 
     @Override
@@ -184,6 +219,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     public void perder() {
         if (personaje.getLife() <= 0) {
             juego.setScreen(new PantallaPerder(juego));
+
         }
     }
 

@@ -106,7 +106,7 @@ public class Enemy extends Objeto{
     }
 
     public void doDamage(Personaje target){
-        if (distance(target) < 80){
+        if (distance(target) < 60){
             target.damage(this.damage);
         }
     }

@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.util.ArrayList;
+
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 
 /**
@@ -38,6 +40,8 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
+
+    private ArrayList<Personaje> objetos = new ArrayList<Personaje>();
 
     //Constructores
     public PantallaCuartoA(Juego juego) {
@@ -130,7 +134,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, obstacle);
+        juego.dibujarObjetos(batch, textureEscenario, obstacle, objetos);
         batch.end();
         //Dibujar Objetos
         batch.begin();
