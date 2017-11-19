@@ -74,8 +74,6 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
 
     private void crearEscena(){
         escenaJuego = new Stage(vista);
-
-
         bullets = new ArrayList<Bullet>();
         shootTimer=0;
         BossBullets = new ArrayList<BulletBoss>();
@@ -169,6 +167,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
         Gdx.input.setInputProcessor(escenaJuego);
         boss = new boss(ANCHO/2,ALTO/2,100);
         texto = new Texto();
+        boss.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
     }
 
     private void dibujarEscena() {

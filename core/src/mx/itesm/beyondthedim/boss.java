@@ -167,7 +167,7 @@ public class boss extends Objeto {
         batch.draw(bossTexture,x,y);
     }
 
-    public void setEstadoMovimiento(Personaje.EstadoMovimiento estadoMovimiento) {
+    public void setEstadoMovimiento(boss.EstadoMovimiento estadoMovimiento) {
         this.estadoMovimiento = estadoMovimiento;
     }
 
