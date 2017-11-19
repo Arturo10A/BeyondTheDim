@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,10 +20,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -82,11 +87,14 @@ public class Juego extends Game {
     private Stage escenaMenuPausa;
     private Stage escenaAboutUs;
     private Stage escenaSettings;
+    /*
     //Joystick
     private Touchpad movJoystick;
-    private Touchpad gunJoystick;
+    private Touchpad gunJoystick;*/
     Texture texturaBtnPausa;
     private ImageButton btnPausa;
+    //
+    public int prueba = 0;
 
 
 
@@ -114,35 +122,35 @@ public class Juego extends Game {
 
     //IniciarEscenas
     public void iniciarCuartoA(Viewport vista){
+	    System.out.println("Cuarto A");
         if(!cuartoAIniciado){
             escenaCuartoA = new Stage(vista);
             cuartoAIniciado = true;
-            generarJoysticks(escenaCuartoA);
         }
     }
 
     public void iniciarCuartoB(Viewport vista){
+        System.out.println("Cuarto B");
         if(!cuartoBIniciado){
             escenaCuartoB = new Stage(vista);
             cuartoBIniciado = true;
-            generarJoysticks(escenaCuartoB);
         }
 
     }
 
     public void iniciarCuartoC(Viewport vista){
+        System.out.println("Cuarto C");
         if(!cuartoCIniciado){
             escenaCuartoC = new Stage(vista);
             cuartoCIniciado = true;
-            generarJoysticks(escenaCuartoC);
         }
     }
 
     public void iniciarCuartoD(Viewport vista){
+        System.out.println("Cuarto D");
         if(!cuartoDIniciado){
             escenaCuartoD = new Stage(vista);
             cuartoDIniciado = true;
-            generarJoysticks(escenaCuartoD);
         }
     }
 
@@ -150,7 +158,7 @@ public class Juego extends Game {
         if(!cuartoBossFinalIniciado){
             escenaCuartoBossFinal = new Stage(vista);
             cuartoBossFinalIniciado = true;
-            generarJoysticks(escenaCuartoBossFinal);
+            //generarJoysticks();
         }
     }
 
@@ -220,14 +228,14 @@ public class Juego extends Game {
     public void clearLimites(){
         this.limites.clear();
     }
-
+    /*
     //Joysticks
     public Touchpad getGunJoystick(){
         return gunJoystick;
     }
     public Touchpad getMovJoystick(){
         return movJoystick;
-    }
+    }*/
 
     //Boton pausa
     public ImageButton getBtnPausa(){
@@ -251,7 +259,7 @@ public class Juego extends Game {
 		assetManager.clear();
 	}
 
-    public void controlJoystickMovimiento(SpriteBatch batch, Touchpad pad, Personaje obstacle, Camera camara) {
+    public void controlJoystickMovimiento(SpriteBatch batch, Touchpad pad, Touchpad movJoystick, Personaje obstacle, Camera camara) {
         if(cambiarDireccion) {
             if (pad.getKnobPercentX() > 0.20) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
@@ -283,13 +291,13 @@ public class Juego extends Game {
         } else {
             Rectangle rp = personaje.getSprite().getBoundingRectangle();
             Rectangle ro = obstacle.getSprite().getBoundingRectangle();
-            Gdx.app.log("Choque",rp.toString()+","+ro.toString());
+            //Gdx.app.log("Choque",rp.toString()+","+ro.toString());
             rp.setX(rp.getX()+10);
             if(! rp.overlaps(ro)){
-                Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+                //Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
                 personaje.mover(pad.getKnobPercentX(),pad.getKnobPercentY());
             } else{
-                Gdx.app.log("Choque ","NO SE PUEDE");
+                //Gdx.app.log("Choque ","NO SE PUEDE");
             }
         }
 
@@ -316,7 +324,7 @@ public class Juego extends Game {
         }
     }
 
-    public void logicaDisparo(float delta, SpriteBatch batch){
+    public void logicaDisparo(float delta, Touchpad gunJoystick,SpriteBatch batch){
         //****************************************Logica Disparo*****************************************
         shootTimer += delta;
         //Disparo derecha
@@ -443,22 +451,20 @@ public class Juego extends Game {
         }
     }
 
-    public void jugar(float delta, SpriteBatch batch, Stage escenaJuego){
+    public void jugar(float delta, SpriteBatch batch, Stage escenaJuego, Touchpad gunJoystick){
         if(this.getEstadoJuego()==EstadoJuego.JUGANDO) {
             if(Gdx.input.getInputProcessor()!= escenaJuego) {
                 Gdx.input.setInputProcessor(escenaJuego);
             }
             this.logicaEnemigo(delta);
             //***************Balas***************
-            this.logicaDisparo(delta, batch);
+            this.logicaDisparo(delta, gunJoystick, batch);
             //***************Colision Bala/Enemigo***************
             this.sistemaColisionesBala();
         }
     }
-
-    private void generarJoysticks(Stage escenaJuego){
-        movJoystick = null;
-        gunJoystick = null;
+    /*
+    private void generarJoysticks(){
         //Texturas
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
@@ -475,7 +481,7 @@ public class Juego extends Game {
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
-    }
+    }*/
 
     private void generarBotonPausa(){
         texturaBtnPausa = new Texture("Botones/button_pause.png");

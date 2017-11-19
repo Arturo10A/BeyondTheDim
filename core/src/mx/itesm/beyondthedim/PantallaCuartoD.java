@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -32,6 +33,9 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     //Escenario
     private Stage escenaJuego;
     private Texture texturaBtnPausa;
+    //Joystick
+    private Touchpad movJoystick;
+    private Touchpad gunJoystick;
 
     //Constructores
     public PantallaCuartoD(Juego juego) {
@@ -45,20 +49,32 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         //Escenario
         escenaJuego = juego.getEscenaCuartoD();
         //*******************************************************Joysticks*******************************************************
+        //Texturas
+        Skin skin = new Skin();
+        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+
+        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
+        estilo.background = skin.getDrawable("padFondo");
+        estilo.knob = skin.getDrawable("padMovimiento");
+        //Joystick pistola
+        gunJoystick = new Touchpad(20, estilo);
+        gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
+
+        //Joystick movimiento
+        movJoystick = new Touchpad(20, estilo);
+        movJoystick.setBounds(0, 0, 200, 200);
+        movJoystick.setColor(1, 1, 1, 0.7f);
         //Listener joystick movimiento
-        juego.getMovJoystick().addListener(new ChangeListener() {
+        movJoystick.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.controlJoystickMovimiento(batch, pad, obstacle, camara);
+                juego.controlJoystickMovimiento(batch, pad, movJoystick, obstacle, camara);
             }
         });
-        //
-        escenaJuego.addActor(juego.getMovJoystick());
-        escenaJuego.addActor(juego.getGunJoystick());
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
-
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
 
@@ -67,6 +83,8 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
                 juego.setEstadoJuego(EstadoJuego.PAUSADO);
             }
         });
+        escenaJuego.addActor(movJoystick);
+        escenaJuego.addActor(gunJoystick);
         escenaJuego.addActor(juego.getBtnPausa());
     }
 
@@ -107,17 +125,15 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         batch.setProjectionMatrix(camara.combined);
         //HUD
         batch.setProjectionMatrix(camara.combined);
-        escenaJuego.draw();
-        //Dibujar Objetos
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario, obstacle);
         batch.end();
-        //Dibujar escena del juego
+        //Dibujar Objetos
         batch.begin();
         escenaJuego.draw();
         batch.end();
+        //Dibujar escena del juego
         escenaJuego.act(Gdx.graphics.getDeltaTime());
-        escenaJuego.draw();
         //Jugar
         jugar(delta);
         //Ganar/Perder
@@ -140,7 +156,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-
+        
     }
 
 
@@ -156,6 +172,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
             juego.getLimites().get(5).setSize(10);
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
                 juego.setScreen(new PantallaCuartoB(juego));
+                dispose();
                 escenaJuego.clear();
             }
         }
@@ -175,7 +192,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     @Override
     public void jugar(float delta) {
-        juego.jugar(delta, batch, escenaJuego);
+        juego.jugar(delta, batch, escenaJuego, gunJoystick);
     }
 
     @Override
