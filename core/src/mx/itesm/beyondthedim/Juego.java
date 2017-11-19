@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class Juego extends Game {
     private Texture texturaItemHistoria;
     //Limites
     private ArrayList<Rectangle> limites = new ArrayList<Rectangle>();
-    public boolean limitesGenerados = false;
+    //public boolean limitesGenerados = false;
     private Rectangle personajeRectangle;
     //Escenas de Juego
     private Stage escenaCuartoA;
@@ -84,6 +86,10 @@ public class Juego extends Game {
     private ImageButton btnPausa;
     //
     public int prueba = 0;
+
+    //HUDEscenarioB
+    protected OrthographicCamera camaraHUDEscenarioB;
+    protected Viewport vistaHUDEscenarioB;
 
 
 
@@ -112,6 +118,8 @@ public class Juego extends Game {
     //IniciarEscenas
     public void iniciarCuartoA(Viewport vista){
 	    System.out.println("Cuarto A");
+	    enemy_list.clear();
+        limites.clear();
         if(!cuartoAIniciado){
             escenaCuartoA = new Stage(vista);
             cuartoAIniciado = true;
@@ -121,8 +129,16 @@ public class Juego extends Game {
 
     public void iniciarCuartoB(Viewport vista){
         System.out.println("Cuarto B");
+        enemy_list.clear();
+        limites.clear();
+        this.personaje.setPosition(173,1080/2);
         if(!cuartoBIniciado){
-            escenaCuartoB = new Stage(vista);
+            // Cámara HUD
+            camaraHUDEscenarioB = new OrthographicCamera(Pantalla.ANCHO,Pantalla.ALTO);
+            camaraHUDEscenarioB.position.set(Pantalla.ANCHO/2, Pantalla.ALTO/2, 0);
+            camaraHUDEscenarioB.update();
+            vistaHUDEscenarioB = new StretchViewport(Pantalla.ANCHO, Pantalla.ALTO, camaraHUDEscenarioB);
+            escenaCuartoB = new Stage(vistaHUDEscenarioB);
             cuartoBIniciado = true;
         }
 
@@ -130,6 +146,9 @@ public class Juego extends Game {
 
     public void iniciarCuartoC(Viewport vista){
         System.out.println("Cuarto C");
+        enemy_list.clear();
+        this.personaje.setPosition(Pantalla.ANCHO/2,60);
+        limites.clear();
         if(!cuartoCIniciado){
             escenaCuartoC = new Stage(vista);
             cuartoCIniciado = true;
@@ -137,7 +156,9 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoD(Viewport vista){
+        enemy_list.clear();
         System.out.println("Cuarto D");
+        limites.clear();
         if(!cuartoDIniciado){
             escenaCuartoD = new Stage(vista);
             cuartoDIniciado = true;
@@ -145,6 +166,8 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoBossFinal(Viewport vista){
+        enemy_list.clear();
+        limites.clear();
         if(!cuartoBossFinalIniciado){
             escenaCuartoBossFinal = new Stage(vista);
             cuartoBossFinalIniciado = true;
@@ -249,7 +272,7 @@ public class Juego extends Game {
 		assetManager.clear();
 	}
 
-    public void controlJoystickMovimiento(SpriteBatch batch, Touchpad pad, Touchpad movJoystick, Personaje obstacle, Camera camara) {
+    public void controlMovPad(SpriteBatch batch, Touchpad pad, Touchpad movJoystick, Personaje obstacle, Camera camara) {
         if(cambiarDireccion) {
             if (pad.getKnobPercentX() > 0.20) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
@@ -261,6 +284,7 @@ public class Juego extends Game {
         }
         //Restricciones de movimiento(paredes)
         //Right
+        /*
         if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
             personaje.mover(-2,pad.getKnobPercentY());
         }
@@ -289,7 +313,73 @@ public class Juego extends Game {
             } else{
                 //Gdx.app.log("Choque ","NO SE PUEDE");
             }
+        }*/
+
+        //Narvaez Logic
+
+        Rectangle personajeRectangle = personaje.getSprite().getBoundingRectangle();
+        personajeRectangle.setX(personaje.getPositionX()+17);
+        personajeRectangle.setY(personaje.getPositionY());
+        personajeRectangle.setWidth(30);
+        personajeRectangle.setHeight(20);
+
+        Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
+        float ang = v.angle();
+        double angle = ang*Math.PI/180.0;
+        if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
+            personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
+            personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
+
+            if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))   ){
+                personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+            }
         }
+    }
+
+    public void conMovPadGrande(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
+        if(cambiarDireccion) {
+            if (pad.getKnobPercentX() > 0.20) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+            } else if (pad.getKnobPercentX() < -0.20) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+            } else if (pad.getKnobPercentX() == 0) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+            }
+        }
+        //Restricciones de movimiento(paredes)
+        //Right
+        /*
+        if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
+            personaje.mover(-2,pad.getKnobPercentY());
+        }
+        if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
+            personaje.mover(-1,pad.getKnobPercentY());
+        }
+        //Left
+        else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
+            personaje.mover(10,pad.getKnobPercentY());
+        }
+        //TOP
+        else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0) {
+            personaje.mover(pad.getKnobPercentX(), -10);
+        }
+        //Bottom
+        else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0) {
+            personaje.mover(pad.getKnobPercentX(), 10);
+        } else {
+            Rectangle rp = personaje.getSprite().getBoundingRectangle();
+            Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+            //Gdx.app.log("Choque",rp.toString()+","+ro.toString());
+            rp.setX(rp.getX()+10);
+            if(! rp.overlaps(ro)){
+                //Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+                personaje.mover(pad.getKnobPercentX(),pad.getKnobPercentY());
+            } else{
+                //Gdx.app.log("Choque ","NO SE PUEDE");
+            }
+        }*/
 
         //Narvaez Logic
 

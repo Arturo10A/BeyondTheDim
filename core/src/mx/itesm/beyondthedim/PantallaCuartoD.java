@@ -75,7 +75,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.controlJoystickMovimiento(batch, pad, movJoystick, obstacle, camara);
+                juego.controlMovPad(batch, pad, movJoystick, obstacle, camara);
             }
         });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
@@ -201,7 +201,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     @Override
     public void generarLimites() {
-        if(!juego.limitesGenerados){
+        if(juego.getLimites().isEmpty()){
             juego.addLimites(obstacle.getSprite().getBoundingRectangle());
             juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
             juego.addLimites(new Rectangle(0, 0, 120, ALTO));
@@ -210,7 +210,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
             juego.addLimites(new Rectangle(1160, 0, 120, 300));
             juego.addLimites(new Rectangle(1160, 300, 120, 120));
 
-            juego.limitesGenerados = true;
+            //juego.limitesGenerados = true;
         }
     }
 }

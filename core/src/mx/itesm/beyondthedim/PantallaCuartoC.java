@@ -2,7 +2,6 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
-
-import javax.xml.soap.Text;
 
 /**
  * Creado por Equipo 2
@@ -49,7 +46,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
 
     private Texture cpu  = new Texture("Objetos_varios/cpu_izq.png");
-    private Texture cpu_der = new Texture("Objetos_varios/cpu_der.png");
+    private Texture cpu_der = new Texture("Objetos_varios/cpu_izq.png");
 
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>(5);
 
@@ -57,7 +54,6 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     public PantallaCuartoC(Juego juego) {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
-        this.personaje.setPosition(ANCHO/2,60);
         juego.iniciarCuartoC(vista);
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
@@ -89,7 +85,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.controlJoystickMovimiento(batch, pad, movJoystick, obstacle, camara);
+                juego.controlMovPad(batch, pad, movJoystick, obstacle, camara);
             }
         });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
@@ -108,8 +104,8 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     //********************Cargar*******************
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/escenarioC.jpg");
-        textureEscenarioAbierto = new Texture("Stage/escenarioCabierto.jpg");
+        textureEscenario = new Texture("Stage/escenarioC_cerrado.jpg");
+        textureEscenarioAbierto = new Texture("Stage/escenarioC_abierto.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
     }
     @Override
@@ -233,7 +229,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     @Override
     public void generarLimites() {
-        if(!juego.limitesGenerados){
+        if(juego.getLimites().isEmpty()){
             juego.addLimites(obstacle.getSprite().getBoundingRectangle());
             juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
             juego.addLimites(new Rectangle(0, 0, 120, ALTO));
@@ -242,7 +238,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
             juego.addLimites(new Rectangle(1160, 0, 120, 300));
             juego.addLimites(new Rectangle(1160, 300, 120, 120));
 
-            juego.limitesGenerados = true;
+            //juego.limitesGenerados = true;
         }
     }
 }
