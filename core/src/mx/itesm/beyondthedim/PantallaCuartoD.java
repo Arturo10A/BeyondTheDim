@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.util.ArrayList;
+
 /**
  * Creado por Equipo 2
  * <p>
@@ -32,6 +34,8 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     //Escenario
     private Stage escenaJuego;
     private Texture texturaBtnPausa;
+
+    private ArrayList<Personaje> objetos = new ArrayList<Personaje>();
 
     //Constructores
     public PantallaCuartoD(Juego juego) {
@@ -110,7 +114,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         escenaJuego.draw();
         //Dibujar Objetos
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, obstacle);
+        juego.dibujarObjetos(batch, textureEscenario, obstacle, objetos);
         batch.end();
         //Dibujar escena del juego
         batch.begin();

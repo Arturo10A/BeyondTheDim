@@ -71,6 +71,10 @@ class Personaje extends Objeto{
         sprite.setPosition(x,y);    // Posición inicial
     }
 
+    public void setTexture(String textura){
+
+    }
+
     //return the current life of the character
     public int getLife(){
         return this.life;

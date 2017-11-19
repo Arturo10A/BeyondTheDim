@@ -404,13 +404,17 @@ public class Juego extends Game {
         }
     }
 
-    public void dibujarObjetos(SpriteBatch batch, Texture textureEscenario, Personaje obstacle){
+    public void dibujarObjetos(SpriteBatch batch, Texture textureEscenario, Personaje obstacle, ArrayList<Personaje> objetos){
         batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
 
         obstacle.dibujar(batch, Gdx.graphics.getDeltaTime());
+
+        for (int i = 0; i <= objetos.size()-1 ; i++) {
+            objetos.get(i).dibujar(batch,Gdx.graphics.getDeltaTime());
+        }
 
         //Enemigos
         for (Enemy ene : this.getEnemy_list()) {
