@@ -2,6 +2,7 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
+
+import javax.xml.soap.Text;
 
 /**
  * Creado por Equipo 2
@@ -42,11 +45,11 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private ObjetoEscenario cpu1;
     private ObjetoEscenario cpu2;
     private ObjetoEscenario cpu3;
-    private ObjetoEscenario cpu4;
 
 
     private Texture cpu  = new Texture("Objetos_varios/cpu_izq.png");
-    private Texture cpu_der = new Texture("Objetos_varios/cpu_izq.png");
+    private Texture cpu_der = new Texture("Objetos_varios/cpu_der.png");
+    private Texture cpu_central = new Texture("Objetos_varios/cpu_central.png");
 
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>(5);
 
@@ -54,6 +57,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     public PantallaCuartoC(Juego juego) {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
+        this.personaje.setPosition(ANCHO/2,ALTO);
         juego.iniciarCuartoC(vista);
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
@@ -123,13 +127,13 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, 1);
 
         cpu1 = new ObjetoEscenario(-10,110, cpu);
-        cpu2 = new ObjetoEscenario(-10 ,380, cpu_der);
-        //cpu3 = new ObjetoEscenario(ANCHO-400, ALTO/2, cpu);
+        cpu2 = new ObjetoEscenario(ANCHO-230 ,110, cpu_der);
+        cpu3 = new ObjetoEscenario(ANCHO/3, ALTO-140, cpu_central);
         //cpu4 = new ObjetoEscenario(ANCHO-200,ALTO/4, cpu);
 
         objetos.add(cpu1);
         objetos.add(cpu2);
-        //objetos.add(cpu3);
+        objetos.add(cpu3);
         //objetos.add(cpu4);
 
         generarLimites();
@@ -231,6 +235,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     public void generarLimites() {
         if(juego.getLimites().isEmpty()){
             juego.addLimites(obstacle.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu1.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu2.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu3.getSprite().getBoundingRectangle());
             juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
             juego.addLimites(new Rectangle(0, 0, 120, ALTO));
             juego.addLimites(new Rectangle(0, 0, ANCHO, 120));

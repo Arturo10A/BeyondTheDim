@@ -2,6 +2,7 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -10,24 +11,29 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 
 public class boss extends Objeto {
-    Texture bossTexture;
-    TextureRegion texturaPersonaje;
+    private TextureRegion bossTexture;
+    //TextureRegion texturaPersonaje;
+    TextureRegion [][] texturaPersonaje;
     public Animation<TextureRegion> spriteAnimation;
     public float timerAnimation;
     protected float x;
     protected float y;
     private int life;
     private int teleportCont = 0;
+
+    protected Personaje.EstadoMovimiento estadoMovimiento = Personaje.EstadoMovimiento.QUIETO;
+
     public boss(float x, float y, int life){
         this.x    = x;
         this.y    = y;
         this.life = life;
-        bossTexture = new Texture("Enemigos/boss.png");
-        //texturaPersonaje = bossTexture.split(63,100);
-        //spriteAnimation = new Animation(0.1f, texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1]);
-        //spriteAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        //timerAnimation = 0;
-       //sprite.setPosition(x,y);    // Posición inicial
+        bossTexture = new TextureRegion(new Texture("Enemigos/boss_completo.png"));
+        texturaPersonaje = bossTexture.split(80,120);
+        spriteAnimation = new Animation(0.1f, texturaPersonaje[0][2], texturaPersonaje[0][1], texturaPersonaje[0][0]);
+        spriteAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        timerAnimation = 0;
+        sprite = new Sprite(texturaPersonaje[0][0]);
+        sprite.setPosition(x,y);    // Posición inicial
 
     }
 
@@ -52,6 +58,10 @@ public class boss extends Objeto {
         if (distancePersonaje(target) < 100){
             target.damage(10);
         }
+
+
+        this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.02));
+        this.y +=  ((float) ((target.getPositionY() - this.getPositionY()) * 0.02));
 
     }
 
@@ -128,9 +138,65 @@ public class boss extends Objeto {
 
     }
 
-    @Override
-    public void dibujar(SpriteBatch batch) {
+    public void dibujar(SpriteBatch batch, float tiempo) {
+
+        // Dibuja el personaje dependiendo del estadoMovimiento
+        switch (estadoMovimiento) {
+            case MOV_DERECHA:
+            case MOV_IZQUIERDA:
+                timerAnimation += tiempo;
+                // Frame que se dibujará
+                TextureRegion region = spriteAnimation.getKeyFrame(timerAnimation, true);
+                if (estadoMovimiento==EstadoMovimiento.MOV_IZQUIERDA) {
+                    if (!region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+                } else {
+                    if (region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+                }
+                batch.draw(region,x,y);
+                break;
+            case QUIETO:
+            case INICIANDO:
+                batch.draw(texturaPersonaje[0][0], x, y);
+                break;
+        }
+
         batch.draw(bossTexture,x,y);
     }
+
+    public void setEstadoMovimiento(Personaje.EstadoMovimiento estadoMovimiento) {
+        this.estadoMovimiento = estadoMovimiento;
+    }
+
+    public void render(SpriteBatch batch, float tiempo){
+        //batch.draw(enemyTexture, x, y);
+        // Dibuja el personaje dependiendo del estadoMovimiento
+        switch (estadoMovimiento) {
+            case MOV_DERECHA:
+            case MOV_IZQUIERDA:
+                timerAnimation += tiempo;
+                // Frame que se dibujará
+                TextureRegion region = spriteAnimation.getKeyFrame(timerAnimation, true);
+                if (estadoMovimiento== Personaje.EstadoMovimiento.MOV_DERECHA) {
+                    if (!region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+                } else {
+                    if (region.isFlipX()) {
+                        region.flip(true,false);
+                    }
+                }
+                batch.draw(region,x,y);
+                break;
+            case QUIETO:
+            case INICIANDO:
+                batch.draw(texturaPersonaje[0][0], x, y);
+                break;
+        }
+    }
+
 
 }
