@@ -308,7 +308,8 @@ public class Juego extends Game {
     }
 
     public void conMovPadGrande(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
-        if (cambiarDireccion) {
+
+/*        if(cambiarDireccion) {
             if (pad.getKnobPercentX() > 0.20) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
             } else if (pad.getKnobPercentX() < -0.20) {
@@ -318,8 +319,39 @@ public class Juego extends Game {
             }
         }
         //Restricciones de movimiento(paredes)
-        //Narvaez Logic
+        //Right
+        /*
+        if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
+            personaje.mover(-2,pad.getKnobPercentY());
+        }
+        if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
+            personaje.mover(-1,pad.getKnobPercentY());
+        }
+        //Left
+        else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
+            personaje.mover(10,pad.getKnobPercentY());
+        }
+        //TOP
+        else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0) {
+            personaje.mover(pad.getKnobPercentX(), -10);
+        }
+        //Bottom
+        else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0) {
+            personaje.mover(pad.getKnobPercentX(), 10);
+        } else {
+            Rectangle rp = personaje.getSprite().getBoundingRectangle();
+            Rectangle ro = obstacle.getSprite().getBoundingRectangle();
+            //Gdx.app.log("Choque",rp.toString()+","+ro.toString());
+            rp.setX(rp.getX()+10);
+            if(! rp.overlaps(ro)){
+                //Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
+                personaje.mover(pad.getKnobPercentX(),pad.getKnobPercentY());
+            } else{
+                //Gdx.app.log("Choque ","NO SE PUEDE");
+            }
+        }*/
 
+        //Narvaez Logic
 
         Rectangle personajeRectangle = personaje.getSprite().getBoundingRectangle();
         personajeRectangle.setX(personaje.getPositionX()+17);
@@ -331,14 +363,24 @@ public class Juego extends Game {
         float ang = v.angle();
         double angle = ang*Math.PI/180.0;
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
-            personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
-            personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
+            personajeRectangle.setX(personajeRectangle.getX() + (float) (Math.cos(angle) * 20));
+            personajeRectangle.setY(personajeRectangle.getY() + (float) (Math.sin(angle) * 20));
 
+            //Sprite a la Derecha
+            if ((ang > 0 && ang < 90) || ang > 270 && ang < 360) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+                //Sprite a la Izq
+            } else if (ang > 90 && ang < 270) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+            }else{
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+            }
             if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                     &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(5))) ){
                 personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
             }
+
         }
     }
 
