@@ -88,54 +88,6 @@ public abstract class Pantalla implements Screen {
 
     }
 
-    public static class EscenaPausa extends Stage{
-
-        public EscenaPausa(Viewport vista, SpriteBatch batch, final Juego juego, final Stage escenaJuego) {
-            super(vista,batch);
-            Pixmap pixmap = new Pixmap((int) (ANCHO), (int) (ALTO), Pixmap.Format.RGBA8888);
-            pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.4f );
-            pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
-            Texture texturaRectangulo = new Texture(pixmap);
-            pixmap.dispose();
-            Image imgRectangulo = new Image(texturaRectangulo);
-            imgRectangulo.setPosition(0, 0);
-            this.addActor(imgRectangulo);
-
-            // Salir
-            Texture texturaBtnSalir = new Texture("Botones/button_inicio.png");
-            TextureRegionDrawable trdSalir = new TextureRegionDrawable(
-                    new TextureRegion(texturaBtnSalir));
-            ImageButton btnSalir = new ImageButton(trdSalir);
-            btnSalir.setPosition(ANCHO/2-btnSalir.getWidth()/2, ALTO*0.2f);
-            btnSalir.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // Regresa al menú
-                    juego.getMusic().stop();
-                    juego.musicaCargada = false;
-                    juego.setScreen(new PantallaMenu(juego));
-                }
-            });
-            this.addActor(btnSalir);
-
-            // Continuar
-            Texture texturabtnReintentar = new Texture("Botones/button_back_2.png");
-            TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
-                    new TextureRegion(texturabtnReintentar));
-            ImageButton btnReintentar = new ImageButton(trdReintentar);
-            btnReintentar.setPosition(ANCHO/2-btnReintentar.getWidth()/2, ALTO*0.5f);
-            btnReintentar.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // Continuar el juego
-                    juego.setEstadoJuego(EstadoJuego.JUGANDO);
-                    // Regresa el control a la pantalla
-                    Gdx.input.setInputProcessor(escenaJuego);
-                }
-            });
-            this.addActor(btnReintentar);
-        }
-    }
 
 
 
