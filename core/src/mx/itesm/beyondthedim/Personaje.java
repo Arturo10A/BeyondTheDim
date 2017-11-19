@@ -23,7 +23,7 @@ public class Personaje extends Objeto{
     private Animation<TextureRegion> spriteAnimado;
     protected EstadoMovimiento estadoMovimiento = EstadoMovimiento.QUIETO;
     private float timerAnimacion;
-    private float speed =5;
+    private float speed =8;
     private float x;
     private float y;
     private int life;

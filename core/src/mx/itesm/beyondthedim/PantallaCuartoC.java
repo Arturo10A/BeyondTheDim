@@ -84,14 +84,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         movJoystick.setBounds(0, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
         //Listener joystick movimiento
-        movJoystick.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Touchpad pad = (Touchpad) actor;
-                //Control de Sprites
-                juego.controlMovPad(batch, pad, movJoystick, obstacle, camara);
-            }
-        });
+        juego.controlJoystickMovimiento(batch, movJoystick, camara);
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
@@ -108,8 +101,8 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     //********************Cargar*******************
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/escenarioC_cerrado.jpg");
-        textureEscenarioAbierto = new Texture("Stage/escenarioC_abierto.jpg");
+        textureEscenario = new Texture("Stage/escenarioC.jpg");
+        textureEscenarioAbierto = new Texture("Stage/escenarioCabierto.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
     }
     @Override

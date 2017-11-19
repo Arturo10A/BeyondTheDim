@@ -174,7 +174,7 @@ public class PantallaTutorial extends  Pantalla {
                     personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),10);
                 }
                 else {
-                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(), DY_PERSONAJE*pad.getKnobPercentY());
+                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX()/7, DY_PERSONAJE*pad.getKnobPercentY()/7);
                 }
             }
         });

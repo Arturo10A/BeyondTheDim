@@ -73,14 +73,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         movJoystick.setBounds(0, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
         //Listener joystick movimiento
-        movJoystick.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Touchpad pad = (Touchpad) actor;
-                //Control de Sprites
-                juego.conMovPadGrande(batch, pad, movJoystick);
-            }
-        });
+        juego.controlJoystickMovimiento(batch, movJoystick, camara);
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
@@ -132,6 +125,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         actualizarCamara();
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
+        juego.controlJoystickMovimiento(batch, movJoystick, camara);
         juego.dibujarObjetos(batch, textureEscenario, obstacle, objetos);
         batch.end();
         //Dibujar Objetos
