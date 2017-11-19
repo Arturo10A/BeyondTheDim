@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 
+import javax.xml.soap.Text;
+
 /**
  * Creado por Equipo 2
  * <p>
@@ -47,6 +49,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
 
     private Texture cpu  = new Texture("Objetos_varios/cpu_izq.png");
+    private Texture cpu_der = new Texture("Objetos_varios/cpu_der.png");
 
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>(5);
 
@@ -123,15 +126,15 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         cargarMusica();
         obstacle = new Personaje(ANCHO / 2+100, ALTO / 2, 1);
 
-        cpu1 = new ObjetoEscenario(100,ALTO / 2, cpu);
-        cpu2 = new ObjetoEscenario(100 ,ALTO / 4, cpu);
-        cpu3 = new ObjetoEscenario(ANCHO-200, ALTO/2, cpu);
-        cpu4 = new ObjetoEscenario(ANCHO-200,ALTO/4, cpu);
+        cpu1 = new ObjetoEscenario(-10,110, cpu);
+        cpu2 = new ObjetoEscenario(-10 ,380, cpu_der);
+        //cpu3 = new ObjetoEscenario(ANCHO-400, ALTO/2, cpu);
+        //cpu4 = new ObjetoEscenario(ANCHO-200,ALTO/4, cpu);
 
         objetos.add(cpu1);
         objetos.add(cpu2);
-        objetos.add(cpu3);
-        objetos.add(cpu4);
+        //objetos.add(cpu3);
+        //objetos.add(cpu4);
 
         generarLimites();
         if(juego.musicOn){

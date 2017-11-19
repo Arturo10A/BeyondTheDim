@@ -1,25 +1,14 @@
 package mx.itesm.beyondthedim;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-
-import java.util.ArrayList;
 
 /**
- * Creado por Equipo 2
- *
- *Arturo Amador Paulino
- *Monserrat Lira Sorcia
- *Jose Rodrigo Narvaez Berlanga
- *Jorge Alexis Rubio Sumano
- *
+ * Created by Arturo on 18/11/17.
  */
 
-class Bullet {
+public class BulletBoss {
+
     private float lifeTime;
     private float lifeTimer;
     public static final int SPEED=600;
@@ -30,7 +19,7 @@ class Bullet {
 
     public boolean removeB = false;
 
-    public Bullet(float x, float y, float dx,float dy){
+    public BulletBoss(float x, float y, float dx,float dy){
 
         this.x = x;
         this.y = y;
@@ -39,7 +28,7 @@ class Bullet {
 
 
         if (texture == null) {
-            texture = new Texture("Objetos_varios/bala_circular.png");
+            texture = new Texture("Objetos_varios/bala_boss.png");
         }
     }
 
@@ -89,7 +78,7 @@ class Bullet {
 
     }
 
-    public double distanceBoss(boss target){
+    public double distanceJett(Personaje target){
 
         //character position
         double enemyX = target.getPositionX();

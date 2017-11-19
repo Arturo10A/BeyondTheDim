@@ -44,7 +44,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
     double bossShot = 100;
     double bossShotFollow = 0.0;
     //Arreglo balas de Jefe
-    private ArrayList<Bullet> BossBullets;
+    private ArrayList<BulletBoss> BossBullets;
     //Escenario y Texturas
     private Texture texturaBtnGoBack;
     private Texture textureEscenario;
@@ -78,7 +78,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
 
         bullets = new ArrayList<Bullet>();
         shootTimer=0;
-        BossBullets = new ArrayList<Bullet>();
+        BossBullets = new ArrayList<BulletBoss>();
 
         logicaJoystick();
 
@@ -201,7 +201,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
             bullet.render(batch);
         }
         //Balas de jefe
-        for (Bullet bullet: BossBullets){
+        for (BulletBoss bullet: BossBullets){
             bullet.render(batch);
         }
         batch.end();
@@ -279,48 +279,48 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
         }
         if (Bosstimer >= bossShot) {
             Bosstimer = 0;
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 0));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, -1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, -1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, -1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 0));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
-            BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 1));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, 0));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, -1));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, -1));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, -1));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, 0));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, 1));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, 1));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, 1));
+            BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, 1));
         }
         //Diparar al objetivo mientras lo sigue
         if (bossShotFollow > 0.2){
             bossShotFollow = 0;
             if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 1));
+                BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, 1));
             }
             if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, -1));
+                BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, -1));
             }
             if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 1));
+                BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, 1));
             }
             if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, -1));
+                BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, -1));
             }
 
             if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() == personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), -1, 0));
+                BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, 0));
             }
 
             if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() == personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 1, 0));
+                BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, 0));
             }
             if (boss.getPositionX() == personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, -1));
+                BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, -1));
             }
             if (boss.getPositionX() == personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
-                BossBullets.add(new Bullet(boss.getPositionX(), boss.getPositionY(), 0, 1));
+                BossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, 1));
             }
         }
-        ArrayList<Bullet> BoosbulletsRemove = new ArrayList<Bullet>();
-        for(Bullet bullet : BossBullets){
+        ArrayList<BulletBoss> BoosbulletsRemove = new ArrayList<BulletBoss>();
+        for(BulletBoss bullet : BossBullets){
             bullet.update(delta);
             if (bullet.removeB){
                 BoosbulletsRemove.add(bullet);
