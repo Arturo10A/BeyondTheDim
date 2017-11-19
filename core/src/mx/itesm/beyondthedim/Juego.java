@@ -273,41 +273,6 @@ public class Juego extends Game {
 	}
 
     public void controlMovPad(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
-        if (cambiarDireccion) {
-            if (pad.getKnobPercentX() > 0.20) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-            } else if (pad.getKnobPercentX() < -0.20) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-            } else if (pad.getKnobPercentX() == 0) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-            }
-        }
-        //Restricciones de movimiento(paredes)
-        //Narvaez Logic
-
-
-        Rectangle personajeRectangle = personaje.getSprite().getBoundingRectangle();
-        personajeRectangle.setX(personaje.getPositionX()+17);
-        personajeRectangle.setY(personaje.getPositionY());
-        personajeRectangle.setWidth(30);
-        personajeRectangle.setHeight(20);
-
-        Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
-        float ang = v.angle();
-        double angle = ang*Math.PI/180.0;
-        if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
-            personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
-            personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
-
-            if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
-                    &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
-                personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
-            }
-        }
-    }
-
-    public void conMovPadGrande(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
 
 /*        if(cambiarDireccion) {
             if (pad.getKnobPercentX() > 0.20) {
@@ -367,10 +332,10 @@ public class Juego extends Game {
             personajeRectangle.setY(personajeRectangle.getY() + (float) (Math.sin(angle) * 20));
 
             //Sprite a la Derecha
-            if ((ang > 0 && ang < 90) || ang > 270 && ang < 360) {
+            if ((ang > 0 && ang < 45) || ang > 315 && ang < 360) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
                 //Sprite a la Izq
-            } else if (ang > 90 && ang < 270) {
+            } else if (ang > 135 && ang < 225) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
             }else{
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
@@ -381,6 +346,41 @@ public class Juego extends Game {
                 personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
             }
 
+        }
+    }
+
+    public void conMovPadGrande(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
+        if (cambiarDireccion) {
+            if (pad.getKnobPercentX() > 0.20) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+            } else if (pad.getKnobPercentX() < -0.20) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+            } else if (pad.getKnobPercentX() == 0) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+            }
+        }
+        //Restricciones de movimiento(paredes)
+        //Narvaez Logic
+
+
+        Rectangle personajeRectangle = personaje.getSprite().getBoundingRectangle();
+        personajeRectangle.setX(personaje.getPositionX()+17);
+        personajeRectangle.setY(personaje.getPositionY());
+        personajeRectangle.setWidth(30);
+        personajeRectangle.setHeight(20);
+
+        Vector2 v = new Vector2(movJoystick.getKnobPercentX(), movJoystick.getKnobPercentY());
+        float ang = v.angle();
+        double angle = ang*Math.PI/180.0;
+        if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
+            personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
+            personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
+
+            if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
+                personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+            }
         }
     }
 
