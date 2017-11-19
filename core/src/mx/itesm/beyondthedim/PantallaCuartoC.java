@@ -101,8 +101,8 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     //********************Cargar*******************
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/escenarioC.jpg");
-        textureEscenarioAbierto = new Texture("Stage/escenarioCabierto.jpg");
+        textureEscenario = new Texture("Stage/escenarioC_cerrado.jpg");
+        textureEscenarioAbierto = new Texture("Stage/escenarioC_abierto.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
     }
     @Override
