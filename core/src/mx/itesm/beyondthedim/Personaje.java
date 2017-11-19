@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  *
  */
 
-class Personaje extends Objeto{
+public class Personaje extends Objeto{
 
     private TextureRegion jettTextureCompleta;
     TextureRegion[][] texturaPersonaje;

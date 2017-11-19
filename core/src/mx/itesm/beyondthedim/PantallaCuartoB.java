@@ -38,7 +38,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
 
-    private ArrayList<Personaje> objetos = new ArrayList<Personaje>();
+    private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
 
     //Constructores
     public PantallaCuartoB(Juego juego) {
