@@ -77,9 +77,9 @@ public class Juego extends Game {
     protected boolean cuartoDIniciado;
     private Stage escenaCuartoBossFinal;
     protected boolean cuartoBossFinalIniciado;
-    private Stage escenaMenuPausa;
-    private Stage escenaAboutUs;
-    private Stage escenaSettings;
+    private Pantalla pantallaMenu;
+    private Pantalla AboutUs;
+    private Pantalla Settings;
     /*
     //Joystick
     private Touchpad movJoystick;
@@ -141,11 +141,11 @@ public class Juego extends Game {
         System.out.println("Cuarto B");
         enemy_list.clear();
         limites.clear();
-        this.camera = camera;
         this.personaje.setPosition(-250,350);
         this.camera.position.set(-250,350,0);
         //this.camera.position.set(0, 0,0);
         camera.update();
+        this.camera = camera;
         objetos.clear();
         if(!cuartoBIniciado){
             // Cámara HUD
@@ -215,6 +215,16 @@ public class Juego extends Game {
     }
     public Stage getEscenaCuartoBossFinal(){
         return escenaCuartoBossFinal;
+    }
+
+    //Menu
+    public Pantalla getMenu(){
+        if(pantallaMenu == null){
+            pantallaMenu = new PantallaMenu(this);
+        }else {
+            ((PantallaMenu) pantallaMenu).setInicio();
+        }
+        return pantallaMenu;
     }
 
     //Personaje
@@ -546,10 +556,15 @@ public class Juego extends Game {
             // Activar escenaPausa y pasarle el control
             if (this.escenaPausa==null) {
                 this.escenaPausa = new PantallaPausa(vista, batch, this, escenaJuego, camera);
-                this.escenaPausa.dibujar();
+                if(!escenaPausa.elementosDibujados){
+                    this.escenaPausa.dibujar();
+                }
             }else{
+                camera.update();
                 escenaPausa.setEscenaJuego(escenaJuego, camera);
-                this.escenaPausa.dibujar();
+                if(!escenaPausa.elementosDibujados){
+                    this.escenaPausa.dibujar();
+                }
             }
             this.escenaPausa.draw();
             Gdx.input.setInputProcessor(this.escenaPausa);
@@ -559,6 +574,8 @@ public class Juego extends Game {
     public void jugar(float delta, SpriteBatch batch, Stage escenaJuego, Touchpad gunJoystick){
         if(this.getEstadoJuego()==EstadoJuego.JUGANDO) {
             if(Gdx.input.getInputProcessor()!= escenaJuego) {
+                escenaPausa.clear();
+                escenaPausa.elementosDibujados = false;
                 Gdx.input.setInputProcessor(escenaJuego);
             }
             this.logicaEnemigo(delta);

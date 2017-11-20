@@ -31,6 +31,7 @@ public class PantallaPausa extends Stage{
     private Juego juego;
     private ImageButton btnSalir;
     private ImageButton btnReintentar;
+    protected boolean elementosDibujados;
 
     public PantallaPausa(Viewport vista, SpriteBatch batch, final Juego juego, Stage escenaJuego, OrthographicCamera camara) {
         super(vista,batch);
@@ -72,8 +73,8 @@ public class PantallaPausa extends Stage{
                 // Regresa al menú
                 juego.getMusic().stop();
                 juego.musicaCargada = false;
-                juego.setScreen(new PantallaMenu(juego));
-
+                juego.setEstadoJuego(EstadoJuego.JUGANDO);
+                juego.setScreen(juego.getMenu());
             }
         });
         this.addActor(btnSalir);
@@ -87,6 +88,7 @@ public class PantallaPausa extends Stage{
             }
         });
         this.addActor(btnReintentar);
+        elementosDibujados = true;
     }
 
 
