@@ -36,12 +36,13 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
-
+    //Jett Speed
+    private int DX_PERSONAJE = 5;
+    private int DY_PERSONAJE = 5;
 
     private ObjetoEscenario cpu1;
     private ObjetoEscenario cpu2;
     private ObjetoEscenario cpu3;
-    private ObjetoEscenario cpu4;
 
 
 
@@ -53,7 +54,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     public PantallaCuartoC(Juego juego) {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
-        this.personaje.setPosition(ANCHO/2,60);
+        //this.personaje.setPosition(ANCHO/2,60);
         juego.iniciarCuartoC(vista, camara);
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
@@ -64,33 +65,8 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
         //*******************************************************Joysticks*******************************************************
-        //Texturas
-        Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
-
-        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
-        estilo.background = skin.getDrawable("padFondo");
-        estilo.knob = skin.getDrawable("padMovimiento");
-        //Joystick pistola
-        gunJoystick = new Touchpad(20, estilo);
-        gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
-
-        //Joystick movimiento
-        movJoystick = new Touchpad(20, estilo);
-        movJoystick.setBounds(0, 0, 200, 200);
-        movJoystick.setColor(1, 1, 1, 0.7f);
-        //Listener joystick movimiento
-        movJoystick.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Touchpad pad = (Touchpad) actor;
-                //Control de Sprites
-                juego.conMovPadGrande(batch, pad, movJoystick);
-            }
-        });
-        //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
-        //Listener boton pausa
+        logicaJoystick();
+         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
 
             @Override
@@ -103,7 +79,62 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         escenaJuego.addActor(juego.getBtnPausa());
     }
 
+    private void logicaJoystick() {
+        Skin skin = new Skin();
+        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento",new Texture("Joystick/joystick_movimiento.png"));
 
+        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
+        estilo.background = skin.getDrawable("padFondo");
+        estilo.knob = skin.getDrawable("padMovimiento");
+        //Joystick pistola
+        gunJoystick = new Touchpad(20, estilo);
+        gunJoystick.setBounds(ANCHO-200,0,200,200);
+        //Joystick movimiento
+        movJoystick = new Touchpad(20, estilo);
+        movJoystick.setBounds(0, 0, 200, 200);
+        //Listener joystick movimiento
+        movJoystick.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Touchpad pad = (Touchpad) actor;
+                //Control de Sprites
+                if(pad.getKnobPercentX()>0.20) {
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+                }else if(pad.getKnobPercentX()<-0.20){
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+                }else if(pad.getKnobPercentX()==0){
+                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+                }
+                //Restricciones de movimiento(paredes)
+                //Right
+                if (personaje.getPositionX() >= 1105.23 && movJoystick.getKnobPercentX() > 0){
+                    personaje.mover(-10, DY_PERSONAJE*pad.getKnobPercentY());
+                }
+                //Left
+                else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0){
+                    personaje.mover(10, DY_PERSONAJE*pad.getKnobPercentY());
+
+                }
+                //TOP
+                else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0){
+                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),-10);
+                }
+                //Bottom
+                else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0){
+                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),10);
+                }
+                else {
+                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX()/7, DY_PERSONAJE*pad.getKnobPercentY()/7);
+                }
+            }
+        });
+
+        escenaJuego = new Stage(vista);
+        escenaJuego.addActor(movJoystick);
+        escenaJuego.addActor(gunJoystick);
+        movJoystick.setColor(1,1,1,0.7f);
+    }
 
     //********************Cargar*******************
     public void cargarTexturas() {
