@@ -123,6 +123,7 @@ public class Juego extends Game {
 	    enemy_list.clear();
         limites.clear();
         this.camera = camera;
+        camera.update();
         if(!cuartoAIniciado){
             escenaCuartoA = new Stage(vista);
             cuartoAIniciado = true;
@@ -136,10 +137,13 @@ public class Juego extends Game {
         limites.clear();
         this.camera = camera;
         this.personaje.setPosition(-250,350);
+        this.camera.position.set(-250,350,0);
+        //this.camera.position.set(0, 0,0);
+        camera.update();
         if(!cuartoBIniciado){
             // Cámara HUD
             camaraHUDEscenarioB = new OrthographicCamera(Pantalla.ANCHO,Pantalla.ALTO);
-            camaraHUDEscenarioB.position.set(Pantalla.ANCHO/2, Pantalla.ALTO/2, 0);
+            camaraHUDEscenarioB.position.set(-250, 350,0);
             camaraHUDEscenarioB.update();
             vistaHUDEscenarioB = new StretchViewport(Pantalla.ANCHO, Pantalla.ALTO, camaraHUDEscenarioB);
             escenaCuartoB = new Stage(vistaHUDEscenarioB);
@@ -155,6 +159,7 @@ public class Juego extends Game {
         this.personaje.setPosition(Pantalla.ANCHO/2,60);
         limites.clear();
         this.camera = camera;
+        camera.update();
         if(!cuartoCIniciado){
             escenaCuartoC = new Stage(vista);
             cuartoCIniciado = true;
@@ -166,6 +171,7 @@ public class Juego extends Game {
         System.out.println("Cuarto D");
         limites.clear();
         this.camera = camera;
+        camera.update();
         if(!cuartoDIniciado){
             escenaCuartoD = new Stage(vista);
             cuartoDIniciado = true;
@@ -176,6 +182,7 @@ public class Juego extends Game {
         enemy_list.clear();
         limites.clear();
         this.camera = camera;
+        camera.update();
         if(!cuartoBossFinalIniciado){
             escenaCuartoBossFinal = new Stage(vista);
             cuartoBossFinalIniciado = true;

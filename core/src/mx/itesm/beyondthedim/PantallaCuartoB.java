@@ -44,7 +44,6 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
         juego.iniciarCuartoB(vista, camara);
-        camara.position.set((int)personaje.sprite.getX(), (int)personaje.sprite.getY(),0);
         //Escenario
         escenaJuego = juego.getEscenaCuartoB();
     }
@@ -121,6 +120,10 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
         crearEnemigos();
+        System.out.println("Hoola");
+        personaje.mover(0,0);
+        this.camara.position.set(-250,350,0);
+        camara.update();
         Gdx.input.setInputProcessor(escenaJuego);
     }
 
@@ -146,7 +149,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         //ganar();
         //Pausa
         pausa();
-        System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
+        //System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
     }
 
 

@@ -122,6 +122,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
         crearEnemigos();
+        camara.update();
         Gdx.input.setInputProcessor(escenaJuego);
     }
 
@@ -204,8 +205,8 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     @Override
     public void generarLimites() {
         if(juego.getLimites().isEmpty()){
-            juego.addLimites(new Rectangle(0, ALTO, ANCHO, 120));
-            juego.addLimites(new Rectangle(820, 0, 120, ALTO));
+            juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
+            juego.addLimites(new Rectangle(0, 0, 120, ALTO));
             juego.addLimites(new Rectangle(0, 0, ANCHO, 120));
             juego.addLimites(new Rectangle(1160, ALTO - 300, 120, 300));
             juego.addLimites(new Rectangle(1160, 0, 120, 300));
