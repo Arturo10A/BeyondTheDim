@@ -45,6 +45,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
         juego.iniciarCuartoD(vista, camara);
+        juego.setPantallaJuego(this);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.controlMovPad(batch, pad, movJoystick);
+                juego.conMovPadGrande(batch, pad, movJoystick);
             }
         });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
@@ -90,6 +91,8 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         escenaJuego.addActor(gunJoystick);
         escenaJuego.addActor(juego.getBtnPausa());
     }
+
+
 
     //********************Cargar*******************
     @Override
@@ -128,7 +131,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, objetos);
+        juego.dibujarObjetos(batch, textureEscenario);
         batch.end();
         //Dibujar Objetos
         batch.begin();

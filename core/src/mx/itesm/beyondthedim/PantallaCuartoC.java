@@ -44,20 +44,20 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private ObjetoEscenario cpu4;
 
 
+
     private Texture cpu  = new Texture("Objetos_varios/cpu_izq.png");
     private Texture cpu_der = new Texture("Objetos_varios/cpu_der.png");
     private Texture cpu_central = new Texture("Objetos_varios/cpu_central.png");
-
-    private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>(5);
 
     //Constructores
     public PantallaCuartoC(Juego juego) {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
-        this.personaje.setPosition(ANCHO/2,ALTO);
+        this.personaje.setPosition(ANCHO/2,60);
         juego.iniciarCuartoC(vista, camara);
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
+        juego.setPantallaJuego(this);
     }
 
     public void crearEscena() {
@@ -86,7 +86,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.controlMovPad(batch, pad, movJoystick);
+                juego.conMovPadGrande(batch, pad, movJoystick);
             }
         });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
@@ -103,10 +103,13 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         escenaJuego.addActor(juego.getBtnPausa());
     }
 
+
+
     //********************Cargar*******************
     public void cargarTexturas() {
         textureEscenario = new Texture("Stage/escenarioC_cerrado.jpg");
         textureEscenarioAbierto = new Texture("Stage/escenarioC_abierto.jpg");
+
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
     }
     @Override
@@ -127,9 +130,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         cpu3 = new ObjetoEscenario(ANCHO/3, ALTO-140, cpu_central);
         //cpu4 = new ObjetoEscenario(ANCHO-200,ALTO/4, cpu);
 
-        objetos.add(cpu1);
-        objetos.add(cpu2);
-        objetos.add(cpu3);
+        juego.getObjetos().add(cpu1);
+        juego.getObjetos().add(cpu2);
+        juego.getObjetos().add(cpu3);
         //objetos.add(cpu4);
 
         generarLimites();
@@ -151,7 +154,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, objetos);
+        juego.dibujarObjetos(batch, textureEscenario);
         batch.end();
         //Dibujar Objetos
         batch.begin();

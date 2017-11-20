@@ -62,6 +62,8 @@ public class Juego extends Game {
     private Texture texturaItemHistoria;
     //Limites
     private ArrayList<Rectangle> limites = new ArrayList<Rectangle>();
+    //Objetos
+    private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
     //public boolean limitesGenerados = false;
     private Rectangle personajeRectangle;
     //Escenas de Juego
@@ -92,6 +94,9 @@ public class Juego extends Game {
     //HUDEscenarioB
     protected OrthographicCamera camaraHUDEscenarioB;
     protected Viewport vistaHUDEscenarioB;
+
+    //pantalla
+    private Pantalla pantallaJuego;
 
 
 
@@ -124,6 +129,7 @@ public class Juego extends Game {
         limites.clear();
         this.camera = camera;
         camera.update();
+        objetos.clear();
         if(!cuartoAIniciado){
             escenaCuartoA = new Stage(vista);
             cuartoAIniciado = true;
@@ -140,6 +146,7 @@ public class Juego extends Game {
         this.camera.position.set(-250,350,0);
         //this.camera.position.set(0, 0,0);
         camera.update();
+        objetos.clear();
         if(!cuartoBIniciado){
             // Cámara HUD
             camaraHUDEscenarioB = new OrthographicCamera(Pantalla.ANCHO,Pantalla.ALTO);
@@ -160,6 +167,7 @@ public class Juego extends Game {
         limites.clear();
         this.camera = camera;
         camera.update();
+        objetos.clear();
         if(!cuartoCIniciado){
             escenaCuartoC = new Stage(vista);
             cuartoCIniciado = true;
@@ -172,6 +180,7 @@ public class Juego extends Game {
         limites.clear();
         this.camera = camera;
         camera.update();
+        objetos.clear();
         if(!cuartoDIniciado){
             escenaCuartoD = new Stage(vista);
             cuartoDIniciado = true;
@@ -183,6 +192,7 @@ public class Juego extends Game {
         limites.clear();
         this.camera = camera;
         camera.update();
+        objetos.clear();
         if(!cuartoBossFinalIniciado){
             escenaCuartoBossFinal = new Stage(vista);
             cuartoBossFinalIniciado = true;
@@ -223,6 +233,11 @@ public class Juego extends Game {
         this.vidaPersonaje = vida;
     }
 
+    //Objetos
+    public ArrayList<ObjetoEscenario> getObjetos(){
+        return this.objetos;
+    }
+
     //Musica
     public void setMusic(Music music){
         if(this.music != null) {
@@ -256,6 +271,11 @@ public class Juego extends Game {
     public void clearLimites(){
         this.limites.clear();
     }
+
+    //Pantalla
+    public void setPantallaJuego(Pantalla pantallaJuego){
+        this.pantallaJuego = pantallaJuego;
+    }
     /*
     //Joysticks
     public Touchpad getGunJoystick(){
@@ -288,49 +308,6 @@ public class Juego extends Game {
 	}
 
     public void controlMovPad(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
-
-/*        if(cambiarDireccion) {
-            if (pad.getKnobPercentX() > 0.20) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-            } else if (pad.getKnobPercentX() < -0.20) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-            } else if (pad.getKnobPercentX() == 0) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-            }
-        }
-        //Restricciones de movimiento(paredes)
-        //Right
-        /*
-        if (((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0)) {
-            personaje.mover(-2,pad.getKnobPercentY());
-        }
-        if ((personaje.getPositionX() >= 1120 && personaje.getPositionY() > 400) && movJoystick.getKnobPercentX() > 0) {
-            personaje.mover(-1,pad.getKnobPercentY());
-        }
-        //Left
-        else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0) {
-            personaje.mover(10,pad.getKnobPercentY());
-        }
-        //TOP
-        else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0) {
-            personaje.mover(pad.getKnobPercentX(), -10);
-        }
-        //Bottom
-        else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0) {
-            personaje.mover(pad.getKnobPercentX(), 10);
-        } else {
-            Rectangle rp = personaje.getSprite().getBoundingRectangle();
-            Rectangle ro = obstacle.getSprite().getBoundingRectangle();
-            //Gdx.app.log("Choque",rp.toString()+","+ro.toString());
-            rp.setX(rp.getX()+10);
-            if(! rp.overlaps(ro)){
-                //Gdx.app.log("CHOQUE", "SI PUEDE CAMINAR");
-                personaje.mover(pad.getKnobPercentX(),pad.getKnobPercentY());
-            } else{
-                //Gdx.app.log("Choque ","NO SE PUEDE");
-            }
-        }*/
-
         //Narvaez Logic
 
         Rectangle personajeRectangle = personaje.getSprite().getBoundingRectangle();
@@ -393,11 +370,57 @@ public class Juego extends Game {
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
             personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
             personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
+            //Overlaps de diferentes niveles
+            boolean h = pantallaJuego instanceof  PantallaCuartoA;
+            System.out.println(h);
+            if(pantallaJuego instanceof PantallaCuartoA){
+                //((PantallaCuartoA) pantalla).generarOverlaps();
+                if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
+                    personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+                }
+                System.out.println("Ovelaps A");
+            }
+            if(pantallaJuego instanceof PantallaCuartoB){
+                //((PantallaCuartoB) pantalla).generarOverlaps();
+                if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(8)))&&(!personajeRectangle.overlaps(this.getLimites().get(9)))&&(!personajeRectangle.overlaps(this.getLimites().get(10)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(11)))){
+                    personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+                }
 
-            if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
-                    &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))){
-                personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+                System.out.println("Ovelaps B");
+            }
+            if(pantallaJuego instanceof PantallaCuartoC){
+                //((PantallaCuartoC) pantalla).generarOverlaps();
+                if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(8)))){
+                    personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+                }
+                System.out.println("Ovelaps C");
+            }
+            if(pantallaJuego instanceof PantallaCuartoD){
+                //((PantallaCuartoD) pantalla).generarOverlaps();
+                if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))){
+                    personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+                }
+                System.out.println("Ovelaps D");
+            }
+            if(pantallaJuego instanceof PantallaCuartoEscenarioBoss){
+                //((PantallaCuartoA) pantalla).generarOverlaps();
+                if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))){
+                    personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+                }
+                System.out.println("Ovelaps Boss");
             }
         }
     }
@@ -490,7 +513,7 @@ public class Juego extends Game {
         }
     }
 
-    public void dibujarObjetos(SpriteBatch batch, Texture textureEscenario, ArrayList<ObjetoEscenario> objetos){
+    public void dibujarObjetos(SpriteBatch batch, Texture textureEscenario){
         batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
 
         //Personaje Jett

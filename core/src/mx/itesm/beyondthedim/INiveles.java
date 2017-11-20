@@ -33,4 +33,6 @@ public interface INiveles {
 
     public void crearEscena();
 
+    //public void generarOverlaps();
+
 }

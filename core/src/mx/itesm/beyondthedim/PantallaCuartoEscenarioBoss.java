@@ -65,6 +65,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
     public PantallaCuartoEscenarioBoss(Juego juego){
         this.juego = juego;
         this.personaje = juego.getPersonaje();
+        juego.setPantallaJuego(this);
     }
 
     private void cargarTexturas(){

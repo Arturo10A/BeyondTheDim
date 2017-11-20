@@ -33,11 +33,21 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     //Escenario
     private Stage escenaJuego;
     private Texture texturaBtnPausa;
+    private Texture texturaCpu;
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
+    //
+    private int apariciones = 4;
+    //
+    private ObjetoEscenario cpu1;
+    private ObjetoEscenario cpu2;
+    private ObjetoEscenario cpu3;
+    private ObjetoEscenario cpu4;
+    private ObjetoEscenario cpu5;
+    private ObjetoEscenario cpu6;
+    private ObjetoEscenario cpu7;
 
-    private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
 
     //Constructores
     public PantallaCuartoB(Juego juego) {
@@ -46,12 +56,22 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         juego.iniciarCuartoB(vista, camara);
         //Escenario
         escenaJuego = juego.getEscenaCuartoB();
+        juego.setPantallaJuego(this);
     }
 
     @Override
     public void crearEscena() {
         //Escenario
 
+        cpu1 = new ObjetoEscenario(-45,770, texturaCpu);
+        cpu2 = new ObjetoEscenario(-45 ,-67, texturaCpu);
+        cpu2.sprite.flip(false,true);
+        cpu3 = new ObjetoEscenario(526, 440, texturaCpu);
+        cpu4 = new ObjetoEscenario(526,290, texturaCpu);
+        cpu4.sprite.flip(false,true);
+        cpu5 = new ObjetoEscenario(970 ,770, texturaCpu);
+        cpu6 = new ObjetoEscenario(970, -67, texturaCpu);
+        cpu6.sprite.flip(false,true);
         escenaJuego = juego.getEscenaCuartoB();
         //*******************************************************Joysticks*******************************************************
         //Texturas
@@ -91,7 +111,15 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         escenaJuego.addActor(movJoystick);
         escenaJuego.addActor(gunJoystick);
         escenaJuego.addActor(juego.getBtnPausa());
+        juego.getObjetos().add(cpu1);
+        juego.getObjetos().add(cpu2);
+        juego.getObjetos().add(cpu3);
+        juego.getObjetos().add(cpu4);
+        juego.getObjetos().add(cpu5);
+        juego.getObjetos().add(cpu6);
     }
+
+
 
     //********************Cargar*******************
     @Override
@@ -99,6 +127,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         textureEscenario = new Texture("Stage/escenarioB_cerrado.jpg");
         textureEscenarioAbierto = new Texture("Stage/escenarioB_cerrado.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+        texturaCpu = new Texture("Objetos_varios/mesa_de_control_2.png");
     }
     @Override
     public void cargarMusica(){
@@ -116,6 +145,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             juego.getMusic().setVolume(0.2f);
             juego.getMusic().play();
         }
+        cpu4.sprite.flip(false,true);
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         //Añadir enemigo
@@ -133,8 +163,12 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         actualizarCamara();
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, objetos);
+        juego.dibujarObjetos(batch, textureEscenario);
         batch.end();
+        if(juego.getEnemy_list().isEmpty() && apariciones >= 0){
+            crearEnemigos();
+            apariciones--;
+        }
         //Dibujar Objetos
         //batch.setProjectionMatrix(juego.camaraHUDEscenarioB.combined);
         batch.begin();
@@ -146,10 +180,10 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         jugar(delta);
         //Ganar/Perder
         perder();
-        //ganar();
+        ganar();
         //Pausa
         pausa();
-        //System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
+        System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
     }
 
 
@@ -177,6 +211,12 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void crearEnemigos() {
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
     }
 
@@ -213,6 +253,12 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     @Override
     public void generarLimites() {
         if(juego.getLimites().isEmpty()){
+            juego.addLimites(cpu1.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu2.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu3.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu4.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu5.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu6.getSprite().getBoundingRectangle());
             juego.addLimites(new Rectangle(-250, 770, 820, 0));
             juego.addLimites(new Rectangle(670, 770, 820, 0));
             juego.addLimites(new Rectangle(-250, -67, 0, 1900));
@@ -248,4 +294,6 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         camara.position.set((int)posX,(int)posY, 0);
         camara.update();
     }
+
+
 }

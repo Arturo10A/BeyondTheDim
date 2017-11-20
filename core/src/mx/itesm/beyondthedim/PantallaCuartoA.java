@@ -49,6 +49,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         juego.iniciarCuartoA(vista, camara);
         //Escenario
         escenaJuego = juego.getEscenaCuartoA();
+        juego.setPantallaJuego(this);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.controlMovPad(batch, pad, movJoystick);
+                juego.conMovPadGrande(batch, pad, movJoystick);
             }
         });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
@@ -94,6 +95,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         escenaJuego.addActor(gunJoystick);
         escenaJuego.addActor(juego.getBtnPausa());
     }
+
 
     //********************Cargar*******************
     @Override
@@ -133,7 +135,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.dibujarObjetos(batch, textureEscenario, objetos);
+        juego.dibujarObjetos(batch, textureEscenario);
         batch.end();
         //Dibujar Objetos
         batch.begin();
@@ -211,8 +213,8 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
             juego.addLimites(new Rectangle(1160, ALTO - 300, 120, 300));
             juego.addLimites(new Rectangle(1160, 0, 120, 300));
             juego.addLimites(new Rectangle(1160, 300, 120, 120));
-
             //juego.limitesGenerados = true;
         }
     }
+
 }
