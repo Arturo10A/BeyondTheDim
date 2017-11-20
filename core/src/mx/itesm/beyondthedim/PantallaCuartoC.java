@@ -40,6 +40,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private int DX_PERSONAJE = 5;
     private int DY_PERSONAJE = 5;
 
+    //Medicina
+    private Medicina medicina;
+
     private ObjetoEscenario cpu1;
     private ObjetoEscenario cpu2;
     private ObjetoEscenario cpu3;
@@ -160,6 +163,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         cpu2 = new ObjetoEscenario(ANCHO-230 ,110, cpu_der);
         cpu3 = new ObjetoEscenario(ANCHO/3, ALTO-140, cpu_central);
         //cpu4 = new ObjetoEscenario(ANCHO-200,ALTO/4, cpu);
+        medicina = new Medicina(ANCHO/2,ALTO/2);
 
         juego.getObjetos().add(cpu1);
         juego.getObjetos().add(cpu2);
@@ -186,6 +190,11 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
+        if (!medicina.vida(personaje)) {
+            medicina.dib(batch);
+        }
+        System.out.println("X:"+personaje.getPositionX() +" Y:"+personaje.getPositionY());
+        medicina.vida(personaje);
         batch.end();
         //Dibujar Objetos
         batch.begin();
@@ -235,7 +244,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         if (juego.getEnemy_list().isEmpty()){
             textureEscenario = textureEscenarioAbierto;
             juego.getLimites().get(5).setSize(10);
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+            if (personaje.getPositionX() >= 548 && personaje.getPositionX() <= 657 && personaje.getPositionY() >= 122 && personaje.getPositionY() <= 124) {
                 juego.setScreen(new PantallaCuartoB(juego));
                 dispose();
                 escenaJuego.clear();

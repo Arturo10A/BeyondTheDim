@@ -86,6 +86,10 @@ public class Personaje extends Objeto{
         return this.life;
     }
 
+    public void recoverLife(){
+        this.life = 1000;
+    }
+
     public void dibujar(SpriteBatch batch, float tiempo){
         // Dibuja el personaje dependiendo del estadoMovimiento
         switch (estadoMovimiento) {
