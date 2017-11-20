@@ -40,6 +40,10 @@ public class Objeto {
         return sprite;
     }
 
+    public void rota(float grado){
+        this.sprite.rotate(grado);
+    }
+
     public void dibujar(SpriteBatch batch) {
         sprite.draw(batch);
     }

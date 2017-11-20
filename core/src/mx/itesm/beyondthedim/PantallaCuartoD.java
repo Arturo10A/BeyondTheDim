@@ -40,6 +40,17 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
 
+
+
+    private ObjetoEscenario redBed;
+    private ObjetoEscenario blueBed;
+    private ObjetoEscenario greenBed;
+    private ObjetoEscenario seaBed;
+    private Texture texturaRedBed;
+    private Texture texturaBlueBed;
+    private Texture texturaSeaBed;
+    private Texture texturaGreenBed;
+
     //Constructores
     public PantallaCuartoD(Juego juego) {
         this.juego = juego;
@@ -51,6 +62,20 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     @Override
     public void crearEscena() {
         //Escenario
+        redBed = new ObjetoEscenario(ANCHO-(ANCHO/7),ALTO/3, texturaRedBed);
+
+        blueBed = new ObjetoEscenario(ANCHO/11,ALTO-ALTO/3, texturaBlueBed);
+
+        greenBed = new ObjetoEscenario(ANCHO-(ANCHO/7),ALTO-ALTO/3, texturaGreenBed);
+
+        seaBed = new ObjetoEscenario(ANCHO/11,ALTO/3, texturaSeaBed);
+
+
+        juego.getObjetos().add(redBed);
+        juego.getObjetos().add(blueBed );
+        juego.getObjetos().add(greenBed);
+        juego.getObjetos().add(seaBed );
+
         escenaJuego = juego.getEscenaCuartoD();
         //*******************************************************Joysticks*******************************************************
         //Texturas
@@ -97,9 +122,14 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     //********************Cargar*******************
     @Override
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
+        textureEscenario = new Texture("Stage/tutorial.jpg");
         textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
-        //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+
+        texturaRedBed = new Texture("Objetos_varios/cama_3_2.png");
+        texturaBlueBed = new Texture("Objetos_varios/cama_2_2.png");
+        texturaSeaBed = new Texture("Objetos_varios/cama_4_2.png");
+        texturaGreenBed = new Texture("Objetos_varios/cama_1_2.png");
+
     }
     @Override
     public void cargarMusica(){

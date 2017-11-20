@@ -28,16 +28,17 @@ public class ObjetoEscenario extends Objeto {
         this.x = x;
         this.y = y;
         texturaObjeto = textura;
-        sprite = new Sprite(texturaObjeto);    // QUIETO
+        sprite = new Sprite(textura);    // QUIETO
         sprite.setPosition(x,y);    // Posición inicial
     }
 
+
     public void setTexture(Texture textura){
-        this.texturaObjeto = textura;
+        this.sprite = new Sprite(textura);
     }
 
     public void dibujar(SpriteBatch batch, float tiempo){
-        batch.draw(texturaObjeto, x, y);
+        batch.draw(sprite, x, y);
     }
 
     public float getPositionX(){
@@ -48,6 +49,13 @@ public class ObjetoEscenario extends Objeto {
         return y;
     }
 
+    public Sprite getSprite(){
+        return sprite;
+    }
+
+    public void rota(float grado){
+        this.sprite.rotate(grado);
+    }
     public  void setPosition(float x, float y){
         this.x = x;
         this.y = y;

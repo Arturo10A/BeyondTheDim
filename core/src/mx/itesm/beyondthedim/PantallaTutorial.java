@@ -311,7 +311,7 @@ public class PantallaTutorial extends  Pantalla {
 
         timerDialogo += Gdx.graphics.getDeltaTime();
 
-        timerDialogo += 1;
+        timerDialogo +=100;
         if (timerDialogo >= 120 && timerDialogo < 300){
             cuadro1 = cuadro2;
         }
@@ -334,7 +334,7 @@ public class PantallaTutorial extends  Pantalla {
 
         if (timerDialogo >= 1000){
 
-            juego.setScreen(new PantallaCuartoA(juego));
+            juego.setScreen(new PantallaCuartoD(juego));
 
 
         }

@@ -1,7 +1,9 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.awt.Shape;
 import java.util.ArrayList;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
@@ -40,6 +43,8 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
 
+    private ShapeRenderer shape;
+
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
 
     //Constructores
@@ -68,7 +73,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         //Joystick pistola
         gunJoystick = new Touchpad(20, estilo);
         gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
-
+        shape = new ShapeRenderer();
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
@@ -176,15 +181,24 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
     @Override
     public void ganar() {
-        if (juego.getEnemy_list().isEmpty()){
+
+        shape.begin(ShapeRenderer.ShapeType.Line);
+        shape.setProjectionMatrix(camara.combined);
+        shape.setColor(Color.RED);
+
+        if (juego.getEnemy_list().isEmpty()) {
             textureEscenario = textureEscenarioAbierto;
-            juego.getLimites().get(5).setSize(10);
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+            // juego.getLimites().get(5).setSize(30);
+
+            shape.rect(juego.getLimites().get(5).getX(), juego.getLimites().get(5).getY(), juego.getLimites().get(5).getWidth(), juego.getLimites().get(5).getHeight());
+            if (personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(5))) {
                 juego.setScreen(new PantallaCuartoB(juego));
                 dispose();
                 escenaJuego.clear();
             }
+
         }
+        shape.end();
     }
 
     @Override
@@ -207,11 +221,17 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     @Override
     public void generarLimites() {
         if(juego.getLimites().isEmpty()){
+            //MURO NORTE
             juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
+            //MURO OESTE
             juego.addLimites(new Rectangle(0, 0, 120, ALTO));
+            //MURO SUR
             juego.addLimites(new Rectangle(0, 0, ANCHO, 120));
+            //MURO ESTE NORTE
             juego.addLimites(new Rectangle(1160, ALTO - 300, 120, 300));
+            //MURO ESTE SUR
             juego.addLimites(new Rectangle(1160, 0, 120, 300));
+            //PUERTA ESTE
             juego.addLimites(new Rectangle(1160, 300, 120, 120));
             //juego.limitesGenerados = true;
         }

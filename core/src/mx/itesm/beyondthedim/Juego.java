@@ -177,6 +177,7 @@ public class Juego extends Game {
     public void iniciarCuartoD(Viewport vista, OrthographicCamera camera){
         enemy_list.clear();
         System.out.println("Cuarto D");
+        this.personaje.setPosition(Pantalla.ANCHO/2,Pantalla.ALTO-(Pantalla.ALTO/5));
         limites.clear();
         this.camera = camera;
         camera.update();
@@ -417,8 +418,7 @@ public class Juego extends Game {
             if(pantallaJuego instanceof PantallaCuartoD){
                 //((PantallaCuartoD) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))){
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))){
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
                 System.out.println("Ovelaps D");
