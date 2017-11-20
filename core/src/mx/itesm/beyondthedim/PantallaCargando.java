@@ -77,7 +77,7 @@ class PantallaCargando extends Pantalla {
         tiempo += Gdx.graphics.getDeltaTime();
 
         if (tiempo >= 1){
-            juego.setScreen(new PantallaMenu(juego));
+            juego.setScreen(juego.getMenu());
         }
 
     }

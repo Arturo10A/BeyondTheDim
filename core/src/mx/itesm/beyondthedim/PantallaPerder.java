@@ -83,7 +83,7 @@ public class PantallaPerder extends Pantalla{
                 lose.stop();
                 lose.dispose();
                 //juego.setScreen(new PantallaCuartoA(juego));
-                juego.setScreen(new PantallaTutorial(juego));
+                juego.setScreen(juego.getMenu());
                 juego.iniciarJuego(ANCHO,ALTO);
             }
         });

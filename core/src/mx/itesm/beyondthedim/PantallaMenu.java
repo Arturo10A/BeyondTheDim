@@ -46,9 +46,20 @@ class PantallaMenu extends Pantalla {
 
     public PantallaMenu(Juego juego) {
         this.juego = juego;
+        System.out.println("Se creo un nuevo menu");
     }
     private void cargarNave() {
         nave = new Nave(ANCHO/2-280/2,ALTO*posAltoNave);
+        nave.setEstadoMovimiento(Objeto.EstadoMovimiento.ACTIVO);
+
+    }
+    //
+    public void setInicio(){
+        altoNave = 0;
+        anchoNave = 0;
+        playAnimacionNave = false;
+        posAltoNave = 0.20f;
+        nave.setPosition(ANCHO/2-280/2,ALTO*posAltoNave);
         nave.setEstadoMovimiento(Objeto.EstadoMovimiento.ACTIVO);
     }
 

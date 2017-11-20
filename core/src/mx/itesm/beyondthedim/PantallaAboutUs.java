@@ -92,7 +92,7 @@ class PantallaAboutUs extends Pantalla {
                 super.clicked(event, x, y);
                 Gdx.app.log("clicked","***GO BACK***");
                 dispose();
-                juego.setScreen(new PantallaMenu(juego));
+                juego.setScreen(juego.getMenu());
             }
         });
 
