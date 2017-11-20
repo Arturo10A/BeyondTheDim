@@ -86,6 +86,8 @@ public class Juego extends Game {
     private ImageButton btnPausa;
     //
     public int prueba = 0;
+    //
+    private OrthographicCamera camera;
 
     //HUDEscenarioB
     protected OrthographicCamera camaraHUDEscenarioB;
@@ -116,10 +118,11 @@ public class Juego extends Game {
     }
 
     //IniciarEscenas
-    public void iniciarCuartoA(Viewport vista){
+    public void iniciarCuartoA(Viewport vista, OrthographicCamera camera){
 	    System.out.println("Cuarto A");
 	    enemy_list.clear();
         limites.clear();
+        this.camera = camera;
         if(!cuartoAIniciado){
             escenaCuartoA = new Stage(vista);
             cuartoAIniciado = true;
@@ -127,11 +130,12 @@ public class Juego extends Game {
         }
     }
 
-    public void iniciarCuartoB(Viewport vista){
+    public void iniciarCuartoB(Viewport vista, OrthographicCamera camera){
         System.out.println("Cuarto B");
         enemy_list.clear();
         limites.clear();
-        this.personaje.setPosition(173,1080/2);
+        this.camera = camera;
+        this.personaje.setPosition(-250,350);
         if(!cuartoBIniciado){
             // Cámara HUD
             camaraHUDEscenarioB = new OrthographicCamera(Pantalla.ANCHO,Pantalla.ALTO);
@@ -140,34 +144,38 @@ public class Juego extends Game {
             vistaHUDEscenarioB = new StretchViewport(Pantalla.ANCHO, Pantalla.ALTO, camaraHUDEscenarioB);
             escenaCuartoB = new Stage(vistaHUDEscenarioB);
             cuartoBIniciado = true;
+
         }
 
     }
 
-    public void iniciarCuartoC(Viewport vista){
+    public void iniciarCuartoC(Viewport vista, OrthographicCamera camera){
         System.out.println("Cuarto C");
         enemy_list.clear();
         this.personaje.setPosition(Pantalla.ANCHO/2,60);
         limites.clear();
+        this.camera = camera;
         if(!cuartoCIniciado){
             escenaCuartoC = new Stage(vista);
             cuartoCIniciado = true;
         }
     }
 
-    public void iniciarCuartoD(Viewport vista){
+    public void iniciarCuartoD(Viewport vista, OrthographicCamera camera){
         enemy_list.clear();
         System.out.println("Cuarto D");
         limites.clear();
+        this.camera = camera;
         if(!cuartoDIniciado){
             escenaCuartoD = new Stage(vista);
             cuartoDIniciado = true;
         }
     }
 
-    public void iniciarCuartoBossFinal(Viewport vista){
+    public void iniciarCuartoBossFinal(Viewport vista, OrthographicCamera camera){
         enemy_list.clear();
         limites.clear();
+        this.camera = camera;
         if(!cuartoBossFinalIniciado){
             escenaCuartoBossFinal = new Stage(vista);
             cuartoBossFinalIniciado = true;
@@ -381,7 +389,7 @@ public class Juego extends Game {
 
             if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                     &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))){
                 personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
             }
         }
@@ -491,7 +499,7 @@ public class Juego extends Game {
         }
         //Vida
         String lifeString = "Vida: " + personaje.getLife();
-        texto.mostrarMensaje(batch, lifeString, 98, Pantalla.ALTO / 1.03f);
+        texto.mostrarMensaje(batch, lifeString, camera.position.x-Pantalla.ANCHO*0.45f, camera.position.y+Pantalla.ALTO*0.47f);
         //Balas
         for (Bullet bullet : this.getBullets()) {
             bullet.render(batch);
@@ -507,9 +515,11 @@ public class Juego extends Game {
         if (this.getEstadoJuego()==EstadoJuego.PAUSADO) {
             // Activar escenaPausa y pasarle el control
             if (this.escenaPausa==null) {
-                this.escenaPausa = new PantallaPausa(vista, batch, this, escenaJuego);
+                this.escenaPausa = new PantallaPausa(vista, batch, this, escenaJuego, camera);
+                this.escenaPausa.dibujar();
             }else{
-                escenaPausa.setEscenaJuego(escenaJuego);
+                escenaPausa.setEscenaJuego(escenaJuego, camera);
+                this.escenaPausa.dibujar();
             }
             this.escenaPausa.draw();
             Gdx.input.setInputProcessor(this.escenaPausa);

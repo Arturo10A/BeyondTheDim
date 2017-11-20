@@ -44,7 +44,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     public PantallaCuartoD(Juego juego) {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
-        juego.iniciarCuartoD(vista);
+        juego.iniciarCuartoD(vista, camara);
     }
 
     @Override

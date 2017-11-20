@@ -43,8 +43,8 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     public PantallaCuartoB(Juego juego) {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
-        juego.iniciarCuartoB(vista);
-        //camara.position.set()
+        juego.iniciarCuartoB(vista, camara);
+        camara.position.set((int)personaje.sprite.getX(), (int)personaje.sprite.getY(),0);
         //Escenario
         escenaJuego = juego.getEscenaCuartoB();
     }
@@ -133,7 +133,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         juego.dibujarObjetos(batch, textureEscenario, objetos);
         batch.end();
         //Dibujar Objetos
-        batch.setProjectionMatrix(juego.camaraHUDEscenarioB.combined);
+        //batch.setProjectionMatrix(juego.camaraHUDEscenarioB.combined);
         batch.begin();
         escenaJuego.draw();
         batch.end();
@@ -143,9 +143,10 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         jugar(delta);
         //Ganar/Perder
         perder();
-        ganar();
+        //ganar();
         //Pausa
         pausa();
+        System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
     }
 
 
@@ -209,12 +210,13 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     @Override
     public void generarLimites() {
         if(juego.getLimites().isEmpty()){
-            juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
-            juego.addLimites(new Rectangle(0, 0, 120, ALTO));
-            juego.addLimites(new Rectangle(0, 0, ANCHO, 120));
-            juego.addLimites(new Rectangle(1160, ALTO - 300, 120, 300));
-            juego.addLimites(new Rectangle(1160, 0, 120, 300));
-            juego.addLimites(new Rectangle(1160, 300, 120, 120));
+            juego.addLimites(new Rectangle(-250, 770, 820, 0));
+            juego.addLimites(new Rectangle(670, 770, 820, 0));
+            juego.addLimites(new Rectangle(-250, -67, 0, 1900));
+            juego.addLimites(new Rectangle(-250,-67, 820, 0));
+            juego.addLimites(new Rectangle(670, -67, 820, 0));
+            juego.addLimites(new Rectangle(1500, -67, 0, 367));
+            juego.addLimites(new Rectangle(1500, 400, 0, 370));
 
             //juego.limitesGenerados = true;
         }
@@ -222,16 +224,25 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     private void actualizarCamara() {
         float posX = personaje.sprite.getX();
-        // Si está en la parte 'media'
-        if (posX>=ANCHO/2 && posX<=textureEscenario.getWidth()-ANCHO/2) {
+        float posY = personaje.sprite.getY();
+        /*// Si está en la parte 'media'
+        if (posX>=ANCHO/4 && posX<=ANCHO-ANCHO/4) {
             // El personaje define el centro de la cámara
-            camara.position.set((int)posX, camara.position.y, 0);
-        } else if (posX>textureEscenario.getWidth()-ANCHO/2) {    // Si está en la última mitad
+            camara.position.set((int)posX, (int)posY, 0);
+            System.out.println("Parte1");
+        } else if (posX>ANCHO-ANCHO/4) {    // Si está en la última mitad
             // La cámara se queda a media pantalla antes del fin del mundo  :)
-            camara.position.set(textureEscenario.getWidth()-ANCHO/2, camara.position.y, 0);
-        } else if ( posX<ANCHO/2 ) { // La primera mitad
-            camara.position.set(ANCHO/2, ALTO/2,0);
-        }
+            if(posY>=ALTO/4 && posY<=ALTO-ALTO/4){
+                camara.position.set(ANCHO-ANCHO/4,(int)posY, 0);
+            }
+            System.out.println("Parte2");
+        } else if ( posX<ANCHO/4 ) { // La primera mitad
+            if(posY>=ALTO/4 && posY<=ALTO-ALTO/4){
+                camara.position.set(ANCHO/4,(int)posY, 0);
+            }
+            System.out.println("Parte3");
+        }*/
+        camara.position.set((int)posX,(int)posY, 0);
         camara.update();
     }
 }

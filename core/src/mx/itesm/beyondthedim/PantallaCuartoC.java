@@ -55,7 +55,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
         this.personaje.setPosition(ANCHO/2,ALTO);
-        juego.iniciarCuartoC(vista);
+        juego.iniciarCuartoC(vista, camara);
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
     }

@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,25 +26,46 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class PantallaPausa extends Stage{
 
     private Stage escenaJuego;
+    private OrthographicCamera camara;
+    private Image imgRectangulo;
+    private Juego juego;
+    private ImageButton btnSalir;
+    private ImageButton btnReintentar;
 
-    public PantallaPausa(Viewport vista, SpriteBatch batch, final Juego juego, Stage escenaJuego) {
+    public PantallaPausa(Viewport vista, SpriteBatch batch, final Juego juego, Stage escenaJuego, OrthographicCamera camara) {
         super(vista,batch);
         this.escenaJuego = escenaJuego;
+        this.camara = camara;
+        this.juego = juego;
         Pixmap pixmap = new Pixmap((int) (Pantalla.ANCHO), (int) (Pantalla.ALTO), Pixmap.Format.RGBA8888);
         pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.4f );
         pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
         Texture texturaRectangulo = new Texture(pixmap);
         pixmap.dispose();
-        Image imgRectangulo = new Image(texturaRectangulo);
-        imgRectangulo.setPosition(0, 0);
-        this.addActor(imgRectangulo);
-
-        // Salir
+        imgRectangulo = new Image(texturaRectangulo);
         Texture texturaBtnSalir = new Texture("Botones/button_inicio.png");
         TextureRegionDrawable trdSalir = new TextureRegionDrawable(
                 new TextureRegion(texturaBtnSalir));
-        ImageButton btnSalir = new ImageButton(trdSalir);
-        btnSalir.setPosition(Pantalla.ANCHO/2-btnSalir.getWidth()/2, Pantalla.ALTO*0.2f);
+        btnSalir = new ImageButton(trdSalir);
+        // Continuar
+        Texture texturabtnReintentar = new Texture("Botones/button_back_2.png");
+        TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
+                new TextureRegion(texturabtnReintentar));
+        btnReintentar = new ImageButton(trdReintentar);
+
+    }
+
+    public void setEscenaJuego(Stage escenaJuego, OrthographicCamera camera) {
+        this.escenaJuego = escenaJuego;
+        this.camara = camera;
+    }
+
+    public void dibujar(){
+        imgRectangulo.setPosition(this.camara.position.x-Pantalla.ANCHO/2, this.camara.position.y-Pantalla.ALTO/2);
+        this.addActor(imgRectangulo);
+
+        // Salir
+        btnSalir.setPosition(this.camara.position.x-btnSalir.getWidth()/2, this.camara.position.y - btnSalir.getHeight());
         btnSalir.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -55,13 +77,7 @@ public class PantallaPausa extends Stage{
             }
         });
         this.addActor(btnSalir);
-
-        // Continuar
-        Texture texturabtnReintentar = new Texture("Botones/button_back_2.png");
-        TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
-                new TextureRegion(texturabtnReintentar));
-        ImageButton btnReintentar = new ImageButton(trdReintentar);
-        btnReintentar.setPosition(Pantalla.ANCHO/2-btnReintentar.getWidth()/2, Pantalla.ALTO*0.5f);
+        btnReintentar.setPosition(this.camara.position.x-btnReintentar.getWidth()/2, this.camara.position.y+btnReintentar.getHeight()/2);
         btnReintentar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -71,10 +87,6 @@ public class PantallaPausa extends Stage{
             }
         });
         this.addActor(btnReintentar);
-    }
-
-    public void setEscenaJuego(Stage escenaJuego) {
-        this.escenaJuego = escenaJuego;
     }
 
 
