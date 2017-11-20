@@ -53,7 +53,7 @@ class PantallaMenu extends Pantalla {
         nave.setEstadoMovimiento(Objeto.EstadoMovimiento.ACTIVO);
 
     }
-
+    //
     public void setInicio(){
         altoNave = 0;
         anchoNave = 0;
