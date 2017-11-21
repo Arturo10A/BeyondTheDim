@@ -421,19 +421,19 @@ public class Juego extends Game {
     }
 
     public void conMovPadGrande(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
-        if (cambiarDireccion) {
-            if (pad.getKnobPercentX() > 0.20) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-            } else if (pad.getKnobPercentX() < -0.20) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-            } else if (pad.getKnobPercentX() == 0) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-            }
-        }
+//        if (cambiarDireccion) {
+//            if (pad.getKnobPercentX() > 0.20) {
+//                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+//            } else if (pad.getKnobPercentX() < -0.20) {
+//                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+//            } else if (pad.getKnobPercentX() == 0) {
+//                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+//            }
+//        }
         //Restricciones de movimiento(paredes)
         //Narvaez Logic
-
-
+    }
+    public void conMovPadGrande2(SpriteBatch batch, Touchpad movJoystick) {
         Rectangle personajeRectangle = personaje.getSprite().getBoundingRectangle();
         personajeRectangle.setX(personaje.getPositionX()+17);
         personajeRectangle.setY(personaje.getPositionY());
@@ -446,9 +446,18 @@ public class Juego extends Game {
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
             personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
             personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
+            if ((ang > 0 && ang < 45) || ang > 315 && ang < 360) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+                //Sprite a la Izq
+            } else if (ang > 135 && ang < 225) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+            }else{
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+            }
             //Overlaps de diferentes niveles
             if(pantallaJuego instanceof PantallaCuartoA || pantallaJuego instanceof PantallaTutorial){
                 //((PantallaCuartoA) pantalla).generarOverlaps();
+
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
@@ -489,7 +498,7 @@ public class Juego extends Game {
                 //((PantallaCuartoA) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))){
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))&&(!personajeRectangle.overlaps(this.getLimites().get(8)))){
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
                 System.out.println("Ovelaps Boss");

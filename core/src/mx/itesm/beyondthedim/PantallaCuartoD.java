@@ -47,10 +47,15 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     private ObjetoEscenario blueBed;
     private ObjetoEscenario greenBed;
     private ObjetoEscenario seaBed;
+    private ObjetoEscenario extintor;
+    private ObjetoEscenario PC;
+
     private Texture texturaRedBed;
     private Texture texturaBlueBed;
     private Texture texturaSeaBed;
     private Texture texturaGreenBed;
+    private Texture texturaExt;
+    private Texture texturaPC;
 
     //Constructores
     public PantallaCuartoD(Juego juego) {
@@ -72,19 +77,19 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     @Override
     public void crearEscena() {
         //Escenario
-        redBed = new ObjetoEscenario(ANCHO-(ANCHO/7),ALTO/3, texturaRedBed);
-
-        blueBed = new ObjetoEscenario(ANCHO/11,ALTO-ALTO/3, texturaBlueBed);
-
-        greenBed = new ObjetoEscenario(ANCHO-(ANCHO/7),ALTO-ALTO/3, texturaGreenBed);
-
-        seaBed = new ObjetoEscenario(ANCHO/11,ALTO/3, texturaSeaBed);
-
+        redBed = new ObjetoEscenario(ANCHO-(ANCHO/5),ALTO/3, texturaRedBed);
+        blueBed = new ObjetoEscenario(ANCHO/12,(ALTO/2)+(ALTO/12), texturaBlueBed);
+        greenBed = new ObjetoEscenario(ANCHO-(ANCHO/5),(ALTO/2)+(ALTO/12), texturaGreenBed);
+        seaBed = new ObjetoEscenario(ANCHO/12,ALTO/3, texturaSeaBed);
+        PC = new ObjetoEscenario(ANCHO/3,(ALTO/2)+(ALTO+3), texturaPC);
+        extintor = new ObjetoEscenario((ANCHO/2)+ANCHO/8,(ALTO/2)+(ALTO+3), texturaExt);
 
         juego.getObjetos().add(redBed);
         juego.getObjetos().add(blueBed );
         juego.getObjetos().add(greenBed);
         juego.getObjetos().add(seaBed );
+        juego.getObjetos().add(PC);
+        juego.getObjetos().add(extintor);
 
         escenaJuego = juego.getEscenaCuartoD();
         //*******************************************************Joysticks*******************************************************
@@ -101,18 +106,11 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
 
         //Joystick movimiento
+
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
-        //Listener joystick movimiento
-        movJoystick.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Touchpad pad = (Touchpad) actor;
-                //Control de Sprites
-                juego.conMovPadGrande(batch, pad, movJoystick);
-            }
-        });
+        //Listener joystick movimientov
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
@@ -132,13 +130,15 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     //********************Cargar*******************
     @Override
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/tutorial.jpg");
-        textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
+        textureEscenario = new Texture("Stage/stageD_Close.png");
+        textureEscenarioAbierto = new Texture("Stage/stageD_Open.png");
 
         texturaRedBed = new Texture("Objetos_varios/cama_3_2.png");
         texturaBlueBed = new Texture("Objetos_varios/cama_2_2.png");
         texturaSeaBed = new Texture("Objetos_varios/cama_4_2.png");
         texturaGreenBed = new Texture("Objetos_varios/cama_1_2.png");
+        texturaPC = new Texture("Objetos_varios/computadora_2.png");
+        texturaExt = new Texture("Objetos_varios/extintor.png");
         vidaIcono = new Texture("iconLife.png");
 
     }
@@ -150,6 +150,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     @Override
     public void show() {
         //Cargar escena
+
         cargarTexturas();
         crearEscena();
         cargarMusica();
@@ -172,6 +173,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
+        juego.conMovPadGrande2(batch, movJoystick);
         juego.dibujarObjetos(batch, textureEscenario);
         batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
         batch.end();
@@ -259,9 +261,13 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
             juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
             juego.addLimites(new Rectangle(0, 0, 120, ALTO));
             juego.addLimites(new Rectangle(0, 0, ANCHO, 120));
-            juego.addLimites(new Rectangle(1160, ALTO - 300, 120, 300));
-            juego.addLimites(new Rectangle(1160, 0, 120, 300));
-            juego.addLimites(new Rectangle(1160, 300, 120, 120));
+            juego.addLimites(new Rectangle(1160, 0, 120, ALTO));
+
+            juego.addLimites(new Rectangle(ANCHO-(ANCHO/5),ALTO/3,90,180));
+            juego.addLimites(new Rectangle(ANCHO/12,(ALTO/2)+(ALTO/12),90,180));
+            juego.addLimites(new Rectangle(ANCHO-(ANCHO/5),(ALTO/2)+(ALTO/12),90,180));
+            juego.addLimites(new Rectangle(ANCHO/12,ALTO/3,90,180));
+
 
             //juego.limitesGenerados = true;
         }

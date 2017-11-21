@@ -124,7 +124,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 super.clicked(event,x,y);
-                juego.setScreen(new PantallaCuartoA(juego));
+                juego.setScreen(new PantallaCuartoD(juego));
                 dispose();
             }
         });
@@ -137,7 +137,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
     //********************Cargar*******************
     @Override
     public void cargarTexturas() {
-        texturaBtnSkip = new Texture("Botones/button_back_2.png");
+        texturaBtnSkip = new Texture("Botones/forward.png");
         textureEscenario = new Texture("Stage/tutorial.jpg");
         vidaIcono = new Texture("iconLife.png");
         cuadro1 = new Texture("test.png");

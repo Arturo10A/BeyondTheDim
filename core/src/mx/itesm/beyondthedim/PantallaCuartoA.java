@@ -114,6 +114,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     @Override
     public void show() {
         //Cargar escena
+
         cargarTexturas();
         crearEscena();
         cargarMusica();
@@ -139,9 +140,11 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
         batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
+
         batch.end();
         //Dibujar Objetos
         batch.begin();
+        juego.conMovPadGrande2(batch, movJoystick);
         escenaJuego.draw();
 
         batch.end();
