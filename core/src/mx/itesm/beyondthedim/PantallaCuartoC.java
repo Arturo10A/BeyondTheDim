@@ -68,6 +68,14 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         juego.setPantallaJuego(this);
     }
 
+    public void setInicioPantallaC(Juego juego){
+        this.personaje = juego.getPersonaje();
+        juego.iniciarCuartoC(vista, camara);
+        //Escenario
+        escenaJuego = juego.getEscenaCuartoC();
+        juego.setPantallaJuego(this);
+    }
+
     @Override
     public void crearEscena() {
 
@@ -206,6 +214,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     @Override
     public void crearEnemigos() {
+        /*
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 400, 1));
         juego.getEnemy_list().add(new Enemy(ANCHO - 300, ALTO / 2, 200, 1));
         juego.getEnemy_list().add(new Enemy(ANCHO - 400, ALTO / 2, 800, 1));
@@ -213,12 +222,14 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         juego.getEnemy_list().add(new Enemy(ANCHO - 600, ALTO / 2, 500, 1));
         juego.getEnemy_list().add(new Enemy(ANCHO - 700, ALTO / 2, 200, 1));
         juego.getEnemy_list().add(new Enemy(ANCHO - 800, ALTO / 2, 400, 1));
+        */
     }
 
     @Override
     public void ganar() {
-
         if (personaje.getPositionX() >= 560 && personaje.getPositionX() <= 680 && personaje.getPositionY() <= 111) {
+            juego.getPersonaje().setPosition(595,760);
+            juego.getCuartoB().setInicioPantallaB(juego);
             juego.setScreen(juego.getCuartoB());
             dispose();
             escenaJuego.clear();
@@ -226,7 +237,6 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         if(personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(1))){
             juego.isCuartoCterminado = true;
         }
-
     }
 
     @Override

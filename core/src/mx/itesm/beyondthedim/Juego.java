@@ -145,8 +145,6 @@ public class Juego extends Game {
         System.out.println("Cuarto B");
         enemy_list.clear();
         limites.clear();
-        this.personaje.setPosition(-250,350);
-        this.camera.position.set(-250,350,0);
         //this.camera.position.set(0, 0,0);
         camera.update();
         this.camera = camera;

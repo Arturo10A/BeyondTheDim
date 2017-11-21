@@ -51,10 +51,21 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     protected boolean isAbiertoCuartoC = false;
     protected boolean isAbiertoCuartoD = false;
     protected boolean isAbiertoCuartoBoss = false;
+    private boolean texturasCargadas = false;
 
     //Constructores
     public PantallaCuartoB(Juego juego) {
         this.juego = juego;
+        this.personaje = juego.getPersonaje();
+        juego.iniciarCuartoB(vista, camara);
+        //Escenario
+        escenaJuego = juego.getEscenaCuartoB();
+        juego.setPantallaJuego(this);
+        this.personaje.setPosition(-250,350);
+        this.camara.position.set(-250,350,0);
+    }
+
+    public void setInicioPantallaB(Juego juego){
         this.personaje = juego.getPersonaje();
         juego.iniciarCuartoB(vista, camara);
         //Escenario
@@ -133,6 +144,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
         texturaCpu = new Texture("Objetos_varios/mesa_de_control_2.png");
         texturaEscenarioAbiertoBoss = new Texture("Stage/escenarioB_abiertoBoss.jpg");
+        texturasCargadas = true;
     }
     @Override
     public void cargarMusica(){
@@ -142,7 +154,10 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     @Override
     public void show() {
         //Cargar escena
-        cargarTexturas();
+        System.out.println("Se hizo show");
+        if(!texturasCargadas){
+            cargarTexturas();
+        }
         crearEscena();
         cargarMusica();
         generarLimites();
@@ -188,7 +203,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         ganar();
         //Pausa
         pausa();
-        System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
+        //System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
     }
 
 
@@ -216,13 +231,14 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void crearEnemigos() {
+        /*
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));*/
     }
 
     @Override
@@ -231,29 +247,41 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         if (!juego.isCuartoCterminado && !juego.isCuartoDterminado){
             if (personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(3))) {
                 textureEscenario = textureEscenarioAbiertoC;
-                juego.getLimites().get(5).setSize(10);
+                //Puerta C get(13)
+                juego.getLimites().get(13).setSize(10, 0);
+                isAbiertoCuartoC = true;
             }
         }else if(juego.isCuartoCterminado && !juego.isCuartoDterminado){
             textureEscenario = texturaEscenarioAbiertoD;
-            juego.getLimites().get(5).setSize(10);
+            //Puerta D
+            juego.getLimites().get(14).setSize(10, 0);
             isAbiertoCuartoD = true;
         }else if(juego.isCuartoCterminado && juego.isCuartoDterminado){
             textureEscenario = texturaEscenarioAbiertoBoss;
-            juego.getLimites().get(5).setSize(10);
-            isAbiertoCuartoD = true;
+            juego.getLimites().get(15).setSize(0,10);
+            isAbiertoCuartoBoss = true;
         }
         //Checar cuando los cuartos estan abiertos
         if(isAbiertoCuartoC && personaje.getPositionX() >= 570 && personaje.getPositionX() <= 670 && personaje.getPositionY() > 770){
+            if(juego.isCuartoCIniciado){
+                juego.getCuartoC().setInicioPantallaC(juego);
+            }
             juego.setScreen(juego.getCuartoC());
             //dispose();
             escenaJuego.clear();
             isAbiertoCuartoC = true;
         }
-        if(isAbiertoCuartoD){
+        if(isAbiertoCuartoD && personaje.getPositionX() >= 570 && personaje.getPositionX() <= 670 && personaje.getPositionY() < -67){
+            if(juego.isCuartoDIniciado){
+                juego.getCuartoD().setInicioPantallaD(juego);
+            }
             juego.setScreen(juego.getCuartoD());
             //dispose();
             escenaJuego.clear();
             isAbiertoCuartoC = true;
+        }
+        if(isAbiertoCuartoBoss && personaje.getPositionX() >= 1500 && personaje.getPositionY() >= 300 && personaje.getPositionY() <= 400){
+            juego.setScreen(new PantallaCuartoEscenarioBoss(juego));
         }
     }
 
@@ -283,13 +311,26 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             juego.addLimites(cpu4.getSprite().getBoundingRectangle());
             juego.addLimites(cpu5.getSprite().getBoundingRectangle());
             juego.addLimites(cpu6.getSprite().getBoundingRectangle());
+            //Muro Sur Oeste
             juego.addLimites(new Rectangle(-250, 770, 820, 0));
+            //Muro Sur Este
             juego.addLimites(new Rectangle(670, 770, 820, 0));
+            //Muro Oeste
             juego.addLimites(new Rectangle(-250, -67, 0, 1900));
+            //Muro Norte Oeste
             juego.addLimites(new Rectangle(-250,-67, 820, 0));
+            //Muro Norte Este
             juego.addLimites(new Rectangle(670, -67, 820, 0));
+            //Muro Este Norte
             juego.addLimites(new Rectangle(1500, -67, 0, 367));
+            //Muro Este Sur
             juego.addLimites(new Rectangle(1500, 400, 0, 370));
+            //Puerta C get(13)
+            juego.addLimites(new Rectangle(560,-67, 110, 0));
+            //Puerta D get(14)
+            juego.addLimites(new Rectangle(560, 770, 110, 0));
+            //Puerta Boss get(15)
+            juego.addLimites(new Rectangle(1500,290,0,110));
 
             //juego.limitesGenerados = true;
         }

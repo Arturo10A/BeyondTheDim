@@ -60,6 +60,15 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         juego.setPantallaJuego(this);
     }
 
+
+    public void setInicioPantallaD(Juego juego){
+        this.personaje = juego.getPersonaje();
+        juego.iniciarCuartoD(vista, camara);
+        //Escenario
+        escenaJuego = juego.getEscenaCuartoD();
+        juego.setPantallaJuego(this);
+    }
+
     @Override
     public void crearEscena() {
         //Escenario
