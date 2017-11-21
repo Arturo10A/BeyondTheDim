@@ -233,7 +233,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     @Override
     public void ganar() {
         if (personaje.getPositionX() >= 560 && personaje.getPositionX() <= 680 && personaje.getPositionY() >= 590) {
-            juego.getPersonaje().setPosition(595,760);
+            juego.getPersonaje().setPosition(595,-60);
             juego.getCuartoB().setInicioPantallaB(juego);
             juego.setScreen(juego.getCuartoB());
             escenaJuego.clear();
