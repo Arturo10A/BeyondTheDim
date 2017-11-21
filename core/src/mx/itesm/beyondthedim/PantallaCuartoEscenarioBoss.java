@@ -174,6 +174,8 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
         boss.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
     }
 
+
+
     private void dibujarEscena() {
         batch.begin();
         escenaJuego.draw();
@@ -186,7 +188,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
         batch.begin();
         batch.draw(textureEscenario, Pantalla.ANCHO/2- textureEscenario.getWidth()/2, Pantalla.ALTO/2- textureEscenario.getHeight()/2);
         if (boss.getLife() > 0){
-            boss.dibujar(batch);
+            boss.dibujar(batch, Gdx.graphics.getDeltaTime());
         }
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
@@ -348,7 +350,6 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
             }
         }
     }
-
 
     @Override
     public void render(float delta) {
