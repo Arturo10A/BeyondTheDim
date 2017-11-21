@@ -47,6 +47,9 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
 
+    //Icono de vida
+    private Texture vidaIcono;
+
     //Constructores
     public PantallaCuartoA(Juego juego) {
         this.juego = juego;
@@ -108,6 +111,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
         textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+        vidaIcono = new Texture("iconLife.png");
     }
     @Override
     public void cargarMusica(){
@@ -141,10 +145,12 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
+        batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
         batch.end();
         //Dibujar Objetos
         batch.begin();
         escenaJuego.draw();
+
         batch.end();
         //Dibujar escena del juego
         escenaJuego.act(Gdx.graphics.getDeltaTime());

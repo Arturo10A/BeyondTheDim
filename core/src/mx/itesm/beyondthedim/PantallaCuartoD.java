@@ -40,7 +40,8 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
 
-
+    //Icono de vida
+    private Texture vidaIcono;
 
     private ObjetoEscenario redBed;
     private ObjetoEscenario blueBed;
@@ -129,6 +130,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         texturaBlueBed = new Texture("Objetos_varios/cama_2_2.png");
         texturaSeaBed = new Texture("Objetos_varios/cama_4_2.png");
         texturaGreenBed = new Texture("Objetos_varios/cama_1_2.png");
+        vidaIcono = new Texture("iconLife.png");
 
     }
     @Override
@@ -162,6 +164,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
+        batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
         batch.end();
         //Dibujar Objetos
         batch.begin();

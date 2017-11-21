@@ -491,7 +491,7 @@ public class Juego extends Game {
             for (int i = bullets.size() - 1; i>=0; i--) {
                 if (bullets.get(i).distance(enemy_list.get(j)) < 50) {
                     enemy_list.get(j).receiveDamage(20);
-                    enemy_list.get(j).goBack();
+                    enemy_list.get(j).goBack(personaje);
                     bullets.remove(i);
                     if (enemy_list.get(j).isDead()) {
                         enemy_list.remove(j);
@@ -538,12 +538,14 @@ public class Juego extends Game {
             ene.render(batch, Gdx.graphics.getDeltaTime());
         }
         //Vida
-        String lifeString = "Vida: " + personaje.getLife();
-        texto.mostrarMensaje(batch, lifeString, camera.position.x-Pantalla.ANCHO*0.45f, camera.position.y+Pantalla.ALTO*0.47f);
+        String lifeString = " " + personaje.getLife();
+        texto.mostrarMensaje(batch, lifeString, camera.position.x-Pantalla.ANCHO*0.43f, camera.position.y+Pantalla.ALTO*0.47f);
         //Balas
         for (Bullet bullet : this.getBullets()) {
             bullet.render(batch);
         }
+
+
         /*
         //Items
         batch.draw(texturaItemHistoria, ANCHO*0.80f, ALTO*0.17f,

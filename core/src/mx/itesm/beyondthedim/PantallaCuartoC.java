@@ -47,6 +47,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private ObjetoEscenario cpu2;
     private ObjetoEscenario cpu3;
 
+    //Icono de vida
+    private Texture vidaIcono;
+
 
 
     private Texture cpu  = new Texture("Objetos_varios/cpu_izq.png");
@@ -143,8 +146,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     public void cargarTexturas() {
         textureEscenario = new Texture("Stage/escenarioC_cerrado.jpg");
         textureEscenarioAbierto = new Texture("Stage/escenarioC_abierto.jpg");
-
-        //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+        vidaIcono = new Texture("iconLife.png");
     }
     @Override
     public void cargarMusica(){
@@ -193,6 +195,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         if (!medicina.vida(personaje)) {
             medicina.dib(batch);
         }
+        batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
         System.out.println("X:"+personaje.getPositionX() +" Y:"+personaje.getPositionY());
         medicina.vida(personaje);
         batch.end();
@@ -242,7 +245,6 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     @Override
     public void ganar() {
         if (juego.getEnemy_list().isEmpty()){
-            textureEscenario = textureEscenarioAbierto;
             juego.getLimites().get(5).setSize(10);
             if (personaje.getPositionX() >= 548 && personaje.getPositionX() <= 657 && personaje.getPositionY() >= 122 && personaje.getPositionY() <= 124) {
                 juego.setScreen(new PantallaCuartoB(juego));

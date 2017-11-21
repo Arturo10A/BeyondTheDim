@@ -91,8 +91,25 @@ public class Enemy extends Objeto{
         y += dy;
     }
 
-    public void goBack(){
-        mover(50,0);
+    public void goBack(Personaje personaje){
+        float personajeX = personaje.getPositionX();
+        float personajeY = personaje.getPositionY();
+        if (this.x > personajeX)
+            mover(50,0);
+        else if (this.x < personajeX)
+            mover(-50,0);
+        else if(this.y > personajeY)
+            mover(0,50);
+        else if(this.y < personajeY)
+            mover(0,-50);
+        else if(this.x > personajeX && this.y > personajeY)
+            mover(50,50);
+        else if(this.x < personajeX && this.y < personajeY)
+            mover(-50,-50);
+        else if(this.x > personajeX && this.y < personajeY)
+            mover(50,-50);
+        else
+            mover(-50,50);
     }
 
     public void attack(Personaje target, float enemyPosAncho, float enemyPosAlto){

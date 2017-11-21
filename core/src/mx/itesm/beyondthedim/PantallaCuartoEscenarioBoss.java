@@ -61,6 +61,8 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
     //Sonidos
     private Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
 
+    private Texture vidaIcono;
+
 
     public PantallaCuartoEscenarioBoss(Juego juego){
         this.juego = juego;
@@ -71,6 +73,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
     private void cargarTexturas(){
         texturaBtnGoBack = new Texture("Botones/button_pause.png");
         textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
+        vidaIcono = new Texture("iconLife.png");
     }
 
     private void crearEscena(){
@@ -189,10 +192,10 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
         //Vida
         if (personaje.getLife() > 0) {
-            String lifeString = "Vida: " + personaje.getLife();
+            String lifeString = "" + personaje.getLife();
             texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
         }else {
-            String lifeString = "vida 0";
+            String lifeString = "0";
             texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
             juego.setScreen(new PantallaPerder(juego));
         }
@@ -204,6 +207,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
         for (BulletBoss bullet: BossBullets){
             bullet.render(batch);
         }
+        batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
         batch.end();
     }
 
@@ -382,6 +386,8 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla {
                 timeBala++;
             }
         }
+
+
     }
 
     @Override
