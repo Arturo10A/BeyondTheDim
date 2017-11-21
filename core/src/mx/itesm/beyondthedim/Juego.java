@@ -76,6 +76,8 @@ public class Juego extends Game {
     protected boolean isCuartoDIniciado;
     private Stage escenaCuartoBossFinal;
     protected boolean isCuartoBossFinalIniciado;
+    private Stage escenaCuartoTutorial;
+    private boolean isCuartoTutorialIniciado;
     private Pantalla pantallaMenu;
     private Pantalla AboutUs;
     private Pantalla Settings;
@@ -123,10 +125,25 @@ public class Juego extends Game {
         isCuartoBIniciado = false;
         isCuartoCIniciado = false;
         isCuartoDIniciado = false;
+        isCuartoTutorialIniciado = false;
         isCuartoBossFinalIniciado = false;
     }
 
     //IniciarEscenas
+    public void iniciarCuartoTutorial(Viewport vista, OrthographicCamera camera){
+        System.out.println("Cuarto Tutorial");
+        enemy_list.clear();
+        limites.clear();
+        this.camera = camera;
+        camera.update();
+        objetos.clear();
+        if(!isCuartoTutorialIniciado){
+            escenaCuartoTutorial = new Stage(vista);
+            isCuartoTutorialIniciado = true;
+            //cargarObjetosCuartoA;
+        }
+    }
+
     public void iniciarCuartoA(Viewport vista, OrthographicCamera camera){
 	    System.out.println("Cuarto A");
 	    enemy_list.clear();
@@ -218,6 +235,9 @@ public class Juego extends Game {
     }
     public Stage getEscenaCuartoBossFinal(){
         return escenaCuartoBossFinal;
+    }
+    public Stage getEscenaCuartoTutorial(){
+        return escenaCuartoTutorial;
     }
 
     //Menu
@@ -409,9 +429,7 @@ public class Juego extends Game {
             personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
             personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
             //Overlaps de diferentes niveles
-            boolean h = pantallaJuego instanceof  PantallaCuartoA;
-            System.out.println(h);
-            if(pantallaJuego instanceof PantallaCuartoA){
+            if(pantallaJuego instanceof PantallaCuartoA || pantallaJuego instanceof PantallaTutorial){
                 //((PantallaCuartoA) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
