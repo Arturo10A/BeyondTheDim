@@ -6,7 +6,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -68,15 +67,15 @@ public class Juego extends Game {
     private Rectangle personajeRectangle;
     //Escenas de Juego
     private Stage escenaCuartoA;
-    protected boolean cuartoAIniciado;
+    protected boolean isCuartoAIniciado;
     private Stage escenaCuartoB;
-    protected boolean cuartoBIniciado;
+    protected boolean isCuartoBIniciado;
     private Stage escenaCuartoC;
-    protected boolean cuartoCIniciado;
+    protected boolean isCuartoCIniciado;
     private Stage escenaCuartoD;
-    protected boolean cuartoDIniciado;
+    protected boolean isCuartoDIniciado;
     private Stage escenaCuartoBossFinal;
-    protected boolean cuartoBossFinalIniciado;
+    protected boolean isCuartoBossFinalIniciado;
     private Pantalla pantallaMenu;
     private Pantalla AboutUs;
     private Pantalla Settings;
@@ -97,6 +96,11 @@ public class Juego extends Game {
 
     //pantalla
     private Pantalla pantallaJuego;
+    private PantallaCuartoB pantallaCuartoB;
+    private PantallaCuartoC pantallaCuartoC;
+    private PantallaCuartoD pantallaCuartoD;
+    protected boolean isCuartoDterminado = false;
+    protected boolean isCuartoCterminado = false;
 
 
 
@@ -115,11 +119,11 @@ public class Juego extends Game {
         personajeRectangle = personaje.getSprite().getBoundingRectangle();
         //generarJoysticks();
         generarBotonPausa();
-        cuartoAIniciado = false;
-        cuartoBIniciado = false;
-        cuartoCIniciado = false;
-        cuartoDIniciado = false;
-        cuartoBossFinalIniciado = false;
+        isCuartoAIniciado = false;
+        isCuartoBIniciado = false;
+        isCuartoCIniciado = false;
+        isCuartoDIniciado = false;
+        isCuartoBossFinalIniciado = false;
     }
 
     //IniciarEscenas
@@ -130,9 +134,9 @@ public class Juego extends Game {
         this.camera = camera;
         camera.update();
         objetos.clear();
-        if(!cuartoAIniciado){
+        if(!isCuartoAIniciado){
             escenaCuartoA = new Stage(vista);
-            cuartoAIniciado = true;
+            isCuartoAIniciado = true;
             //cargarObjetosCuartoA;
         }
     }
@@ -147,14 +151,14 @@ public class Juego extends Game {
         camera.update();
         this.camera = camera;
         objetos.clear();
-        if(!cuartoBIniciado){
+        if(!isCuartoBIniciado){
             // Cámara HUD
             camaraHUDEscenarioB = new OrthographicCamera(Pantalla.ANCHO,Pantalla.ALTO);
             camaraHUDEscenarioB.position.set(-250, 350,0);
             camaraHUDEscenarioB.update();
             vistaHUDEscenarioB = new StretchViewport(Pantalla.ANCHO, Pantalla.ALTO, camaraHUDEscenarioB);
             escenaCuartoB = new Stage(vistaHUDEscenarioB);
-            cuartoBIniciado = true;
+            isCuartoBIniciado = true;
 
         }
 
@@ -163,14 +167,14 @@ public class Juego extends Game {
     public void iniciarCuartoC(Viewport vista, OrthographicCamera camera){
         System.out.println("Cuarto C");
         enemy_list.clear();
-        this.personaje.setPosition(Pantalla.ANCHO/2,60);
+        this.personaje.setPosition(Pantalla.ANCHO/2,115);
         limites.clear();
         this.camera = camera;
         camera.update();
         objetos.clear();
-        if(!cuartoCIniciado){
+        if(!isCuartoCIniciado){
             escenaCuartoC = new Stage(vista);
-            cuartoCIniciado = true;
+            isCuartoCIniciado = true;
         }
     }
 
@@ -182,9 +186,9 @@ public class Juego extends Game {
         this.camera = camera;
         camera.update();
         objetos.clear();
-        if(!cuartoDIniciado){
+        if(!isCuartoDIniciado){
             escenaCuartoD = new Stage(vista);
-            cuartoDIniciado = true;
+            isCuartoDIniciado = true;
         }
     }
 
@@ -194,9 +198,9 @@ public class Juego extends Game {
         this.camera = camera;
         camera.update();
         objetos.clear();
-        if(!cuartoBossFinalIniciado){
+        if(!isCuartoBossFinalIniciado){
             escenaCuartoBossFinal = new Stage(vista);
-            cuartoBossFinalIniciado = true;
+            isCuartoBossFinalIniciado = true;
             //generarJoysticks();
         }
     }
@@ -226,6 +230,30 @@ public class Juego extends Game {
             ((PantallaMenu) pantallaMenu).setInicio();
         }
         return pantallaMenu;
+    }
+
+    //CuartoB
+    public PantallaCuartoB getCuartoB(){
+        if(pantallaCuartoB == null){
+            pantallaCuartoB = new PantallaCuartoB(this);
+        }
+        return pantallaCuartoB;
+    }
+
+    //CuartoC
+    public PantallaCuartoC getCuartoC(){
+        if(pantallaCuartoC == null){
+            pantallaCuartoC = new PantallaCuartoC(this);
+        }
+        return pantallaCuartoC;
+    }
+
+    //CuartoD
+    public PantallaCuartoD getCuartoD(){
+        if(pantallaCuartoD == null){
+            pantallaCuartoD = new PantallaCuartoD(this);
+        }
+        return pantallaCuartoD;
     }
 
     //Personaje
@@ -287,6 +315,7 @@ public class Juego extends Game {
     public void setPantallaJuego(Pantalla pantallaJuego){
         this.pantallaJuego = pantallaJuego;
     }
+
     /*
     //Joysticks
     public Touchpad getGunJoystick(){
@@ -409,8 +438,7 @@ public class Juego extends Game {
                 //((PantallaCuartoC) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(8)))){
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))){
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
                 System.out.println("Ovelaps C");

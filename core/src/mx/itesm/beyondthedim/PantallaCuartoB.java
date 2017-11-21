@@ -11,8 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.util.ArrayList;
-
 /**
  * Creado por Equipo 2
  * <p>
@@ -27,7 +25,9 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     //Imagen del ecenario
     private final Juego juego;
     private Texture textureEscenario;
-    private Texture textureEscenarioAbierto;
+    private Texture textureEscenarioAbiertoC;
+    private Texture texturaEscenarioAbiertoD;
+    private Texture texturaEscenarioAbiertoBoss;
     //Jett start
     private Personaje personaje;
     //Escenario
@@ -47,7 +47,10 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     private ObjetoEscenario cpu5;
     private ObjetoEscenario cpu6;
     private ObjetoEscenario cpu7;
-
+    //
+    protected boolean isAbiertoCuartoC = false;
+    protected boolean isAbiertoCuartoD = false;
+    protected boolean isAbiertoCuartoBoss = false;
 
     //Constructores
     public PantallaCuartoB(Juego juego) {
@@ -125,9 +128,11 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     @Override
     public void cargarTexturas() {
         textureEscenario = new Texture("Stage/escenarioB_cerrado.jpg");
-        textureEscenarioAbierto = new Texture("Stage/escenarioB_cerrado.jpg");
+        textureEscenarioAbiertoC = new Texture("Stage/escenarioB_abiertoC.jpg");
+        texturaEscenarioAbiertoD = new Texture("Stage/escenarioB_abiertoD.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
         texturaCpu = new Texture("Objetos_varios/mesa_de_control_2.png");
+        texturaEscenarioAbiertoBoss = new Texture("Stage/escenarioB_abiertoBoss.jpg");
     }
     @Override
     public void cargarMusica(){
@@ -222,14 +227,33 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void ganar() {
-        if (juego.getEnemy_list().isEmpty()){
-            textureEscenario = textureEscenarioAbierto;
-            juego.getLimites().get(5).setSize(10);
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                juego.setScreen(new PantallaCuartoC(juego));
-                dispose();
-                escenaJuego.clear();
+        //Checar si los cuartos C y D han sido completados
+        if (!juego.isCuartoCterminado && !juego.isCuartoDterminado){
+            if (personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(3))) {
+                textureEscenario = textureEscenarioAbiertoC;
+                juego.getLimites().get(5).setSize(10);
             }
+        }else if(juego.isCuartoCterminado && !juego.isCuartoDterminado){
+            textureEscenario = texturaEscenarioAbiertoD;
+            juego.getLimites().get(5).setSize(10);
+            isAbiertoCuartoD = true;
+        }else if(juego.isCuartoCterminado && juego.isCuartoDterminado){
+            textureEscenario = texturaEscenarioAbiertoBoss;
+            juego.getLimites().get(5).setSize(10);
+            isAbiertoCuartoD = true;
+        }
+        //Checar cuando los cuartos estan abiertos
+        if(isAbiertoCuartoC && personaje.getPositionX() >= 570 && personaje.getPositionX() <= 670 && personaje.getPositionY() > 770){
+            juego.setScreen(juego.getCuartoC());
+            //dispose();
+            escenaJuego.clear();
+            isAbiertoCuartoC = true;
+        }
+        if(isAbiertoCuartoD){
+            juego.setScreen(juego.getCuartoD());
+            //dispose();
+            escenaJuego.clear();
+            isAbiertoCuartoC = true;
         }
     }
 

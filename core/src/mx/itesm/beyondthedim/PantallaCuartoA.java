@@ -198,7 +198,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
             shape.rect(juego.getLimites().get(5).getX(), juego.getLimites().get(5).getY(), juego.getLimites().get(5).getWidth(), juego.getLimites().get(5).getHeight());
             if (personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(5))) {
-                juego.setScreen(new PantallaCuartoB(juego));
+                juego.setScreen(juego.getCuartoB());
                 dispose();
                 escenaJuego.clear();
             }

@@ -2,6 +2,7 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -67,12 +68,38 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         juego.setPantallaJuego(this);
     }
 
+    @Override
     public void crearEscena() {
+
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
         //*******************************************************Joysticks*******************************************************
-        logicaJoystick();
-         //Listener boton pausa
+        //Texturas
+        Skin skin = new Skin();
+        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+
+        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
+        estilo.background = skin.getDrawable("padFondo");
+        estilo.knob = skin.getDrawable("padMovimiento");
+        //Joystick pistola
+        gunJoystick = new Touchpad(20, estilo);
+        gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
+        //Joystick movimiento
+        movJoystick = new Touchpad(20, estilo);
+        movJoystick.setBounds(0, 0, 200, 200);
+        movJoystick.setColor(1, 1, 1, 0.7f);
+        //Listener joystick movimiento
+        movJoystick.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Touchpad pad = (Touchpad) actor;
+                //Control de Sprites
+                juego.conMovPadGrande(batch, pad, movJoystick);
+            }
+        });
+        //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
+        //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
 
             @Override
@@ -80,72 +107,18 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
                 juego.setEstadoJuego(EstadoJuego.PAUSADO);
             }
         });
+
+        escenaJuego = new Stage(vista);
         escenaJuego.addActor(movJoystick);
         escenaJuego.addActor(gunJoystick);
         escenaJuego.addActor(juego.getBtnPausa());
     }
 
-    private void logicaJoystick() {
-        Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento",new Texture("Joystick/joystick_movimiento.png"));
-
-        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
-        estilo.background = skin.getDrawable("padFondo");
-        estilo.knob = skin.getDrawable("padMovimiento");
-        //Joystick pistola
-        gunJoystick = new Touchpad(20, estilo);
-        gunJoystick.setBounds(ANCHO-200,0,200,200);
-        //Joystick movimiento
-        movJoystick = new Touchpad(20, estilo);
-        movJoystick.setBounds(0, 0, 200, 200);
-        //Listener joystick movimiento
-        movJoystick.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Touchpad pad = (Touchpad) actor;
-                //Control de Sprites
-                if(pad.getKnobPercentX()>0.20) {
-                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-                }else if(pad.getKnobPercentX()<-0.20){
-                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-                }else if(pad.getKnobPercentX()==0){
-                    personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-                }
-                //Restricciones de movimiento(paredes)
-                //Right
-                if (personaje.getPositionX() >= 1105.23 && movJoystick.getKnobPercentX() > 0){
-                    personaje.mover(-10, DY_PERSONAJE*pad.getKnobPercentY());
-                }
-                //Left
-                else if (personaje.getPositionX() <= 116.42 && movJoystick.getKnobPercentX() < 0){
-                    personaje.mover(10, DY_PERSONAJE*pad.getKnobPercentY());
-
-                }
-                //TOP
-                else if (personaje.getPositionY() >= 549.42 && movJoystick.getKnobPercentY() > 0){
-                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),-10);
-                }
-                //Bottom
-                else if (personaje.getPositionY() <= 110.0 && movJoystick.getKnobPercentY() < 0){
-                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX(),10);
-                }
-                else {
-                    personaje.mover(DX_PERSONAJE*pad.getKnobPercentX()/7, DY_PERSONAJE*pad.getKnobPercentY()/7);
-                }
-            }
-        });
-
-        escenaJuego = new Stage(vista);
-        escenaJuego.addActor(movJoystick);
-        escenaJuego.addActor(gunJoystick);
-        movJoystick.setColor(1,1,1,0.7f);
-    }
-
     //********************Cargar*******************
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/escenarioC_cerrado.jpg");
-        textureEscenarioAbierto = new Texture("Stage/escenarioC_abierto.jpg");
+        textureEscenario = new Texture("Stage/escenarioC_abierto.jpg");
+
+        //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
         vidaIcono = new Texture("iconLife.png");
     }
     @Override
@@ -244,14 +217,16 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     @Override
     public void ganar() {
-        if (juego.getEnemy_list().isEmpty()){
-            juego.getLimites().get(5).setSize(10);
-            if (personaje.getPositionX() >= 548 && personaje.getPositionX() <= 657 && personaje.getPositionY() >= 122 && personaje.getPositionY() <= 124) {
-                juego.setScreen(new PantallaCuartoB(juego));
-                dispose();
-                escenaJuego.clear();
-            }
+
+        if (personaje.getPositionX() >= 560 && personaje.getPositionX() <= 680 && personaje.getPositionY() <= 111) {
+            juego.setScreen(juego.getCuartoB());
+            dispose();
+            escenaJuego.clear();
         }
+        if(personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(1))){
+            juego.isCuartoCterminado = true;
+        }
+
     }
 
     @Override
@@ -278,13 +253,19 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
             juego.addLimites(cpu1.getSprite().getBoundingRectangle());
             juego.addLimites(cpu2.getSprite().getBoundingRectangle());
             juego.addLimites(cpu3.getSprite().getBoundingRectangle());
-            juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
-            juego.addLimites(new Rectangle(0, 0, 120, ALTO));
-            juego.addLimites(new Rectangle(0, 0, ANCHO, 120));
-            juego.addLimites(new Rectangle(1160, ALTO - 300, 120, 300));
-            juego.addLimites(new Rectangle(1160, 0, 120, 300));
-            juego.addLimites(new Rectangle(1160, 300, 120, 120));
-
+            //MURO NORTE
+            juego.addLimites(new Rectangle(90, 590, ANCHO, 0));
+            //MURO OESTE
+            juego.addLimites(new Rectangle(90, 111, 0, ALTO));
+            //MURO Este
+            juego.addLimites(new Rectangle(1110, 111, 0, ALTO));
+            //MURO SUR ESTE
+            juego.addLimites(new Rectangle(690, 38, ANCHO, 73));
+            //MURO SUR OESTE
+            juego.addLimites(new Rectangle(90, 38, 470, 73));
+            //PUERTA OESTE
+            juego.addLimites(new Rectangle(90, 111, 0, ALTO));
+            //juego.limitesGenerados = true;
             //juego.limitesGenerados = true;
         }
     }

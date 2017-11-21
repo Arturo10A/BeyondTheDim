@@ -112,6 +112,7 @@ public class Personaje extends Objeto{
             case QUIETO:
             case INICIANDO:
                 batch.draw(texturaPersonaje[0][0], x, y);
+
                 break;
         }
     }
