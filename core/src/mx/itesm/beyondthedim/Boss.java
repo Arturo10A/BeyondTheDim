@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Created by Arturo on 02/11/17.
  */
 
-public class boss extends Objeto {
+public class Boss extends Objeto {
     private TextureRegion bossTexture;
     //TextureRegion texturaPersonaje;
     TextureRegion [][] texturaPersonaje;
@@ -23,7 +23,7 @@ public class boss extends Objeto {
 
     protected Personaje.EstadoMovimiento estadoMovimiento = Personaje.EstadoMovimiento.QUIETO;
 
-    public boss(float x, float y, int life){
+    public Boss(float x, float y, int life){
         this.x    = x;
         this.y    = y;
         this.life = life;
@@ -167,7 +167,7 @@ public class boss extends Objeto {
         batch.draw(bossTexture,x,y);
     }
 
-    public void setEstadoMovimiento(boss.EstadoMovimiento estadoMovimiento) {
+    public void setEstadoMovimiento(Boss.EstadoMovimiento estadoMovimiento) {
         this.estadoMovimiento = estadoMovimiento;
     }
 

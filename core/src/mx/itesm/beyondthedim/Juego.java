@@ -103,6 +103,12 @@ public class Juego extends Game {
     protected boolean isCuartoDterminado = false;
     protected boolean isCuartoCterminado = false;
 
+    //Escenario Final
+    float bosstimer = 0;
+    double bossShot = 100;
+    double bossShotFollow = 0.0;
+    private ArrayList<BulletBoss> bossBullets = new ArrayList<BulletBoss>();
+
 
 
     public Juego(){
@@ -611,7 +617,11 @@ public class Juego extends Game {
         for (Bullet bullet : this.getBullets()) {
             bullet.render(batch);
         }
-
+        if(pantallaJuego instanceof PantallaCuartoEscenarioBoss){
+            for (BulletBoss bullet: bossBullets){
+                bullet.render(batch);
+            }
+        }
 
         /*
         //Items
@@ -652,6 +662,114 @@ public class Juego extends Game {
             this.logicaDisparo(delta, gunJoystick, batch);
             //***************Colision Bala/Enemigo***************
             this.sistemaColisionesBala();
+        }
+    }
+    private void bossSpecialAtack(float delta, Personaje target, Boss boss){
+
+        bosstimer += delta;
+        bossShotFollow += delta;
+        if (boss.getLife() < 80){
+            bossShot = 3.0;
+        }
+        else if(boss.getLife() < 60){
+            bossShot = 2.0;
+        }
+        else if(boss.getLife() < 30){
+            bossShot = 1.0;
+        }
+        else if(boss.getLife() < 10){
+            bossShot = 0.1;
+        }
+        if (bosstimer >= bossShot) {
+            bosstimer = 0;
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, 0));
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, -1));
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, -1));
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, -1));
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, 0));
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, 1));
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, 1));
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, 1));
+            bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, 1));
+        }
+        //Diparar al objetivo mientras lo sigue
+        if (bossShotFollow > 0.2){
+            bossShotFollow = 0;
+            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
+                bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, 1));
+            }
+            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
+                bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, -1));
+            }
+            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
+                bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, 1));
+            }
+            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
+                bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, -1));
+            }
+
+            if (boss.getPositionX() > personaje.getPositionX() && boss.getPositionY() == personaje.getPositionY()) {
+                bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), -1, 0));
+            }
+
+            if (boss.getPositionX() < personaje.getPositionX() && boss.getPositionY() == personaje.getPositionY()) {
+                bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 1, 0));
+            }
+            if (boss.getPositionX() == personaje.getPositionX() && boss.getPositionY() > personaje.getPositionY()) {
+                bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, -1));
+            }
+            if (boss.getPositionX() == personaje.getPositionX() && boss.getPositionY() < personaje.getPositionY()) {
+                bossBullets.add(new BulletBoss(boss.getPositionX(), boss.getPositionY(), 0, 1));
+            }
+        }
+        ArrayList<BulletBoss> BoosbulletsRemove = new ArrayList<BulletBoss>();
+        for(BulletBoss bullet : bossBullets){
+            bullet.update(delta);
+            if (bullet.removeB){
+                BoosbulletsRemove.add(bullet);
+            }
+        }
+        bossBullets.removeAll(BoosbulletsRemove);
+        for (int i = 0; i < bossBullets.size(); i++) {
+            if (bossBullets.get(i).distanceJett(personaje) < 25){
+                System.out.println("** JETT EN PROBLEMAS **");
+                personaje.damage(1);
+                bossBullets.remove(i);
+            }
+        }
+    }
+
+    private void collisiones(Boss Boss){
+        for (int bala = 0; bala < bullets.size(); bala++) {
+            if (bullets.get(bala).distanceBoss(Boss) < 100){
+                Boss.Damege(1);
+                bullets.remove(bala);
+            }
+        }
+    }
+
+    public void jugarBossFinal(float delta, SpriteBatch batch, Stage escenaJuego, Touchpad gunJoystick, Boss boss){
+        if (this.getEstadoJuego() == EstadoJuego.JUGANDO){
+            if (boss.getLife() > 0){
+                boss.atack(personaje);
+                for (Bullet bullet: bullets) {
+                    boss.isUnderAtack(bullet,personaje);
+                }
+                collisiones(boss);
+                bossSpecialAtack(delta, personaje, boss);
+            }
+            else {
+                bossBullets.clear();
+            }
+            this.logicaDisparo(delta, gunJoystick, batch);
+            if(timeBala >= 100.0){
+                for (int i = 0; i < bullets.size()-4; i++) {
+                    bullets.remove(i);
+                }
+                timeBala = 0;
+            }else {
+                timeBala++;
+            }
         }
     }
     /*

@@ -287,6 +287,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             isAbiertoCuartoC = true;
         }
         if(isAbiertoCuartoBoss && personaje.getPositionX() >= 1500 && personaje.getPositionY() >= 300 && personaje.getPositionY() <= 400){
+            personaje.setPosition(ANCHO / 9.5f, ALTO / 2f);
             juego.setScreen(new PantallaCuartoEscenarioBoss(juego));
         }
     }
