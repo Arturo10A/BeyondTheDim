@@ -35,9 +35,9 @@ import java.util.ArrayList;
 
 public class Juego extends Game {
 
-	//Asset Manager
-	private final AssetManager assetManager;
-	//Variables del juego
+    //Asset Manager
+    private final AssetManager assetManager;
+    //Variables del juego
     private Personaje personaje;
     private int vidaPersonaje;
     private ArrayList<Bullet> bullets;
@@ -45,12 +45,12 @@ public class Juego extends Game {
     private static final float SWT = 0.3f;
     private float shootTimer;
     private float timeBala;
-	private EstadoJuego estadoJuego;
+    private EstadoJuego estadoJuego;
     private boolean cambiarDireccion = true;
-	private Music music;
+    private Music music;
     protected boolean musicOn = true;
     protected boolean musicaCargada = false;
-	protected boolean juegoIniciado = false;
+    protected boolean juegoIniciado = false;
     private float enemyPosAncho = 0;
     private float enemyPosAlto = 0;
     private Texto texto;
@@ -104,13 +104,13 @@ public class Juego extends Game {
 
 
 
-	public Juego(){
-		assetManager = new AssetManager();
-	}
+    public Juego(){
+        assetManager = new AssetManager();
+    }
 
-	public void iniciarJuego(float ANCHO, float ALTO){
-	    vidaPersonaje = 1000;
-	    juegoIniciado = true;
+    public void iniciarJuego(float ANCHO, float ALTO){
+        vidaPersonaje = 1000;
+        juegoIniciado = true;
         personaje = new Personaje(ANCHO / 9.5f, ALTO / 2f, vidaPersonaje);
         bullets = new ArrayList<Bullet>();
         shootTimer = 0;
@@ -127,16 +127,16 @@ public class Juego extends Game {
     }
 
     public void reiniciarJuego(){
-	    pantallaCuartoB = null;
-	    pantallaCuartoC = null;
-	    pantallaCuartoD = null;
-	    isCuartoCterminado = false;
-	    isCuartoDterminado = false;
-	    juegoIniciado = false;
-	    enemy_list.clear();
-	    limites.clear();
-	    objetos.clear();
-	    pantallaJuego = null;
+        pantallaCuartoB = null;
+        pantallaCuartoC = null;
+        pantallaCuartoD = null;
+        isCuartoCterminado = false;
+        isCuartoDterminado = false;
+        juegoIniciado = false;
+        enemy_list.clear();
+        limites.clear();
+        objetos.clear();
+        pantallaJuego = null;
     }
 
     //IniciarEscenas
@@ -155,8 +155,8 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoA(Viewport vista, OrthographicCamera camera){
-	    System.out.println("Cuarto A");
-	    enemy_list.clear();
+        System.out.println("Cuarto A");
+        enemy_list.clear();
         limites.clear();
         this.camera = camera;
         camera.update();
@@ -206,7 +206,7 @@ public class Juego extends Game {
     public void iniciarCuartoD(Viewport vista, OrthographicCamera camera){
         enemy_list.clear();
         System.out.println("Cuarto D");
-        this.personaje.setPosition(Pantalla.ANCHO/2,Pantalla.ALTO-(Pantalla.ALTO/5));
+        this.personaje.setPosition(Pantalla.ANCHO/2,585);
         limites.clear();
         this.camera = camera;
         camera.update();
@@ -293,16 +293,16 @@ public class Juego extends Game {
     }
 
     //Personaje
-	public Personaje getPersonaje(){
-	    return personaje;
+    public Personaje getPersonaje(){
+        return personaje;
     }
 
     //EstadoJuego
-	public void setEstadoJuego(EstadoJuego estadoJuego){
-	    this.estadoJuego = estadoJuego;
+    public void setEstadoJuego(EstadoJuego estadoJuego){
+        this.estadoJuego = estadoJuego;
     }
     public EstadoJuego getEstadoJuego(){
-	    return this.estadoJuego;
+        return this.estadoJuego;
     }
     public void setVidaPersonaje(int vida){
         this.vidaPersonaje = vida;
@@ -367,21 +367,21 @@ public class Juego extends Game {
     }
 
     @Override
-	public void create () {
-		// Lo preparamos para que cargue mapas
-		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-		setScreen(new PantallaCargando(this));
-	}
+    public void create () {
+        // Lo preparamos para que cargue mapas
+        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        setScreen(new PantallaCargando(this));
+    }
 
-	public AssetManager getAssetManager() {
-		return assetManager;
-	}
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		assetManager.clear();
-	}
+    @Override
+    public void dispose() {
+        super.dispose();
+        assetManager.clear();
+    }
 
     public void controlMovPad(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
         //Narvaez Logic
@@ -421,19 +421,19 @@ public class Juego extends Game {
     }
 
     public void conMovPadGrande(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
-//        if (cambiarDireccion) {
-//            if (pad.getKnobPercentX() > 0.20) {
-//                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-//            } else if (pad.getKnobPercentX() < -0.20) {
-//                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-//            } else if (pad.getKnobPercentX() == 0) {
-//                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-//            }
-//        }
+        if (cambiarDireccion) {
+            if (pad.getKnobPercentX() > 0.20) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
+            } else if (pad.getKnobPercentX() < -0.20) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
+            } else if (pad.getKnobPercentX() == 0) {
+                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
+            }
+        }
         //Restricciones de movimiento(paredes)
         //Narvaez Logic
-    }
-    public void conMovPadGrande2(SpriteBatch batch, Touchpad movJoystick) {
+
+
         Rectangle personajeRectangle = personaje.getSprite().getBoundingRectangle();
         personajeRectangle.setX(personaje.getPositionX()+17);
         personajeRectangle.setY(personaje.getPositionY());
@@ -446,18 +446,9 @@ public class Juego extends Game {
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
             personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
             personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
-            if ((ang > 0 && ang < 45) || ang > 315 && ang < 360) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-                //Sprite a la Izq
-            } else if (ang > 135 && ang < 225) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-            }else{
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-            }
             //Overlaps de diferentes niveles
             if(pantallaJuego instanceof PantallaCuartoA || pantallaJuego instanceof PantallaTutorial){
                 //((PantallaCuartoA) pantalla).generarOverlaps();
-
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
@@ -498,7 +489,7 @@ public class Juego extends Game {
                 //((PantallaCuartoA) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))&&(!personajeRectangle.overlaps(this.getLimites().get(8)))){
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))){
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
                 System.out.println("Ovelaps Boss");
@@ -664,14 +655,12 @@ public class Juego extends Game {
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
         skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
-
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
         //Joystick pistola
         gunJoystick = new Touchpad(20, estilo);
         gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
-
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);

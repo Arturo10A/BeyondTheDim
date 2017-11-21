@@ -28,7 +28,6 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     //Imagen del ecenario
     private final Juego juego;
     private Texture textureEscenario;
-    private Texture textureEscenarioAbierto;
     //Jett start
     private Personaje personaje;
     //Escenario
@@ -111,6 +110,16 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         movJoystick.setBounds(0, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
         //Listener joystick movimientov
+
+        //Listener joystick movimiento
+        movJoystick.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Touchpad pad = (Touchpad) actor;
+                //Control de Sprites
+                juego.conMovPadGrande(batch, pad, movJoystick);
+            }
+        });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
@@ -130,8 +139,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     //********************Cargar*******************
     @Override
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/stageD_Close.png");
-        textureEscenarioAbierto = new Texture("Stage/stageD_Open.png");
+        textureEscenario = new Texture("Stage/escenarioD_abierto.jpg");
 
         texturaRedBed = new Texture("Objetos_varios/cama_3_2.png");
         texturaBlueBed = new Texture("Objetos_varios/cama_2_2.png");
@@ -173,7 +181,6 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
-        juego.conMovPadGrande2(batch, movJoystick);
         juego.dibujarObjetos(batch, textureEscenario);
         batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
         batch.end();
@@ -225,14 +232,14 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     @Override
     public void ganar() {
-        if (juego.getEnemy_list().isEmpty()){
-            textureEscenario = textureEscenarioAbierto;
-            juego.getLimites().get(5).setSize(10);
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
-                juego.setScreen(new PantallaCuartoB(juego));
-                dispose();
-                escenaJuego.clear();
-            }
+        if (personaje.getPositionX() >= 560 && personaje.getPositionX() <= 680 && personaje.getPositionY() >= 590) {
+            juego.getPersonaje().setPosition(595,760);
+            juego.getCuartoB().setInicioPantallaB(juego);
+            juego.setScreen(juego.getCuartoB());
+            escenaJuego.clear();
+        }
+        if(personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(1))){
+            juego.isCuartoDterminado = true;
         }
     }
 
@@ -258,15 +265,24 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     @Override
     public void generarLimites() {
         if(juego.getLimites().isEmpty()){
-            juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
-            juego.addLimites(new Rectangle(0, 0, 120, ALTO));
-            juego.addLimites(new Rectangle(0, 0, ANCHO, 120));
-            juego.addLimites(new Rectangle(1160, 0, 120, ALTO));
-
-            juego.addLimites(new Rectangle(ANCHO-(ANCHO/5),ALTO/3,90,180));
-            juego.addLimites(new Rectangle(ANCHO/12,(ALTO/2)+(ALTO/12),90,180));
-            juego.addLimites(new Rectangle(ANCHO-(ANCHO/5),(ALTO/2)+(ALTO/12),90,180));
-            juego.addLimites(new Rectangle(ANCHO/12,ALTO/3,90,180));
+            juego.addLimites(redBed.getSprite().getBoundingRectangle());
+            juego.addLimites(blueBed.getSprite().getBoundingRectangle());
+            juego.addLimites(greenBed.getSprite().getBoundingRectangle());
+            juego.addLimites(seaBed.getSprite().getBoundingRectangle());
+            juego.addLimites(PC.getSprite().getBoundingRectangle());
+            juego.addLimites(extintor.getSprite().getBoundingRectangle());
+            //MURO NORTE
+            juego.addLimites(new Rectangle(90, 111, ANCHO, 0));
+            //MURO OESTE
+            juego.addLimites(new Rectangle(90, 111, 0, ALTO));
+            //MURO Este
+            juego.addLimites(new Rectangle(1110, 111, 0, ALTO));
+            //MURO Norte ESTE
+            juego.addLimites(new Rectangle(690, 590, ANCHO, 73));
+            //MURO Norte OESTE
+            juego.addLimites(new Rectangle(90, 590, 470, 73));
+            //PUERTA OESTE
+            juego.addLimites(new Rectangle(90, 111, 0, ALTO));
 
 
             //juego.limitesGenerados = true;

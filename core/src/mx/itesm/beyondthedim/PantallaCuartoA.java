@@ -144,7 +144,6 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         batch.end();
         //Dibujar Objetos
         batch.begin();
-        juego.conMovPadGrande2(batch, movJoystick);
         escenaJuego.draw();
 
         batch.end();
