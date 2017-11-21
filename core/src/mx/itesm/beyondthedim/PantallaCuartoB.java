@@ -254,17 +254,17 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             if (personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(3))) {
                 textureEscenario = textureEscenarioAbiertoC;
                 //Puerta C get(13)
-                juego.getLimites().get(13).setSize(10, 0);
+                juego.getLimites().get(13).setSize(0);
                 isAbiertoCuartoC = true;
             }
         }else if(juego.isCuartoCterminado && !juego.isCuartoDterminado){
             textureEscenario = texturaEscenarioAbiertoD;
             //Puerta D
-            juego.getLimites().get(14).setSize(10, 0);
+            juego.getLimites().get(14).setSize(0);
             isAbiertoCuartoD = true;
         }else if(juego.isCuartoCterminado && juego.isCuartoDterminado){
             textureEscenario = texturaEscenarioAbiertoBoss;
-            juego.getLimites().get(15).setSize(0,10);
+            juego.getLimites().get(15).setSize(0);
             isAbiertoCuartoBoss = true;
         }
         //Checar cuando los cuartos estan abiertos
@@ -334,9 +334,9 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             //Muro Este Sur
             juego.addLimites(new Rectangle(1500, 400, 0, 370));
             //Puerta C get(13)
-            juego.addLimites(new Rectangle(560,-67, 110, 0));
-            //Puerta D get(14)
             juego.addLimites(new Rectangle(560, 770, 110, 0));
+            //Puerta D get(14)
+            juego.addLimites(new Rectangle(560,-67, 110, 0));
             //Puerta Boss get(15)
             juego.addLimites(new Rectangle(1500,290,0,110));
 

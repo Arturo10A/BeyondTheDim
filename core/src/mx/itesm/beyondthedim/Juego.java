@@ -447,18 +447,9 @@ public class Juego extends Game {
         if(movJoystick.getKnobPercentX()!=0.000 && movJoystick.getKnobPercentY()!=0.000) {
             personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
             personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
-            if ((ang > 0 && ang < 45) || ang > 315 && ang < 360) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-                //Sprite a la Izq
-            } else if (ang > 135 && ang < 225) {
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-            }else{
-                personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
-            }
             //Overlaps de diferentes niveles
             if(pantallaJuego instanceof PantallaCuartoA || pantallaJuego instanceof PantallaTutorial){
                 //((PantallaCuartoA) pantalla).generarOverlaps();
-
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
@@ -472,7 +463,8 @@ public class Juego extends Game {
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(8)))&&(!personajeRectangle.overlaps(this.getLimites().get(9)))&&(!personajeRectangle.overlaps(this.getLimites().get(10)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(11)))){
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(11)))&&(!personajeRectangle.overlaps(this.getLimites().get(12)))&&(!personajeRectangle.overlaps(this.getLimites().get(13)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(14)))&&(!personajeRectangle.overlaps(this.getLimites().get(15)))){
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
 
@@ -490,15 +482,15 @@ public class Juego extends Game {
             if(pantallaJuego instanceof PantallaCuartoD){
                 //((PantallaCuartoD) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(7)))){
-                    personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(8)))&&(!personajeRectangle.overlaps(this.getLimites().get(9)))&&(!personajeRectangle.overlaps(this.getLimites().get(10)))
+                    &&(!personajeRectangle.overlaps(this.getLimites().get(11)))) {
+                    personaje.mover((float) (Math.cos(angle)), (float) (Math.sin(angle)));
                 }
-                System.out.println("Ovelaps D");
             }
             if(pantallaJuego instanceof PantallaCuartoEscenarioBoss){
-                //((PantallaCuartoA) pantalla).generarOverlaps();
+            //((PantallaCuartoA) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
@@ -565,7 +557,7 @@ public class Juego extends Game {
         for (int j = enemy_list.size() - 1; j >=0 ; j--) {
             for (int i = bullets.size() - 1; i>=0; i--) {
                 if (bullets.get(i).distance(enemy_list.get(j)) < 50) {
-                    enemy_list.get(j).receiveDamage(200);
+                    enemy_list.get(j).receiveDamage(20);
                     enemy_list.get(j).goBack(personaje);
                     bullets.remove(i);
                     if (enemy_list.get(j).isDead()) {
