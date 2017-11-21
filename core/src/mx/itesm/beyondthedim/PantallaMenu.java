@@ -78,7 +78,7 @@ class PantallaMenu extends Pantalla {
         fondoPantalla = new Texture("Stage/MenuFondo.jpg");
     }
 
-    private void crearEcenaMenu() {
+    private void crearEscenaMenu() {
 
         escenaMenu = new Stage(vista);
         //Fondo de pantalla
@@ -144,7 +144,7 @@ class PantallaMenu extends Pantalla {
     public void show() {
 
         cargarTexturas(); //Carga imagenes
-        crearEcenaMenu(); //Crea la escena
+        crearEscenaMenu(); //Crea la escena
         cargarNave();
         if(!juego.musicaCargada) {
             cargarMusica();

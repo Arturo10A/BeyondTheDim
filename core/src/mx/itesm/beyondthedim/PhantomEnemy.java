@@ -7,20 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * Creado por Equipo 2
- *
- *Arturo Amador Paulino
- *Monserrat Lira Sorcia
- *Jose Rodrigo Narvaez Berlanga
- *Jorge Alexis Rubio Sumano
- *
+ * Created by rodri on 21/11/2017.
  */
 
-public class Enemy extends Objeto{
+public class PhantomEnemy extends Objeto{
 
     //Texturas enemigo
     private Texture enemyTexture;
-    private Texture damageTexture = new Texture("Enemigos/moscaDamage.png");
     private TextureRegion enemyTextureCompleta ;
     //Movimiento
     private float x;
@@ -31,32 +24,22 @@ public class Enemy extends Objeto{
     private float timerAnimacion;
     private int damage;
     public static final int SPEED=1;
-    private Animation<TextureRegion> spriteAnimado;
-    private TextureRegion[][] texturaEnemigo;
+
     protected Personaje.EstadoMovimiento estadoMovimiento = Personaje.EstadoMovimiento.QUIETO;
 
 
-    public Enemy(float x, float y, float life, int damage){
+    public PhantomEnemy(float x, float y, float life, int damage){
         this.x = x;
         this.y = y;
         this.life = life;
         this.damage = damage;
-        enemyTexture = new Texture("Enemigos/mosca_completo.png");
-
+        enemyTexture = new Texture("Enemigos/phantom.png");
         enemyTextureCompleta = new TextureRegion(enemyTexture);
 
-        //Divide en 4 frames 63x100
-        texturaEnemigo = enemyTextureCompleta.split(90,80);
-
-        //Se crea la animacion con tiempo de 0.25 segundos entre frames
-        spriteAnimado = new Animation(0.1f, texturaEnemigo[0][3], texturaEnemigo[0][2], texturaEnemigo[0][1]);
-
-        //Animación infinita
-        spriteAnimado.setPlayMode(Animation.PlayMode.LOOP);
         // Inicia el timer que contará tiempo para saber qué frame se dibuja
         timerAnimacion = 0;
         // Crea el sprite con el personaje quieto (idle)
-        sprite = new Sprite(texturaEnemigo[0][0]);    // QUIETO
+        sprite = new Sprite(enemyTexture);    // QUIETO
         sprite.setPosition(x,y);    // Posición inicial
     }
 
@@ -66,23 +49,16 @@ public class Enemy extends Objeto{
         switch (estadoMovimiento) {
             case MOV_DERECHA:
             case MOV_IZQUIERDA:
-                timerAnimacion += tiempo;
-                // Frame que se dibujará
-                TextureRegion region = spriteAnimado.getKeyFrame(timerAnimacion, true);
+
                 if (estadoMovimiento== Personaje.EstadoMovimiento.MOV_DERECHA) {
-                    if (!region.isFlipX()) {
-                        region.flip(true,false);
-                    }
+                    sprite.flip(true,false);
                 } else {
-                    if (region.isFlipX()) {
-                        region.flip(true,false);
-                    }
+                    sprite.flip(false,false);
                 }
-                batch.draw(region,x,y);
+                batch.draw(sprite,x,y);
                 break;
             case QUIETO:
             case INICIANDO:
-                batch.draw(texturaEnemigo[0][0], x, y);
                 break;
         }
     }
@@ -95,27 +71,8 @@ public class Enemy extends Objeto{
 
     public void goBack(Personaje personaje){
 
-
         float personajeX = personaje.getPositionX();
         float personajeY = personaje.getPositionY();
-        setEnemyTexture(damageTexture);
-        if (this.x > personajeX)
-            mover(50,0);
-        else if (this.x < personajeX)
-            mover(-50,0);
-        else if(this.y > personajeY)
-            mover(0,50);
-        else if(this.y < personajeY)
-            mover(0,-50);
-        else if(this.x > personajeX && this.y > personajeY)
-            mover(50,50);
-        else if(this.x < personajeX && this.y < personajeY)
-            mover(-50,-50);
-        else if(this.x > personajeX && this.y < personajeY)
-            mover(50,-50);
-        else
-            mover(-50,50);
-
 
     }
 
@@ -176,3 +133,4 @@ public class Enemy extends Objeto{
     }
 
 }
+

@@ -54,6 +54,7 @@ public class Objeto {
         QUIETO,
         MOV_IZQUIERDA,
         MOV_DERECHA,
+        MOV_FRONTAL,
         //Nave
         ACTIVO,
         PROPULSOR,

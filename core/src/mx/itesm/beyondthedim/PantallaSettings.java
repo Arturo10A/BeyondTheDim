@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -71,6 +72,9 @@ class PantallaSettings extends Pantalla {
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(textureGoBack));
         ImageButton btnGoBack = new ImageButton(trdGoBack);
         btnGoBack.setPosition(ANCHO*0.85f,(ALTO*0.80f)-btnGoBack.getHeight()*0.2f);
+        Gdx.input.setInputProcessor(this.escenaSettings);
+        Gdx.input.setCatchBackKey(true);
+
 
         btnGoBack.addListener(new ClickListener(){
             @Override
@@ -132,6 +136,11 @@ class PantallaSettings extends Pantalla {
         batch.begin();
         batch.draw(textureButtonMusic, ANCHO/2-textureButtonMusic.getWidth()/2,ALTO/2-textureButtonMusic.getHeight()/2);
         batch.end();
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            Gdx.app.log("clicked","***MUERTE***");
+            dispose();
+            juego.setScreen(juego.getMenu());
+        }
         if(juego.musicOn){
             textureButtonMusic = textureButtonMusicOn;
         }else{

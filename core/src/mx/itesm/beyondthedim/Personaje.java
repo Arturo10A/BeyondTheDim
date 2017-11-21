@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Personaje extends Objeto{
 
     private TextureRegion jettTextureCompleta;
+    private TextureRegion jettTextureFrontal;
     TextureRegion[][] texturaPersonaje;
     private Animation<TextureRegion> spriteAnimado;
     protected EstadoMovimiento estadoMovimiento = EstadoMovimiento.QUIETO;
@@ -109,6 +110,8 @@ public class Personaje extends Objeto{
                 }
                 batch.draw(region,x,y);
                 break;
+            case MOV_FRONTAL:
+                timerAnimacion += tiempo;
             case QUIETO:
             case INICIANDO:
                 batch.draw(texturaPersonaje[0][0], x, y);

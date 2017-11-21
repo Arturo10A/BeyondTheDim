@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -56,7 +57,7 @@ class PantallaAboutUs extends Pantalla {
     public void show() {
 
         cargarTexturas();
-        crearEcenaAyuda();
+        crearEscenaAyuda();
 
         Gdx.input.setInputProcessor(escenaAyuda);
 
@@ -77,10 +78,12 @@ class PantallaAboutUs extends Pantalla {
         texturaJorge = new Texture("Stage/AboutUs/registro_alexis.png");
     }
 
-    public void crearEcenaAyuda(){
+    public void crearEscenaAyuda(){
 
         escenaAyuda = new Stage(vista);
-
+        batch.setProjectionMatrix(camara.combined);
+        Gdx.input.setInputProcessor(this.escenaAyuda);
+        Gdx.input.setCatchBackKey(true);
         //Boton goBack
         TextureRegionDrawable trdGoBack = new TextureRegionDrawable(new TextureRegion(texturaBtnGoBack));
         ImageButton btnGoBack = new ImageButton(trdGoBack);
@@ -95,6 +98,7 @@ class PantallaAboutUs extends Pantalla {
                 juego.setScreen(juego.getMenu());
             }
         });
+
 
         //Textura botones casco
         TextureRegionDrawable trdCasco = new TextureRegionDrawable(new TextureRegion(texturaBotonCasco));
@@ -184,13 +188,17 @@ class PantallaAboutUs extends Pantalla {
     @Override
     public void render(float delta) {
         borrarPantalla(0,0,0);
-        batch.setProjectionMatrix(camara.combined);
 
         //Dibujamos los elementos graficos
         batch.begin();
         escenaAyuda.draw();
         batch.end();
 
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            Gdx.app.log("clicked","***MUERTE***");
+            dispose();
+            juego.setScreen(juego.getMenu());
+        }
         //Registros equipo
         if(dibujarEscenaInfo){
             switch(turno){
