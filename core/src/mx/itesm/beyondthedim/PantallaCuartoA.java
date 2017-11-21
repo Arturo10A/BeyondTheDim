@@ -38,14 +38,9 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     private Personaje personaje;
     //Escenario
     private Stage escenaJuego;
-    private Texture texturaBtnPausa;
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
-
-    private ShapeRenderer shape;
-
-    private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
 
     //Icono de vida
     private Texture vidaIcono;
@@ -69,14 +64,12 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
         skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
-
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
         //Joystick pistola
         gunJoystick = new Touchpad(20, estilo);
         gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
-        shape = new ShapeRenderer();
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
         movJoystick.setBounds(0, 0, 200, 200);
@@ -176,7 +169,13 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-
+        /*
+        //Imagen del ecenario
+        textureEscenario.dispose();
+        textureEscenarioAbierto.dispose();
+        //Checar
+        escenaJuego.dispose();
+        vidaIcono.dispose();*/
     }
 
 
@@ -188,28 +187,23 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     @Override
     public void ganar() {
 
-        shape.begin(ShapeRenderer.ShapeType.Line);
-        shape.setProjectionMatrix(camara.combined);
-        shape.setColor(Color.RED);
-
         if (juego.getEnemy_list().isEmpty()) {
             textureEscenario = textureEscenarioAbierto;
             // juego.getLimites().get(5).setSize(30);
 
-            shape.rect(juego.getLimites().get(5).getX(), juego.getLimites().get(5).getY(), juego.getLimites().get(5).getWidth(), juego.getLimites().get(5).getHeight());
             if (personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(5))) {
                 juego.setScreen(juego.getCuartoB());
-                dispose();
                 escenaJuego.clear();
             }
 
         }
-        shape.end();
     }
 
     @Override
     public void perder() {
         if (personaje.getLife() <= 0) {
+            juego.getMusic().stop();
+            juego.musicaCargada = false;
             juego.setScreen(new PantallaPerder(juego));
         }
     }

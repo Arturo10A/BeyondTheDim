@@ -203,7 +203,16 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-
+        /*
+        textureEscenario.dispose();
+        //Escenario
+        escenaJuego.dispose();
+        //Icono de vida
+        vidaIcono.dispose();
+        texturaRedBed.dispose();
+        texturaBlueBed.dispose();
+        texturaSeaBed.dispose();
+        texturaGreenBed.dispose();*/
     }
 
 
@@ -228,6 +237,8 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     @Override
     public void perder() {
         if (personaje.getLife() <= 0) {
+            juego.getMusic().stop();
+            juego.musicaCargada = false;
             juego.setScreen(new PantallaPerder(juego));
         }
     }

@@ -67,11 +67,16 @@ public class PantallaPerder extends Pantalla{
                 Gdx.app.log("clicked","***Inicio***");
                 lose.stop();
                 lose.dispose();
-                juego.setScreen(new PantallaMenu(juego));
+                juego.getMusic().stop();
+                juego.musicaCargada = false;
+                juego.setEstadoJuego(EstadoJuego.JUGANDO);
+                juego.reiniciarJuego();
+                juego.setScreen(juego.getMenu());
+                //dispose();
             }
         });
 
-        //Boton Reload (menu principal)
+        //Boton Reload (cuartoA)
         TextureRegionDrawable trdReload = new TextureRegionDrawable(new TextureRegion(backButtonReload));
         ImageButton btnGoBack = new ImageButton(trdReload);
         btnGoBack.setPosition(ANCHO*0.7f,ALTO*0.1f);
@@ -83,8 +88,10 @@ public class PantallaPerder extends Pantalla{
                 lose.stop();
                 lose.dispose();
                 //juego.setScreen(new PantallaCuartoA(juego));
-                juego.setScreen(juego.getMenu());
+                juego.reiniciarJuego();
                 juego.iniciarJuego(ANCHO,ALTO);
+                juego.setScreen(juego.getCuartoA());
+                //dispose();
             }
         });
 
@@ -114,7 +121,9 @@ public class PantallaPerder extends Pantalla{
         //texto.mostrarMensaje(batch,"You Died", Pantalla.ANCHO/2, Pantalla.ALTO/2);
         //
         batch.begin();
-        lose.play();
+        if(juego.musicOn){
+            lose.play();
+        }
         escenaLoseScreen.draw();
         batch.end();
     }
@@ -124,6 +133,11 @@ public class PantallaPerder extends Pantalla{
     @Override
     public void resume() {}
     @Override
-    public void dispose() {}
+    public void dispose() {
+        background.dispose();
+        escenaLoseScreen.dispose();
+        backButtonInicio.dispose();
+        backButtonReload.dispose();
+    }
 
 }

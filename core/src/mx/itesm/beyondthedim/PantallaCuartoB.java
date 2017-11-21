@@ -32,7 +32,6 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     private Personaje personaje;
     //Escenario
     private Stage escenaJuego;
-    private Texture texturaBtnPausa;
     private Texture texturaCpu;
     //Joystick
     private Touchpad movJoystick;
@@ -55,6 +54,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     //Constructores
     public PantallaCuartoB(Juego juego) {
+
         this.juego = juego;
         this.personaje = juego.getPersonaje();
         juego.iniciarCuartoB(vista, camara);
@@ -76,7 +76,6 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     @Override
     public void crearEscena() {
         //Escenario
-
         cpu1 = new ObjetoEscenario(-45,770, texturaCpu);
         cpu2 = new ObjetoEscenario(-45 ,-67, texturaCpu);
         cpu2.sprite.flip(false,true);
@@ -92,7 +91,6 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
         skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
-
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
@@ -131,6 +129,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         juego.getObjetos().add(cpu4);
         juego.getObjetos().add(cpu5);
         juego.getObjetos().add(cpu6);
+
     }
 
 
@@ -219,7 +218,14 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-
+        /*
+        textureEscenario.dispose();
+        textureEscenarioAbiertoC.dispose();
+        texturaEscenarioAbiertoD.dispose();
+        texturaEscenarioAbiertoBoss.dispose();
+        //Checar
+        escenaJuego.dispose();
+        texturaCpu.dispose();*/
     }
 
     @Override
@@ -231,14 +237,14 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void crearEnemigos() {
-        /*
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));*/
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
     }
 
     @Override
@@ -288,6 +294,8 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     @Override
     public void perder() {
         if (personaje.getLife() <= 0) {
+            juego.getMusic().stop();
+            juego.musicaCargada = false;
             juego.setScreen(new PantallaPerder(juego));
         }
     }

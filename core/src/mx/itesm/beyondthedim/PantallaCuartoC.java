@@ -28,34 +28,29 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     //Imagen del ecenario
     private final Juego juego;
     private Texture textureEscenario;
-    private Texture textureEscenarioAbierto;
     //Jett start
     private Personaje personaje;
     //Escenario
     private Stage escenaJuego;
-    private Texture texturaBtnPausa;
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
-    //Jett Speed
-    private int DX_PERSONAJE = 5;
-    private int DY_PERSONAJE = 5;
 
     //Medicina
     private Medicina medicina;
+
+    private Texture cpu;
+    private Texture cpu_der;
+    private Texture cpu_central;
+    //Icono de vida
+    private Texture vidaIcono;
 
     private ObjetoEscenario cpu1;
     private ObjetoEscenario cpu2;
     private ObjetoEscenario cpu3;
 
-    //Icono de vida
-    private Texture vidaIcono;
 
 
-
-    private Texture cpu  = new Texture("Objetos_varios/cpu_izq.png");
-    private Texture cpu_der = new Texture("Objetos_varios/cpu_der.png");
-    private Texture cpu_central = new Texture("Objetos_varios/cpu_central.png");
 
     //Constructores
     public PantallaCuartoC(Juego juego) {
@@ -128,6 +123,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
         vidaIcono = new Texture("iconLife.png");
+        cpu  = new Texture("Objetos_varios/cpu_izq.png");
+        cpu_der = new Texture("Objetos_varios/cpu_der.png");
+        cpu_central = new Texture("Objetos_varios/cpu_central.png");
     }
     @Override
     public void cargarMusica(){
@@ -208,13 +206,21 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-
+        /*
+        textureEscenario.dispose();
+        //Escenario
+        escenaJuego.dispose();
+        cpu.dispose();
+        cpu_der.dispose();
+        cpu_central.dispose();
+        //Icono de vida
+        vidaIcono.dispose();*/
     }
 
 
     @Override
     public void crearEnemigos() {
-        /*
+
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 400, 1));
         juego.getEnemy_list().add(new Enemy(ANCHO - 300, ALTO / 2, 200, 1));
         juego.getEnemy_list().add(new Enemy(ANCHO - 400, ALTO / 2, 800, 1));
@@ -222,7 +228,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         juego.getEnemy_list().add(new Enemy(ANCHO - 600, ALTO / 2, 500, 1));
         juego.getEnemy_list().add(new Enemy(ANCHO - 700, ALTO / 2, 200, 1));
         juego.getEnemy_list().add(new Enemy(ANCHO - 800, ALTO / 2, 400, 1));
-        */
+
     }
 
     @Override
@@ -231,7 +237,6 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
             juego.getPersonaje().setPosition(595,760);
             juego.getCuartoB().setInicioPantallaB(juego);
             juego.setScreen(juego.getCuartoB());
-            dispose();
             escenaJuego.clear();
         }
         if(personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(1))){
@@ -242,8 +247,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     @Override
     public void perder() {
         if (personaje.getLife() <= 0) {
+            juego.getMusic().stop();
+            juego.musicaCargada = false;
             juego.setScreen(new PantallaPerder(juego));
-
         }
     }
 

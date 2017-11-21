@@ -64,7 +64,6 @@ public class Juego extends Game {
     //Objetos
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
     //public boolean limitesGenerados = false;
-    private Rectangle personajeRectangle;
     //Escenas de Juego
     private Stage escenaCuartoA;
     protected boolean isCuartoAIniciado;
@@ -86,9 +85,7 @@ public class Juego extends Game {
     private Touchpad movJoystick;
     private Touchpad gunJoystick;*/
     Texture texturaBtnPausa;
-    private ImageButton btnPausa;
-    //
-    public int prueba = 0;
+    private ImageButton btnPausa;;
     //
     private OrthographicCamera camera;
 
@@ -98,6 +95,7 @@ public class Juego extends Game {
 
     //pantalla
     private Pantalla pantallaJuego;
+    private PantallaCuartoA pantallaCuartoA;
     private PantallaCuartoB pantallaCuartoB;
     private PantallaCuartoC pantallaCuartoC;
     private PantallaCuartoD pantallaCuartoD;
@@ -118,7 +116,6 @@ public class Juego extends Game {
         shootTimer = 0;
         shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
         texto = new Texto();
-        personajeRectangle = personaje.getSprite().getBoundingRectangle();
         //generarJoysticks();
         generarBotonPausa();
         isCuartoAIniciado = false;
@@ -127,6 +124,19 @@ public class Juego extends Game {
         isCuartoDIniciado = false;
         isCuartoTutorialIniciado = false;
         isCuartoBossFinalIniciado = false;
+    }
+
+    public void reiniciarJuego(){
+	    pantallaCuartoB = null;
+	    pantallaCuartoC = null;
+	    pantallaCuartoD = null;
+	    isCuartoCterminado = false;
+	    isCuartoDterminado = false;
+	    juegoIniciado = false;
+	    enemy_list.clear();
+	    limites.clear();
+	    objetos.clear();
+	    pantallaJuego = null;
     }
 
     //IniciarEscenas
@@ -248,6 +258,14 @@ public class Juego extends Game {
             ((PantallaMenu) pantallaMenu).setInicio();
         }
         return pantallaMenu;
+    }
+
+    //Cuarto A
+    public PantallaCuartoA getCuartoA(){
+        if(pantallaCuartoA == null){
+            pantallaCuartoA = new PantallaCuartoA(this);
+        }
+        return pantallaCuartoA;
     }
 
     //CuartoB

@@ -74,7 +74,15 @@ public class PantallaPausa extends Stage{
                 juego.getMusic().stop();
                 juego.musicaCargada = false;
                 juego.setEstadoJuego(EstadoJuego.JUGANDO);
+                juego.reiniciarJuego();
                 juego.setScreen(juego.getMenu());
+                /*
+                juego.getCuartoA().dispose();
+                juego.getCuartoB().dispose();
+                juego.getCuartoC().dispose();
+                juego.getCuartoD().dispose();
+                juego.getEscenaCuartoTutorial().dispose();
+                juego.getEscenaCuartoBossFinal().dispose();*/
             }
         });
         this.addActor(btnSalir);
