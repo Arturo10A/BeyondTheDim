@@ -41,7 +41,7 @@ class PantallaCargando extends Pantalla {
 
 
     private void cargarTexturas(){
-        texturafondo = new Texture("Logo/xd.png");
+        texturafondo = new Texture("Logo/xd.jpg");
     }
 
     private void crearEscena(){
@@ -67,7 +67,7 @@ class PantallaCargando extends Pantalla {
     @Override
     public void render(float delta) {
 
-        borrarPantalla(0,0,0);
+        borrarPantalla(1,1,1);
         batch.setProjectionMatrix(camara.combined);
 
         batch.begin();

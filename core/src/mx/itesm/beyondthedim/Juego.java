@@ -108,7 +108,7 @@ public class Juego extends Game {
     double bossShot = 100;
     double bossShotFollow = 0.0;
     private ArrayList<BulletBoss> bossBullets = new ArrayList<BulletBoss>();
-
+    private Boss boss;
 
 
     public Juego(){
@@ -144,6 +144,7 @@ public class Juego extends Game {
         limites.clear();
         objetos.clear();
         pantallaJuego = null;
+        personaje.setLife(100);
     }
 
     //IniciarEscenas
@@ -225,6 +226,8 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoBossFinal(Viewport vista, OrthographicCamera camera){
+        boss = new Boss(Pantalla.ANCHO/2, Pantalla.ALTO/2,100);
+        boss.setEstadoMovimiento(Objeto.EstadoMovimiento.MOV_IZQUIERDA);
         enemy_list.clear();
         limites.clear();
         this.camera = camera;
@@ -454,7 +457,7 @@ public class Juego extends Game {
             personajeRectangle.setX(personajeRectangle.getX()+ (float)(Math.cos(angle)*20));
             personajeRectangle.setY(personajeRectangle.getY()+ (float)(Math.sin(angle)*20));
             //Overlaps de diferentes niveles
-            if(pantallaJuego instanceof PantallaCuartoA || pantallaJuego instanceof PantallaTutorial){
+            if(pantallaJuego instanceof PantallaCuartoA || pantallaJuego instanceof PantallaTutorial || pantallaJuego instanceof PantallaCuartoEscenarioBoss){
                 //((PantallaCuartoA) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
                         &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
@@ -495,6 +498,7 @@ public class Juego extends Game {
                     personaje.mover((float) (Math.cos(angle)), (float) (Math.sin(angle)));
                 }
             }
+            /*
             if(pantallaJuego instanceof PantallaCuartoEscenarioBoss){
             //((PantallaCuartoA) pantalla).generarOverlaps();
                 if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
@@ -504,7 +508,7 @@ public class Juego extends Game {
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
                 System.out.println("Ovelaps Boss");
-            }
+            }*/
         }
     }
 
@@ -618,6 +622,8 @@ public class Juego extends Game {
             bullet.render(batch);
         }
         if(pantallaJuego instanceof PantallaCuartoEscenarioBoss){
+            System.out.println("Estas en BOOOOOOSS");
+            boss.dibujar(batch, Gdx.graphics.getDeltaTime());
             for (BulletBoss bullet: bossBullets){
                 bullet.render(batch);
             }
@@ -733,7 +739,7 @@ public class Juego extends Game {
         for (int i = 0; i < bossBullets.size(); i++) {
             if (bossBullets.get(i).distanceJett(personaje) < 25){
                 System.out.println("** JETT EN PROBLEMAS **");
-                personaje.damage(1);
+                personaje.damage(0);
                 bossBullets.remove(i);
             }
         }

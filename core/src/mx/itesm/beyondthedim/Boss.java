@@ -14,7 +14,7 @@ public class Boss extends Objeto {
     private TextureRegion bossTexture;
     //TextureRegion texturaPersonaje;
     TextureRegion [][] texturaPersonaje;
-    public Animation<TextureRegion> spriteAnimation;
+    public Animation<TextureRegion> spriteAnimationBoss;
     public float timerAnimation;
     protected float x;
     protected float y;
@@ -27,10 +27,11 @@ public class Boss extends Objeto {
         this.x    = x;
         this.y    = y;
         this.life = life;
-        bossTexture = new TextureRegion(new Texture("Enemigos/boss_completo.png"));
-        texturaPersonaje = bossTexture.split(80,120);
-        spriteAnimation = new Animation(0.1f, texturaPersonaje[0][2], texturaPersonaje[0][1], texturaPersonaje[0][0]);
-        spriteAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        Texture textureTemp = new Texture("Enemigos/boss_completo.png");
+        bossTexture = new TextureRegion(textureTemp);
+        texturaPersonaje = bossTexture.split(65,116);
+        spriteAnimationBoss = new Animation(0.2f, texturaPersonaje[0][3], texturaPersonaje[0][2], texturaPersonaje[0][1]);
+        spriteAnimationBoss.setPlayMode(Animation.PlayMode.LOOP);
         timerAnimation = 0;
         sprite = new Sprite(texturaPersonaje[0][0]);
         sprite.setPosition(x,y);    // Posición inicial
@@ -48,12 +49,13 @@ public class Boss extends Objeto {
         return (this.life -= Damage);
     }
 
-    public void atack (Personaje target){
+    public void atack(Personaje target){
         //Do something
         //target.damage(100);
 
         this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.02));
         this.y +=  ((float) ((target.getPositionY() - this.getPositionY()) * 0.02));
+        this.setEstadoMovimiento(target.getEstadoMovimiento());
 
         if (distancePersonaje(target) < 100){
             target.damage(10);
@@ -146,7 +148,7 @@ public class Boss extends Objeto {
             case MOV_IZQUIERDA:
                 timerAnimation += tiempo;
                 // Frame que se dibujará
-                TextureRegion region = spriteAnimation.getKeyFrame(timerAnimation, true);
+                TextureRegion region = spriteAnimationBoss.getKeyFrame(timerAnimation, true);
                 if (estadoMovimiento==EstadoMovimiento.MOV_IZQUIERDA) {
                     if (!region.isFlipX()) {
                         region.flip(true,false);
@@ -163,39 +165,10 @@ public class Boss extends Objeto {
                 batch.draw(texturaPersonaje[0][0], x, y);
                 break;
         }
-
-        batch.draw(bossTexture,x,y);
     }
 
     public void setEstadoMovimiento(Boss.EstadoMovimiento estadoMovimiento) {
         this.estadoMovimiento = estadoMovimiento;
-    }
-
-    public void render(SpriteBatch batch, float tiempo){
-        //batch.draw(enemyTexture, x, y);
-        // Dibuja el personaje dependiendo del estadoMovimiento
-        switch (estadoMovimiento) {
-            case MOV_DERECHA:
-            case MOV_IZQUIERDA:
-                timerAnimation += tiempo;
-                // Frame que se dibujará
-                TextureRegion region = spriteAnimation.getKeyFrame(timerAnimation, true);
-                if (estadoMovimiento== Personaje.EstadoMovimiento.MOV_DERECHA) {
-                    if (!region.isFlipX()) {
-                        region.flip(true,false);
-                    }
-                } else {
-                    if (region.isFlipX()) {
-                        region.flip(true,false);
-                    }
-                }
-                batch.draw(region,x,y);
-                break;
-            case QUIETO:
-            case INICIANDO:
-                batch.draw(texturaPersonaje[0][0], x, y);
-                break;
-        }
     }
 
 

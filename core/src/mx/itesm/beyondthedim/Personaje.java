@@ -161,6 +161,10 @@ public class Personaje extends Objeto{
 
     }
 
+    public void setLife(int life){
+        this.life = life;
+    }
+
 
 
 

@@ -3,6 +3,7 @@ package mx.itesm.beyondthedim;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -95,7 +96,21 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
 
     @Override
     public void generarLimites() {
-
+        if(juego.getLimites().isEmpty()){
+            //MURO NORTE
+            juego.addLimites(new Rectangle(0, ALTO - 120, ANCHO, 120));
+            //MURO OESTE
+            juego.addLimites(new Rectangle(0, 0, 120, ALTO));
+            //MURO SUR
+            juego.addLimites(new Rectangle(0, 0, ANCHO, 120));
+            //MURO ESTE NORTE
+            juego.addLimites(new Rectangle(1160, ALTO - 300, 120, 300));
+            //MURO ESTE SUR
+            juego.addLimites(new Rectangle(1160, 0, 120, 300));
+            //PUERTA ESTE
+            juego.addLimites(new Rectangle(1160, 300, 120, 120));
+            //juego.limitesGenerados = true;
+        }
     }
 
     @Override
@@ -179,11 +194,6 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
         boss.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Gdx.input.setInputProcessor(escenaJuego);
     }
-
-
-
-
-
 
     @Override
     public void render(float delta) {
