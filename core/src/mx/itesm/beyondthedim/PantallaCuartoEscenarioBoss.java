@@ -115,7 +115,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     @Override
     public void cargarTexturas(){
         texturaBtnGoBack = new Texture("Botones/button_pause.png");
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
+        textureEscenario = new Texture("Stage/escenario_final.png");
         vidaIcono = new Texture("iconLife.png");
         texturasCargadas = true;
     }
