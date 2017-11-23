@@ -56,7 +56,6 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     private Texture vidaIcono;
     private boolean texturasCargadas;
 
-
     public PantallaCuartoEscenarioBoss(Juego juego){
         this.juego = juego;
         this.personaje = juego.getPersonaje();
@@ -190,6 +189,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
         crearEnemigos();
         camara.update();
         boss = new Boss(ANCHO/2,ALTO/2,100);
+        juego.boss = boss;
         texto = new Texto();
         boss.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Gdx.input.setInputProcessor(escenaJuego);

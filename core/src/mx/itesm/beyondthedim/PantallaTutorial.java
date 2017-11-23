@@ -152,6 +152,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
         juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
         juego.getMusic().setLooping(true);
     }
+
     @Override
     public void show() {
         //Cargar escena

@@ -58,10 +58,8 @@ public class Boss extends Objeto {
         this.setEstadoMovimiento(target.getEstadoMovimiento());
 
         if (distancePersonaje(target) < 100){
-            target.damage(10);
+            target.damage(1);
         }
-
-
         this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.02));
         this.y +=  ((float) ((target.getPositionY() - this.getPositionY()) * 0.02));
 

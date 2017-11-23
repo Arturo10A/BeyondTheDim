@@ -108,7 +108,7 @@ public class Juego extends Game {
     double bossShot = 100;
     double bossShotFollow = 0.0;
     private ArrayList<BulletBoss> bossBullets = new ArrayList<BulletBoss>();
-    private Boss boss;
+    protected Boss boss;
 
 
     public Juego(){
@@ -226,8 +226,6 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoBossFinal(Viewport vista, OrthographicCamera camera){
-        boss = new Boss(Pantalla.ANCHO/2, Pantalla.ALTO/2,100);
-        boss.setEstadoMovimiento(Objeto.EstadoMovimiento.MOV_IZQUIERDA);
         enemy_list.clear();
         limites.clear();
         this.camera = camera;
