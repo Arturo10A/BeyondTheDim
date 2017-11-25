@@ -85,7 +85,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
 
     @Override
     public void pausa() {
-        juego.pausa(vista, batch, escenaJuego);
+        juego.pausa(vista, batch, escenaJuego, camara);
     }
 
     @Override

@@ -26,18 +26,20 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class PantallaPausa extends Stage{
 
     private Stage escenaJuego;
-    private OrthographicCamera camara;
     private Image imgRectangulo;
     private Juego juego;
     private ImageButton btnSalir;
     private ImageButton btnReintentar;
     protected boolean elementosDibujados;
+    private float posX;
+    private float posY;
 
-    public PantallaPausa(Viewport vista, SpriteBatch batch, final Juego juego, Stage escenaJuego, OrthographicCamera camara) {
+    public PantallaPausa(Viewport vista, SpriteBatch batch, final Juego juego, Stage escenaJuego, float posX, float posY) {
         super(vista,batch);
         this.escenaJuego = escenaJuego;
-        this.camara = camara;
         this.juego = juego;
+        this.posX = posX;
+        this.posY = posY;
         Pixmap pixmap = new Pixmap((int) (Pantalla.ANCHO), (int) (Pantalla.ALTO), Pixmap.Format.RGBA8888);
         pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.4f );
         pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
@@ -56,18 +58,20 @@ public class PantallaPausa extends Stage{
 
     }
 
-    public void setEscenaJuego(Stage escenaJuego, OrthographicCamera camera) {
+    public void setEscenaJuego(Stage escenaJuego, OrthographicCamera camera, float posX, float posY) {
         this.escenaJuego = escenaJuego;
-        this.camara = camera;
+        this.posX = posX;
+        this.posY = posY;
     }
 
     public void dibujar(){
-        imgRectangulo.setPosition(this.camara.position.x-Pantalla.ANCHO/2, this.camara.position.y-Pantalla.ALTO/2);
-        System.out.println(imgRectangulo.getImageX()+ "*********************" + imgRectangulo.getImageY());
+        imgRectangulo.setPosition(posX-Pantalla.ANCHO/2, posY-Pantalla.ALTO/2);
+        System.out.println(imgRectangulo.getX()+ "*********************" + imgRectangulo.getY());
+        System.out.println(posX + " kkk "+ posY);
         this.addActor(imgRectangulo);
 
         // Salir
-        btnSalir.setPosition(this.camara.position.x-btnSalir.getWidth()/2, this.camara.position.y - btnSalir.getHeight());
+        btnSalir.setPosition(posX-btnSalir.getWidth()/2, posY - btnSalir.getHeight());
         btnSalir.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -87,7 +91,7 @@ public class PantallaPausa extends Stage{
             }
         });
         this.addActor(btnSalir);
-        btnReintentar.setPosition(this.camara.position.x-btnReintentar.getWidth()/2, this.camara.position.y+btnReintentar.getHeight()/2);
+        btnReintentar.setPosition(posX-btnReintentar.getWidth()/2, posY+btnReintentar.getHeight()/2);
         btnReintentar.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {

@@ -58,6 +58,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         this.personaje = juego.getPersonaje();
         //this.personaje.setPosition(ANCHO/2,60);
         juego.iniciarCuartoC(vista, camara);
+        camara.position.set(640,360,0);
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
         juego.setPantallaJuego(this);
@@ -108,6 +109,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 juego.setEstadoJuego(EstadoJuego.PAUSADO);
+                System.out.println(camara.position);
             }
         });
 
@@ -175,7 +177,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
             medicina.dib(batch);
         }
         batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
-        System.out.println("X:"+personaje.getPositionX() +" Y:"+personaje.getPositionY());
+        //System.out.println("X:"+personaje.getPositionX() +" Y:"+personaje.getPositionY());
         medicina.vida(personaje);
         batch.end();
         //Dibujar Objetos
@@ -255,7 +257,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     @Override
     public void pausa() {
-        juego.pausa(vista, batch, escenaJuego);
+        juego.pausa(vista, batch, escenaJuego, camara);
     }
 
     @Override

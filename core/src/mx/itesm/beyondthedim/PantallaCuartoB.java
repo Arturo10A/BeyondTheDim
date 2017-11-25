@@ -120,6 +120,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 juego.setEstadoJuego(EstadoJuego.PAUSADO);
+                System.out.println(camara.position);
             }
         });
         escenaJuego.addActor(movJoystick);
@@ -211,8 +212,8 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         ganar();
         //Pausa
         pausa();
-        System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
-        System.out.println(camara.position);
+        //System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
+        //System.out.println(camara.position);
     }
 
 
@@ -247,14 +248,13 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void crearEnemigos() {
-        /*
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
         juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));*/
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
     }
 
     @Override
@@ -313,7 +313,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void pausa() {
-        juego.pausa(vista, batch, escenaJuego);
+        juego.pausa(vista, batch, escenaJuego, camara);
     }
 
     @Override
@@ -367,17 +367,17 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             // El personaje define el centro de la cámara
             //camara.position.set(posX, camara.position.y, 0);
             camaraPosX = posX;
-            System.out.println("Parte1");
+            //System.out.println("Parte1");
         }
         else if(posX>ANCHO_B-ANCHO_B/3){    // Si está en la última mitad
         // La cámara se queda a media pantalla antes del fin del mundo  :)
             camaraPosX = ANCHO_B - ANCHO_B / 3;
-            System.out.println("Parte2");
+            //System.out.println("Parte2");
         }
         else if(posX<ANCHO_B/3) { // La primera mitad
             camaraPosX = ANCHO_B/3;
 
-            System.out.println("Parte3");
+            //System.out.println("Parte3");
         }
         if (posY >= ALTO_B / 3 && posY <= ALTO_B - ALTO_B / 3) {
             camaraPosY = posY;

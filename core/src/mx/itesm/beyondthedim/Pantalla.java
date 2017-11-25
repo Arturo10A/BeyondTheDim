@@ -68,6 +68,7 @@ public abstract class Pantalla implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
+
     //Borra la pantalla con el color RGB(r,g,b)
     @Override
     public void resize(int width, int height) {

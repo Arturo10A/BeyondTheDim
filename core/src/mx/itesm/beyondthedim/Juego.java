@@ -54,7 +54,7 @@ public class Juego extends Game {
     private float enemyPosAncho = 0;
     private float enemyPosAlto = 0;
     private Texto texto;
-    protected PantallaPausa escenaPausa;
+    protected PantallaPausa pantallaPausa;
     //Enemy block
     private ArrayList<Enemy> enemy_list = new ArrayList<Enemy>();
     private ArrayList<PhantomEnemy> phantom_enemy_list = new ArrayList<PhantomEnemy>();
@@ -149,6 +149,7 @@ public class Juego extends Game {
 
     //IniciarEscenas
     public void iniciarCuartoTutorial(Viewport vista, OrthographicCamera camera){
+        pantallaPausa = null;
         System.out.println("Cuarto Tutorial");
         enemy_list.clear();
         limites.clear();
@@ -163,6 +164,7 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoA(Viewport vista, OrthographicCamera camera){
+        pantallaPausa = null;
         System.out.println("Cuarto A");
         enemy_list.clear();
         limites.clear();
@@ -177,6 +179,7 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoB(Viewport vista, OrthographicCamera camera){
+        pantallaPausa = null;
         System.out.println("Cuarto B");
         enemy_list.clear();
         limites.clear();
@@ -198,6 +201,7 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoC(Viewport vista, OrthographicCamera camera){
+        pantallaPausa = null;
         System.out.println("Cuarto C");
         enemy_list.clear();
         this.personaje.setPosition(Pantalla.ANCHO/2,115);
@@ -212,6 +216,7 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoD(Viewport vista, OrthographicCamera camera){
+        pantallaPausa = null;
         enemy_list.clear();
         System.out.println("Cuarto D");
         this.personaje.setPosition(Pantalla.ANCHO/2,585);
@@ -226,6 +231,7 @@ public class Juego extends Game {
     }
 
     public void iniciarCuartoBossFinal(Viewport vista, OrthographicCamera camera){
+        pantallaPausa = null;
         enemy_list.clear();
         limites.clear();
         this.camera = camera;
@@ -462,7 +468,6 @@ public class Juego extends Game {
                         &&(!personajeRectangle.overlaps(this.getLimites().get(5)))){
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
-                System.out.println("Ovelaps A");
             }
             if(pantallaJuego instanceof PantallaCuartoB){
                 //((PantallaCuartoB) pantalla).generarOverlaps();
@@ -474,8 +479,6 @@ public class Juego extends Game {
                         &&(!personajeRectangle.overlaps(this.getLimites().get(14)))&&(!personajeRectangle.overlaps(this.getLimites().get(15)))){
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
-
-                System.out.println("Ovelaps B");
             }
             if(pantallaJuego instanceof PantallaCuartoC){
                 //((PantallaCuartoC) pantalla).generarOverlaps();
@@ -484,7 +487,6 @@ public class Juego extends Game {
                         &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))){
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
-                System.out.println("Ovelaps C");
             }
             if(pantallaJuego instanceof PantallaCuartoD){
                 //((PantallaCuartoD) pantalla).generarOverlaps();
@@ -634,32 +636,36 @@ public class Juego extends Game {
     }
 
 
-    public void pausa(Viewport vista, SpriteBatch batch, Stage escenaJuego) {
+    public void pausa(Viewport vista, SpriteBatch batch, Stage escenaJuego, OrthographicCamera camara) {
         if (this.getEstadoJuego()==EstadoJuego.PAUSADO) {
-            // Activar escenaPausa y pasarle el control
-            camera.update();
-            if (this.escenaPausa==null) {
-                this.escenaPausa = new PantallaPausa(vista, batch, this, escenaJuego, camera);
-                if(!escenaPausa.elementosDibujados){
-                    this.escenaPausa.dibujar();
+            // Activar pantallaPausa y pasarle el control
+            //camera.update();
+            float posX = camara.position.x;
+            float posY = camara.position.y;
+            if (this.pantallaPausa ==null) {
+                this.pantallaPausa = new PantallaPausa(vista, batch, this, escenaJuego, posX, posY);
+                if(!pantallaPausa.elementosDibujados){
+                    this.pantallaPausa.dibujar();
+                    System.out.println("se dibujao pausa");
                 }
             }else{
-                escenaPausa.setEscenaJuego(escenaJuego, camera);
-                if(!escenaPausa.elementosDibujados){
-                    this.escenaPausa.dibujar();
+                pantallaPausa.setEscenaJuego(escenaJuego, camera, posX, posY);
+                if(!pantallaPausa.elementosDibujados){
+                    this.pantallaPausa.dibujar();
+                    System.out.println("se dibujao pausa");
                 }
             }
-            this.escenaPausa.draw();
-            Gdx.input.setInputProcessor(this.escenaPausa);
+            this.pantallaPausa.draw();
+            Gdx.input.setInputProcessor(this.pantallaPausa);
         }
     }
 
     public void jugar(float delta, SpriteBatch batch, Stage escenaJuego, Touchpad gunJoystick){
         if(this.getEstadoJuego()==EstadoJuego.JUGANDO) {
             if(Gdx.input.getInputProcessor()!= escenaJuego) {
-                escenaPausa.clear();
-                escenaPausa.dispose();
-                escenaPausa.elementosDibujados = false;
+                pantallaPausa.clear();
+                pantallaPausa.dispose();
+                pantallaPausa.elementosDibujados = false;
                 Gdx.input.setInputProcessor(escenaJuego);
             }
             this.logicaEnemigo(delta);
