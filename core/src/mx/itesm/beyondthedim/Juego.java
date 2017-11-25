@@ -181,13 +181,13 @@ public class Juego extends Game {
         enemy_list.clear();
         limites.clear();
         //this.camera.position.set(0, 0,0);
-        camera.update();
         this.camera = camera;
+        camera.update();
         objetos.clear();
         if(!isCuartoBIniciado){
             // Cámara HUD
             camaraHUDEscenarioB = new OrthographicCamera(Pantalla.ANCHO,Pantalla.ALTO);
-            camaraHUDEscenarioB.position.set(-250, 350,0);
+            camaraHUDEscenarioB.position.set(70, 530,0);
             camaraHUDEscenarioB.update();
             vistaHUDEscenarioB = new StretchViewport(Pantalla.ANCHO, Pantalla.ALTO, camaraHUDEscenarioB);
             escenaCuartoB = new Stage(vistaHUDEscenarioB);
@@ -599,7 +599,7 @@ public class Juego extends Game {
     }
 
     public void dibujarObjetos(SpriteBatch batch, Texture textureEscenario){
-        batch.draw(textureEscenario, Pantalla.ANCHO / 2 - textureEscenario.getWidth() / 2, Pantalla.ALTO / 2 - textureEscenario.getHeight() / 2);
+        batch.draw(textureEscenario, 0, 0);
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
@@ -637,13 +637,13 @@ public class Juego extends Game {
     public void pausa(Viewport vista, SpriteBatch batch, Stage escenaJuego) {
         if (this.getEstadoJuego()==EstadoJuego.PAUSADO) {
             // Activar escenaPausa y pasarle el control
+            camera.update();
             if (this.escenaPausa==null) {
                 this.escenaPausa = new PantallaPausa(vista, batch, this, escenaJuego, camera);
                 if(!escenaPausa.elementosDibujados){
                     this.escenaPausa.dibujar();
                 }
             }else{
-                camera.update();
                 escenaPausa.setEscenaJuego(escenaJuego, camera);
                 if(!escenaPausa.elementosDibujados){
                     this.escenaPausa.dibujar();
@@ -658,6 +658,7 @@ public class Juego extends Game {
         if(this.getEstadoJuego()==EstadoJuego.JUGANDO) {
             if(Gdx.input.getInputProcessor()!= escenaJuego) {
                 escenaPausa.clear();
+                escenaPausa.dispose();
                 escenaPausa.elementosDibujados = false;
                 Gdx.input.setInputProcessor(escenaJuego);
             }

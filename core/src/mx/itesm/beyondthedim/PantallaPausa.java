@@ -63,6 +63,7 @@ public class PantallaPausa extends Stage{
 
     public void dibujar(){
         imgRectangulo.setPosition(this.camara.position.x-Pantalla.ANCHO/2, this.camara.position.y-Pantalla.ALTO/2);
+        System.out.println(imgRectangulo.getImageX()+ "*********************" + imgRectangulo.getImageY());
         this.addActor(imgRectangulo);
 
         // Salir

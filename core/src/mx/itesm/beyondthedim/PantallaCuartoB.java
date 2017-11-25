@@ -28,6 +28,8 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     private Texture textureEscenarioAbiertoC;
     private Texture texturaEscenarioAbiertoD;
     private Texture texturaEscenarioAbiertoBoss;
+    private int ANCHO_B = 1920;
+    private int ALTO_B = 1080;
     //Jett start
     private Personaje personaje;
     //Escenario
@@ -61,8 +63,8 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         //Escenario
         escenaJuego = juego.getEscenaCuartoB();
         juego.setPantallaJuego(this);
-        this.personaje.setPosition(-250, 350);
-        this.camara.position.set(-250, 350, 0);
+        this.personaje.setPosition(80, 530);
+        this.camara.position.set(70, 530, 0);
     }
 
     public void setInicioPantallaB(Juego juego) {
@@ -76,14 +78,14 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     @Override
     public void crearEscena() {
         //Escenario
-        cpu1 = new ObjetoEscenario(-45, 770, texturaCpu);
-        cpu2 = new ObjetoEscenario(-45, -67, texturaCpu);
+        cpu1 = new ObjetoEscenario(275, 950, texturaCpu);
+        cpu2 = new ObjetoEscenario(275, 113, texturaCpu);
         cpu2.sprite.flip(false, true);
-        cpu3 = new ObjetoEscenario(526, 440, texturaCpu);
-        cpu4 = new ObjetoEscenario(526, 290, texturaCpu);
+        cpu3 = new ObjetoEscenario(846, 620, texturaCpu);
+        cpu4 = new ObjetoEscenario(846, 470, texturaCpu);
         cpu4.sprite.flip(false, true);
-        cpu5 = new ObjetoEscenario(970, 770, texturaCpu);
-        cpu6 = new ObjetoEscenario(970, -67, texturaCpu);
+        cpu5 = new ObjetoEscenario(1290, 950, texturaCpu);
+        cpu6 = new ObjetoEscenario(1290, 113, texturaCpu);
         cpu6.sprite.flip(false, true);
         escenaJuego = juego.getEscenaCuartoB();
         //*******************************************************Joysticks*******************************************************
@@ -168,11 +170,17 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         cpu4.sprite.flip(false, true);
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+        if(isAbiertoCuartoC){
+            juego.getLimites().get(13).setSize(0);
+        }
+        if(isAbiertoCuartoD){
+            juego.getLimites().get(13).setSize(0);
+        }
         //Añadir enemigo
         crearEnemigos();
         System.out.println("Hoola");
         personaje.mover(0, 0);
-        this.camara.position.set(-250, 350, 0);
+        this.camara.position.set(70, 530, 0);
         camara.update();
         Gdx.input.setInputProcessor(escenaJuego);
     }
@@ -203,7 +211,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         ganar();
         //Pausa
         pausa();
-        //System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
+        System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
         System.out.println(camara.position);
     }
 
@@ -270,7 +278,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             isAbiertoCuartoBoss = true;
         }
         //Checar cuando los cuartos estan abiertos
-        if (isAbiertoCuartoC && personaje.getPositionX() >= 570 && personaje.getPositionX() <= 670 && personaje.getPositionY() > 770) {
+        if (isAbiertoCuartoC && personaje.getPositionX() >= 890 && personaje.getPositionX() <= 990 && personaje.getPositionY() > 950) {
             if (juego.isCuartoCIniciado) {
                 juego.getCuartoC().setInicioPantallaC(juego);
             }
@@ -279,7 +287,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             escenaJuego.clear();
             isAbiertoCuartoC = true;
         }
-        if (isAbiertoCuartoD && personaje.getPositionX() >= 570 && personaje.getPositionX() <= 670 && personaje.getPositionY() < -67) {
+        if (isAbiertoCuartoD && personaje.getPositionX() >= 890 && personaje.getPositionX() <= 990 && personaje.getPositionY() < 113) {
             if (juego.isCuartoDIniciado) {
                 juego.getCuartoD().setInicioPantallaD(juego);
             }
@@ -288,7 +296,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             escenaJuego.clear();
             isAbiertoCuartoC = true;
         }
-        if (isAbiertoCuartoBoss && personaje.getPositionX() >= 1500 && personaje.getPositionY() >= 300 && personaje.getPositionY() <= 400) {
+        if (isAbiertoCuartoBoss && personaje.getPositionX() >= 1820 && personaje.getPositionY() >= 480 && personaje.getPositionY() <= 580) {
             personaje.setPosition(ANCHO / 9.5f, ALTO / 2f);
             juego.setScreen(new PantallaCuartoEscenarioBoss(juego));
         }
@@ -323,25 +331,25 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             juego.addLimites(cpu5.getSprite().getBoundingRectangle());
             juego.addLimites(cpu6.getSprite().getBoundingRectangle());
             //Muro Sur Oeste
-            juego.addLimites(new Rectangle(-250, 770, 820, 0));
+            juego.addLimites(new Rectangle(102, 950, 820, 0));
             //Muro Sur Este
-            juego.addLimites(new Rectangle(670, 770, 820, 0));
+            juego.addLimites(new Rectangle(1092, 950, 820, 0));
             //Muro Oeste
-            juego.addLimites(new Rectangle(-250, -67, 0, 1900));
+            juego.addLimites(new Rectangle(102, 113, 0, 1900));
             //Muro Norte Oeste
-            juego.addLimites(new Rectangle(-250, -67, 820, 0));
+            juego.addLimites(new Rectangle(102, 113, 820, 0));
             //Muro Norte Este
-            juego.addLimites(new Rectangle(670, -67, 820, 0));
+            juego.addLimites(new Rectangle(1092, 113, 820, 0));
             //Muro Este Norte
-            juego.addLimites(new Rectangle(1500, -67, 0, 367));
+            juego.addLimites(new Rectangle(1852, 113, 0, 367));
             //Muro Este Sur
-            juego.addLimites(new Rectangle(1500, 400, 0, 370));
+            juego.addLimites(new Rectangle(1852, 580, 0, 370));
             //Puerta C get(13)
-            juego.addLimites(new Rectangle(560, 770, 110, 0));
+            juego.addLimites(new Rectangle(912, 950, 110, 0));
             //Puerta D get(14)
-            juego.addLimites(new Rectangle(560, -67, 110, 0));
+            juego.addLimites(new Rectangle(912, 113, 110, 0));
             //Puerta Boss get(15)
-            juego.addLimites(new Rectangle(1500, 290, 0, 110));
+            juego.addLimites(new Rectangle(1852, 470, 0, 110));
 
             //juego.limitesGenerados = true;
         }
@@ -353,35 +361,35 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         float camaraPosX = camara.position.x;
         float camaraPosY = camara.position.y;
         // Si está en la parte 'media'
-        if (posX >= ANCHO / 4 && posX <= ANCHO - ANCHO / 4) {
+        ANCHO_B = textureEscenario.getWidth();
+        ALTO_B = textureEscenario.getHeight();
+        if (posX >= ANCHO_B / 3 && posX <= ANCHO_B - ANCHO_B / 3) {
             // El personaje define el centro de la cámara
             //camara.position.set(posX, camara.position.y, 0);
             camaraPosX = posX;
             System.out.println("Parte1");
         }
-        else if(posX>ANCHO-ANCHO/4){    // Si está en la última mitad
+        else if(posX>ANCHO_B-ANCHO_B/3){    // Si está en la última mitad
         // La cámara se queda a media pantalla antes del fin del mundo  :)
-            camaraPosX = ANCHO - ANCHO / 4;
+            camaraPosX = ANCHO_B - ANCHO_B / 3;
             System.out.println("Parte2");
         }
-        else if(posX<ANCHO/4) { // La primera mitad
-            camaraPosX = ANCHO/4;
+        else if(posX<ANCHO_B/3) { // La primera mitad
+            camaraPosX = ANCHO_B/3;
 
             System.out.println("Parte3");
         }
-        if (posY >= ALTO / 4 && posY <= ALTO - ALTO / 4) {
+        if (posY >= ALTO_B / 3 && posY <= ALTO_B - ALTO_B / 3) {
             camaraPosY = posY;
         }
-        else if (posY > ALTO-ALTO/4) {
-            camaraPosY = ALTO - ALTO / 4;
+        else if (posY > ALTO_B-ALTO/3) {
+            camaraPosY = ALTO_B - ALTO_B / 3;
         }
-        else if (posY <ALTO/4) {
-            camaraPosY = ALTO/4;
+        else if (posY <ALTO_B/3) {
+            camaraPosY = ALTO_B/3;
         }
         camara.position.set(camaraPosX,camaraPosY,0);
         camara.update();
-
     }
-
 
 }
