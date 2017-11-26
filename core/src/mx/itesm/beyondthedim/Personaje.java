@@ -1,5 +1,7 @@
 package mx.itesm.beyondthedim;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -28,6 +30,8 @@ public class Personaje extends Objeto{
     private float x;
     private float y;
     private int life;
+    private Sound music = Gdx.audio.newSound(Gdx.files.internal("Music/pain.mp3"));
+    double cont;
 
     public  Personaje(float x, float y){
         this.x = x;
@@ -83,6 +87,12 @@ public class Personaje extends Objeto{
 
     // return the current life after recive a attack
     public int damage(double damage){
+
+        cont = cont + damage;
+        if (cont >= 50){
+            music.play();
+            cont=0;
+        }
         this.life -= damage;
         return this.life;
     }

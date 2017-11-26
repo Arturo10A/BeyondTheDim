@@ -300,7 +300,9 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         for(int i=0;i<enemiesThisTime;i++){
             randomNumX = randInt((int)personaje.getPositionX()+50,(int)(ANCHO_B-100));
             randomNumY = randInt((int)personaje.getPositionY()+50,(int)(ALTO_B-100));
+
             juego.getEnemy_list().add(new Enemy(randomNumX, randomNumY, 100, 1));
+
         }
 
     }

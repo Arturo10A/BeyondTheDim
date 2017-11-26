@@ -801,7 +801,6 @@ public class Juego extends Game {
         bossBullets.removeAll(BoosbulletsRemove);
         for (int i = 0; i < bossBullets.size(); i++) {
             if (bossBullets.get(i).distanceJett(personaje) < 25){
-                System.out.println("** JETT EN PROBLEMAS **");
                 personaje.damage(0);
                 bossBullets.remove(i);
             }

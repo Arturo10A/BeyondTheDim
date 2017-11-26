@@ -33,9 +33,6 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     private float timeBala;
     //BOSS
     private Boss boss;
-    float Bosstimer = 0;
-    double bossShot = 100;
-    double bossShotFollow = 0.0;
     //Arreglo balas de Jefe
     private ArrayList<BulletBoss> bossBullets;
     //Escenario y Texturas
@@ -52,6 +49,9 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     private Texto texto;
     //Sonidos
     private Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
+
+    //Lista de medicionas
+    private ArrayList<Medicina> medicinas = new ArrayList<Medicina>(5);
 
     private Texture vidaIcono;
     private boolean texturasCargadas;
@@ -176,6 +176,11 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
         if(!texturasCargadas){
             cargarTexturas();
         }
+
+        medicinas.add(new Medicina(ANCHO-190 ,ALTO-190));
+        medicinas.add(new Medicina(190 ,ALTO-190));
+        medicinas.add(new Medicina(190 ,190));
+        medicinas.add(new Medicina(ANCHO-190 ,190));
         crearEscena();
         cargarMusica();
         generarLimites();
@@ -204,6 +209,14 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
+
+        for (int i = 0; i < medicinas.size(); i++) {
+            if (!medicinas.get(i).vida(personaje)){
+                medicinas.get(i).dib(batch);
+            }
+            medicinas.get(i).vida(personaje);
+        }
+        batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
         batch.end();
         batch.begin();
         escenaJuego.draw();

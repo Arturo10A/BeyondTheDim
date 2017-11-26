@@ -1,5 +1,8 @@
 package mx.itesm.beyondthedim;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,6 +25,8 @@ public class Boss extends Objeto {
     private int teleportCont = 0;
 
     protected Personaje.EstadoMovimiento estadoMovimiento = Personaje.EstadoMovimiento.QUIETO;
+
+
 
     public Boss(float x, float y, int life){
         this.x    = x;
