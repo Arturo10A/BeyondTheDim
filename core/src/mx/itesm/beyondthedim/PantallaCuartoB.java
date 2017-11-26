@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -88,6 +89,8 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         cpu6 = new ObjetoEscenario(1290, 113, texturaCpu);
         cpu6.sprite.flip(false, true);
         escenaJuego = juego.getEscenaCuartoB();
+        Gdx.input.setInputProcessor(this.escenaJuego);
+        Gdx.input.setCatchBackKey(true);
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
@@ -219,7 +222,9 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void pause() {
-
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            juego.setEstadoJuego(EstadoJuego.PAUSADO);
+        }
     }
 
     @Override

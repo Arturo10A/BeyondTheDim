@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -69,6 +70,9 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         escenaJuego = juego.getEscenaCuartoA();
         //*******************************************************Joysticks*******************************************************
         //Texturas
+
+        Gdx.input.setInputProcessor(this.escenaJuego);
+        Gdx.input.setCatchBackKey(true);
         Skin skin = new Skin();
         skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
         skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
@@ -93,13 +97,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
-        juego.getBtnPausa().addListener(new ClickListener() {
 
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                juego.setEstadoJuego(EstadoJuego.PAUSADO);
-            }
-        });
         escenaJuego.addActor(movJoystick);
         escenaJuego.addActor(gunJoystick);
         escenaJuego.addActor(juego.getBtnPausa());
@@ -146,10 +144,12 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         //HUD
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
+
         juego.dibujarObjetos(batch, textureEscenario);
         batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
 
         batch.end();
+
         //Dibujar Objetos
         batch.begin();
         escenaJuego.draw();
@@ -164,13 +164,14 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         ganar();
         //Pausa
         pausa();
-        System.out.println(personaje.getPositionX() + " " + personaje.getPositionY());
     }
 
 
     @Override
     public void pause() {
-
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            juego.setEstadoJuego(EstadoJuego.PAUSADO);
+        }
     }
 
     @Override
@@ -221,7 +222,10 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
     @Override
     public void pausa() {
-        juego.pausa(vista, batch, escenaJuego, camara);
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            juego.setEstadoJuego(EstadoJuego.PAUSADO);
+        }
+
     }
 
     @Override

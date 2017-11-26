@@ -90,6 +90,11 @@ class PantallaSettings extends Pantalla {
         ImageButton btnMusic = new ImageButton(trdMusic);
         btnMusic.setPosition(ANCHO/2-btnMusic.getWidth()/2,ALTO/2-btnMusic.getHeight()/2);
 
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            Gdx.app.log("clicked","***MUERTE***");
+            dispose();
+            juego.setScreen(juego.getMenu());
+        }
         btnMusic.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {

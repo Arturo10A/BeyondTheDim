@@ -82,6 +82,7 @@ class PantallaAboutUs extends Pantalla {
 
         escenaAyuda = new Stage(vista);
         batch.setProjectionMatrix(camara.combined);
+
         Gdx.input.setInputProcessor(this.escenaAyuda);
         Gdx.input.setCatchBackKey(true);
         //Boton goBack
@@ -99,7 +100,11 @@ class PantallaAboutUs extends Pantalla {
             }
         });
 
-
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            Gdx.app.log("clicked","***MUERTE***");
+            dispose();
+            juego.setScreen(juego.getMenu());
+        }
         //Textura botones casco
         TextureRegionDrawable trdCasco = new TextureRegionDrawable(new TextureRegion(texturaBotonCasco));
 
