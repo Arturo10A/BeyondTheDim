@@ -145,6 +145,15 @@ public class Juego extends Game {
         objetos.clear();
         pantallaJuego = null;
         personaje.setLife(100);
+        pantallaCuartoA = null;
+        pantallaCuartoB = null;
+        pantallaCuartoC = null;
+        pantallaCuartoD = null;
+        isCuartoAIniciado = false;
+        isCuartoBIniciado = false;
+        isCuartoCIniciado = false;
+        isCuartoDterminado = false;
+        isCuartoBossFinalIniciado = false;
     }
 
     //IniciarEscenas
@@ -171,6 +180,7 @@ public class Juego extends Game {
         this.camera = camera;
         camera.update();
         objetos.clear();
+        personaje.setPosition(Pantalla.ANCHO / 9.5f, Pantalla.ALTO / 2f);
         if(!isCuartoAIniciado){
             escenaCuartoA = new Stage(vista);
             isCuartoAIniciado = true;

@@ -55,6 +55,14 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         juego.setPantallaJuego(this);
     }
 
+    public void setInicioPantallaA(Juego juego) {
+        this.personaje = juego.getPersonaje();
+        juego.iniciarCuartoA(vista, camara);
+        //Escenario
+        escenaJuego = juego.getEscenaCuartoA();
+        juego.setPantallaJuego(this);
+    }
+
     @Override
     public void crearEscena() {
         //Escenario
@@ -156,6 +164,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         ganar();
         //Pausa
         pausa();
+        System.out.println(personaje.getPositionX() + " " + personaje.getPositionY());
     }
 
 
@@ -193,7 +202,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
             textureEscenario = textureEscenarioAbierto;
             juego.getLimites().get(5).setSize(0);
 
-            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() < 330 && personaje.getPositionY() > 320) {
+            if (personaje.getPositionX() >= 1090 && personaje.getPositionY() > 315 && personaje.getPositionY() < 420) {
                 juego.setScreen(juego.getCuartoB());
                 escenaJuego.clear();
             }

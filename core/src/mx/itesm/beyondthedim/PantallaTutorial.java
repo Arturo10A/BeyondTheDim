@@ -82,7 +82,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
         this.personaje = juego.getPersonaje();
         juego.iniciarCuartoTutorial(vista, camara);
         //Escenario
-        escenaJuego = juego.getEscenaCuartoA();
+        escenaJuego = juego.getEscenaCuartoTutorial();
         juego.setPantallaJuego(this);
     }
 
