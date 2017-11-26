@@ -74,6 +74,8 @@ public class Juego extends Game {
     protected boolean isCuartoCIniciado;
     private Stage escenaCuartoD;
     protected boolean isCuartoDIniciado;
+    private Stage escenaCuartoLibre;
+    protected boolean isCuartoLibreIniciado;
     private Stage escenaCuartoBossFinal;
     protected boolean isCuartoBossFinalIniciado;
     private Stage escenaCuartoTutorial;
@@ -100,6 +102,7 @@ public class Juego extends Game {
     private PantallaCuartoB pantallaCuartoB;
     private PantallaCuartoC pantallaCuartoC;
     private PantallaCuartoD pantallaCuartoD;
+    private PantallaJuegoLibre pantallaJuegoLibre;
     protected boolean isCuartoDterminado = false;
     protected boolean isCuartoCterminado = false;
 
@@ -115,7 +118,7 @@ public class Juego extends Game {
         assetManager = new AssetManager();
     }
 
-    public void iniciarJuego(float ANCHO, float ALTO){
+    public void iniciarJuego(float ANCHO, float ALTO) {
         vidaPersonaje = 1000;
         juegoIniciado = true;
         musicaCargada = false;
@@ -132,11 +135,13 @@ public class Juego extends Game {
         isCuartoDIniciado = false;
         isCuartoTutorialIniciado = false;
         isCuartoBossFinalIniciado = false;
+        isCuartoLibreIniciado = false;
     }
 
     public void reiniciarJuego(){
         musicaCargada = false;
         pantallaCuartoB = null;
+        pantallaJuegoLibre = null;
         pantallaCuartoC = null;
         pantallaCuartoD = null;
         isCuartoCterminado = false;
@@ -151,11 +156,13 @@ public class Juego extends Game {
         pantallaCuartoB = null;
         pantallaCuartoC = null;
         pantallaCuartoD = null;
+        pantallaJuegoLibre = null;
         isCuartoAIniciado = false;
         isCuartoBIniciado = false;
         isCuartoCIniciado = false;
         isCuartoDterminado = false;
         isCuartoBossFinalIniciado = false;
+        isCuartoLibreIniciado = false;
     }
 
     //IniciarEscenas
@@ -242,6 +249,21 @@ public class Juego extends Game {
         }
     }
 
+    public void iniciarCuartoLibre(Viewport vista, OrthographicCamera camera){
+        pantallaPausa = null;
+        enemy_list.clear();
+        System.out.println("Cuarto Libre");
+        this.personaje.setPosition(Pantalla.ANCHO/2,585);
+        limites.clear();
+        this.camera = camera;
+        camera.update();
+        objetos.clear();
+        if(!isCuartoLibreIniciado){
+            escenaCuartoLibre = new Stage(vista);
+            isCuartoLibreIniciado = true;
+        }
+    }
+
     public void iniciarCuartoBossFinal(Viewport vista, OrthographicCamera camera){
         pantallaPausa = null;
         enemy_list.clear();
@@ -274,6 +296,9 @@ public class Juego extends Game {
     }
     public Stage getEscenaCuartoTutorial(){
         return escenaCuartoTutorial;
+    }
+    public Stage getEscenaCuartoLibre(){
+        return escenaCuartoLibre;
     }
 
     //Menu
@@ -317,6 +342,15 @@ public class Juego extends Game {
         }
         return pantallaCuartoD;
     }
+
+    //CuartoJuegoLibre
+    public PantallaJuegoLibre getCuartoLibre(){
+        if(pantallaJuegoLibre == null){
+            pantallaJuegoLibre = new PantallaJuegoLibre(this);
+        }
+        return pantallaJuegoLibre;
+    }
+
 
     //Personaje
     public Personaje getPersonaje(){
@@ -508,6 +542,18 @@ public class Juego extends Game {
                     &&(!personajeRectangle.overlaps(this.getLimites().get(8)))&&(!personajeRectangle.overlaps(this.getLimites().get(9)))&&(!personajeRectangle.overlaps(this.getLimites().get(10)))
                     &&(!personajeRectangle.overlaps(this.getLimites().get(11)))) {
                     personaje.mover((float) (Math.cos(angle)), (float) (Math.sin(angle)));
+                }
+            }
+
+            if(pantallaJuego instanceof PantallaJuegoLibre){
+                //((PantallaCuartoB) pantalla).generarOverlaps();
+                if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(8)))&&(!personajeRectangle.overlaps(this.getLimites().get(9)))&&(!personajeRectangle.overlaps(this.getLimites().get(10)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(11)))&&(!personajeRectangle.overlaps(this.getLimites().get(12)))&&(!personajeRectangle.overlaps(this.getLimites().get(13)))
+                        &&(!personajeRectangle.overlaps(this.getLimites().get(14)))&&(!personajeRectangle.overlaps(this.getLimites().get(15)))){
+                    personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
             }
             /*

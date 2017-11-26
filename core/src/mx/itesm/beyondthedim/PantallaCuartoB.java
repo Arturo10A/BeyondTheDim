@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.util.Random;
+
 /**
  * Creado por Equipo 2
  * <p>
@@ -39,6 +41,10 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
+
+    private int difficultyLevel = 1;
+    private int randomNumX;
+    private int randomNumY;
     //
     private int apariciones = 4;
     //
@@ -202,8 +208,8 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         juego.dibujarObjetos(batch, textureEscenario);
         batch.end();
         if (juego.getEnemy_list().isEmpty() && apariciones >= 0) {
+            difficultyLevel+=1;
             crearEnemigos();
-            apariciones--;
         }
         //Dibujar Objetos
         //batch.setProjectionMatrix(juego.camaraHUDEscenarioB.combined);
@@ -254,17 +260,49 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         juego.vistaHUDEscenarioB.update(width, height);
     }
 
+    public static int randInt(int min, int max) {
+
+        // Usually this can be a field rather than a method variable
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
+    }
+    public static int nthPrime(int n) {
+        int candidate, count;
+        for(candidate = 2, count = 0; count < n; ++candidate) {
+            if (isPrime(candidate)) {
+                ++count;
+            }
+        }
+        // The candidate has been incremented once after the count reached n
+        return candidate-1;
+    }
+    private static boolean isPrime(int n) {
+        for(int i = 2; i < n; ++i) {
+            if (n % i == 0) {
+                // We are naive, but not stupid, if
+                // the number has a divisor other
+                // than 1 or itself, we return immediately.
+                return false;
+            }
+        }
+        return true;
+    }
 
     @Override
     public void crearEnemigos() {
-        /*
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
 
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        int enemiesThisTime = nthPrime(difficultyLevel);
+        for(int i=0;i<enemiesThisTime;i++){
+            randomNumX = randInt((int)personaje.getPositionX()+50,(int)(ANCHO_B-100));
+            randomNumY = randInt((int)personaje.getPositionY()+50,(int)(ALTO_B-100));
+            juego.getEnemy_list().add(new Enemy(randomNumX, randomNumY, 100, 1));
+        }
 
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
-
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));*/
     }
 
     @Override

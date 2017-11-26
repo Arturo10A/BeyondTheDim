@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 /**
  * Creado por Equipo 2
  * <p>
@@ -28,6 +31,8 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     private Texture textureEscenarioAbiertoC;
     private Texture texturaEscenarioAbiertoD;
     private Texture texturaEscenarioAbiertoBoss;
+    private int ANCHO_B = 1920;
+    private int ALTO_B = 1080;
     //Jett start
     private Personaje personaje;
     //Escenario
@@ -38,6 +43,9 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     private Touchpad gunJoystick;
     //
     private int apariciones = 4;
+    private int difficultyLevel = 1;
+    private int randomNumX;
+    private int randomNumY;
     //
     private ObjetoEscenario cpu1;
     private ObjetoEscenario cpu2;
@@ -57,25 +65,38 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
 
         this.juego = juego;
         this.personaje = juego.getPersonaje();
-        juego.iniciarCuartoB(vista, camara);
+        juego.iniciarCuartoLibre(vista, camara);
         //Escenario
-        escenaJuego = juego.getEscenaCuartoB();
+        escenaJuego = juego.getEscenaCuartoLibre();
         juego.setPantallaJuego(this);
-        this.personaje.setPosition(-250, 350);
-        this.camara.position.set(-250, 350, 0);
+        this.personaje.setPosition(80, 530);
+        this.camara.position.set(70, 530, 0);
     }
 
-    public void setInicioPantallaB(Juego juego) {
+    public void setInicioPantallaJuegoLibre(Juego juego) {
         this.personaje = juego.getPersonaje();
-        juego.iniciarCuartoB(vista, camara);
+        System.out.println(juego.getMusic().isPlaying() + "*******");
+        juego.iniciarCuartoLibre(vista, camara);
         //Escenario
-        escenaJuego = juego.getEscenaCuartoB();
+        escenaJuego = juego.getEscenaCuartoLibre();
         juego.setPantallaJuego(this);
     }
 
     @Override
     public void crearEscena() {
+        //Escenario
+        cpu1 = new ObjetoEscenario(275, 950, texturaCpu);
+        cpu2 = new ObjetoEscenario(275, 90, texturaCpu);
+        cpu2.sprite.flip(false, true);
+        cpu3 = new ObjetoEscenario(846, 520, texturaCpu);
+        cpu4 = new ObjetoEscenario(846, 470, texturaCpu);
+        cpu3.sprite.flip(false, true);
+        cpu5 = new ObjetoEscenario(1290, 950, texturaCpu);
+        cpu6 = new ObjetoEscenario(1290, 90, texturaCpu);
+        cpu6.sprite.flip(false, true);
         escenaJuego = juego.getEscenaCuartoB();
+        Gdx.input.setInputProcessor(this.escenaJuego);
+        Gdx.input.setCatchBackKey(true);
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
@@ -108,6 +129,7 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 juego.setEstadoJuego(EstadoJuego.PAUSADO);
+                System.out.println(camara.position);
             }
         });
         escenaJuego.addActor(movJoystick);
@@ -149,20 +171,29 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             cargarTexturas();
         }
         crearEscena();
-        cargarMusica();
+        if (!juego.musicaCargada) {
+            cargarMusica();
+        }
         generarLimites();
-        if (juego.musicOn) {
+
+        if (juego.musicOn && !juego.getMusic().isPlaying()) {
             juego.getMusic().setVolume(0.2f);
             juego.getMusic().play();
+            System.out.println("Entro");
         }
-        cpu4.sprite.flip(false, true);
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
+        if (isAbiertoCuartoC) {
+            juego.getLimites().get(13).setSize(0);
+        }
+        if (isAbiertoCuartoD) {
+            juego.getLimites().get(13).setSize(0);
+        }
         //Añadir enemigo
         crearEnemigos();
         System.out.println("Hoola");
         personaje.mover(0, 0);
-        this.camara.position.set(-250, 350, 0);
+        this.camara.position.set(70, 530, 0);
         camara.update();
         Gdx.input.setInputProcessor(escenaJuego);
     }
@@ -176,6 +207,7 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         juego.dibujarObjetos(batch, textureEscenario);
         batch.end();
         if (juego.getEnemy_list().isEmpty() && apariciones >= 0) {
+            difficultyLevel+=1;
             crearEnemigos();
             apariciones--;
         }
@@ -194,12 +226,15 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         //Pausa
         pausa();
         //System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
+        //System.out.println(camara.position);
     }
 
 
     @Override
     public void pause() {
-
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            juego.setEstadoJuego(EstadoJuego.PAUSADO);
+        }
     }
 
     @Override
@@ -225,18 +260,51 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         juego.vistaHUDEscenarioB.update(width, height);
     }
 
+    public static int randInt(int min, int max) {
+
+        // Usually this can be a field rather than a method variable
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
+    }
+    public static int nthPrime(int n) {
+        int candidate, count;
+        for(candidate = 2, count = 0; count < n; ++candidate) {
+            if (isPrime(candidate)) {
+                ++count;
+            }
+        }
+        // The candidate has been incremented once after the count reached n
+        return candidate-1;
+    }
+    private static boolean isPrime(int n) {
+        for(int i = 2; i < n; ++i) {
+            if (n % i == 0) {
+                // We are naive, but not stupid, if
+                // the number has a divisor other
+                // than 1 or itself, we return immediately.
+                return false;
+            }
+        }
+        return true;
+    }
 
     @Override
     public void crearEnemigos() {
 
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        int enemiesThisTime = nthPrime(difficultyLevel);
+        for(int i=0;i<enemiesThisTime;i++){
+            randomNumX = randInt((int)personaje.getPositionX()+50,(int)(ANCHO-100));
+            randomNumY = randInt((int)personaje.getPositionY()+50,(int)(ALTO-100));
+            juego.getEnemy_list().add(new Enemy(randomNumX, randomNumY, 100, 1));
+        }
 
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
-
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
-
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
     }
+
 
     @Override
     public void ganar() {
@@ -245,21 +313,21 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             if (personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(3))) {
                 textureEscenario = textureEscenarioAbiertoC;
                 //Puerta C get(13)
-                juego.getLimites().get(13).setSize(10, 0);
+                juego.getLimites().get(13).setSize(0);
                 isAbiertoCuartoC = true;
             }
         } else if (juego.isCuartoCterminado && !juego.isCuartoDterminado) {
             textureEscenario = texturaEscenarioAbiertoD;
             //Puerta D
-            juego.getLimites().get(14).setSize(10, 0);
+            juego.getLimites().get(14).setSize(0);
             isAbiertoCuartoD = true;
         } else if (juego.isCuartoCterminado && juego.isCuartoDterminado) {
             textureEscenario = texturaEscenarioAbiertoBoss;
-            juego.getLimites().get(15).setSize(0, 10);
+            juego.getLimites().get(15).setSize(0);
             isAbiertoCuartoBoss = true;
         }
         //Checar cuando los cuartos estan abiertos
-        if (isAbiertoCuartoC && personaje.getPositionX() >= 570 && personaje.getPositionX() <= 670 && personaje.getPositionY() > 770) {
+        if (isAbiertoCuartoC && personaje.getPositionX() >= 890 && personaje.getPositionX() <= 990 && personaje.getPositionY() > 950) {
             if (juego.isCuartoCIniciado) {
                 juego.getCuartoC().setInicioPantallaC(juego);
             }
@@ -268,7 +336,7 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             escenaJuego.clear();
             isAbiertoCuartoC = true;
         }
-        if (isAbiertoCuartoD && personaje.getPositionX() >= 570 && personaje.getPositionX() <= 670 && personaje.getPositionY() < -67) {
+        if (isAbiertoCuartoD && personaje.getPositionX() >= 890 && personaje.getPositionX() <= 990 && personaje.getPositionY() < 113) {
             if (juego.isCuartoDIniciado) {
                 juego.getCuartoD().setInicioPantallaD(juego);
             }
@@ -277,7 +345,8 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             escenaJuego.clear();
             isAbiertoCuartoC = true;
         }
-        if (isAbiertoCuartoBoss && personaje.getPositionX() >= 1500 && personaje.getPositionY() >= 300 && personaje.getPositionY() <= 400) {
+        if (isAbiertoCuartoBoss && personaje.getPositionX() >= 1820 && personaje.getPositionY() >= 480 && personaje.getPositionY() <= 580) {
+            personaje.setPosition(ANCHO / 9.5f, ALTO / 2f);
             juego.setScreen(new PantallaCuartoEscenarioBoss(juego));
         }
     }
@@ -304,26 +373,32 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     @Override
     public void generarLimites() {
         if (juego.getLimites().isEmpty()) {
+            juego.addLimites(cpu1.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu2.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu3.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu4.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu5.getSprite().getBoundingRectangle());
+            juego.addLimites(cpu6.getSprite().getBoundingRectangle());
             //Muro Sur Oeste
-            juego.addLimites(new Rectangle(-250, 770, 820, 0));
+            juego.addLimites(new Rectangle(102, 950, 820, 0));
             //Muro Sur Este
-            juego.addLimites(new Rectangle(670, 770, 820, 0));
+            juego.addLimites(new Rectangle(1092, 950, 820, 0));
             //Muro Oeste
-            juego.addLimites(new Rectangle(-250, -67, 0, 1900));
+            juego.addLimites(new Rectangle(102, 113, 0, 1900));
             //Muro Norte Oeste
-            juego.addLimites(new Rectangle(-250, -67, 820, 0));
+            juego.addLimites(new Rectangle(102, 113, 820, 0));
             //Muro Norte Este
-            juego.addLimites(new Rectangle(670, -67, 820, 0));
+            juego.addLimites(new Rectangle(1092, 113, 820, 0));
             //Muro Este Norte
-            juego.addLimites(new Rectangle(1500, -67, 0, 367));
+            juego.addLimites(new Rectangle(1852, 113, 0, 367));
             //Muro Este Sur
-            juego.addLimites(new Rectangle(1500, 400, 0, 370));
+            juego.addLimites(new Rectangle(1852, 580, 0, 370));
             //Puerta C get(13)
-            juego.addLimites(new Rectangle(560, -67, 110, 0));
+            juego.addLimites(new Rectangle(912, 950, 110, 0));
             //Puerta D get(14)
-            juego.addLimites(new Rectangle(560, 770, 110, 0));
+            juego.addLimites(new Rectangle(912, 113, 110, 0));
             //Puerta Boss get(15)
-            juego.addLimites(new Rectangle(1500, 290, 0, 110));
+            juego.addLimites(new Rectangle(1852, 470, 0, 110));
 
             //juego.limitesGenerados = true;
         }
@@ -332,24 +407,33 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     private void actualizarCamara() {
         float posX = personaje.sprite.getX();
         float posY = personaje.sprite.getY();
-        /*// Si está en la parte 'media'
-        if (posX>=ANCHO/4 && posX<=ANCHO-ANCHO/4) {
+        float camaraPosX = camara.position.x;
+        float camaraPosY = camara.position.y;
+        // Si está en la parte 'media'
+        ANCHO_B = textureEscenario.getWidth();
+        ALTO_B = textureEscenario.getHeight();
+        if (posX >= ANCHO_B / 3 && posX <= ANCHO_B - ANCHO_B / 3) {
             // El personaje define el centro de la cámara
-            camara.position.set((int)posX, (int)posY, 0);
-            System.out.println("Parte1");
-        } else if (posX>ANCHO-ANCHO/4) {    // Si está en la última mitad
+            //camara.position.set(posX, camara.position.y, 0);
+            camaraPosX = posX;
+            //System.out.println("Parte1");
+        } else if (posX > ANCHO_B - ANCHO_B / 3) {    // Si está en la última mitad
             // La cámara se queda a media pantalla antes del fin del mundo  :)
-            if(posY>=ALTO/4 && posY<=ALTO-ALTO/4){
-                camara.position.set(ANCHO-ANCHO/4,(int)posY, 0);
-            }
-            System.out.println("Parte2");
-        } else if ( posX<ANCHO/4 ) { // La primera mitad
-            if(posY>=ALTO/4 && posY<=ALTO-ALTO/4){
-                camara.position.set(ANCHO/4,(int)posY, 0);
-            }
-            System.out.println("Parte3");
-        }*/
-        camara.position.set((int) posX, (int) posY, 0);
+            camaraPosX = ANCHO_B - ANCHO_B / 3;
+            //System.out.println("Parte2");
+        } else if (posX < ANCHO_B / 3) { // La primera mitad
+            camaraPosX = ANCHO_B / 3;
+
+            //System.out.println("Parte3");
+        }
+        if (posY >= ALTO_B / 3 && posY <= ALTO_B - ALTO_B / 3) {
+            camaraPosY = posY;
+        } else if (posY > ALTO_B - ALTO / 3) {
+            camaraPosY = ALTO_B - ALTO_B / 3;
+        } else if (posY < ALTO_B / 3) {
+            camaraPosY = ALTO_B / 3;
+        }
+        camara.position.set(camaraPosX, camaraPosY, 0);
         camara.update();
     }
 }

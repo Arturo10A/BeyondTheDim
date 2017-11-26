@@ -124,7 +124,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 super.clicked(event,x,y);
-                juego.setScreen(juego.getCuartoA());
+                juego.setScreen(juego.getCuartoB());
                 dispose();
             }
         });
