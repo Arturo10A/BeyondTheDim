@@ -28,7 +28,7 @@ public class Medicina extends Objeto {
         double personajeX = personaje.getPositionX();
         double personajeY = personaje.getPositionY();
         double distance = Math.sqrt( Math.pow(personajeX-this.x,2) + Math.pow(personajeY-this.y,2));
-        if (distance <= 70 && personaje.getLife() < 1000){
+        if (distance <= 70 && personaje.getLife() < 1000 && estado == false){
             personaje.recoverLife();
             System.out.println("vida recover");
             this.estado = true;
