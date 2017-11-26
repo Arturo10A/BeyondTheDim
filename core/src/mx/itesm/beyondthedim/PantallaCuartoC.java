@@ -133,6 +133,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     public void cargarMusica(){
         juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
         juego.getMusic().setLooping(true);
+        juego.musicaCargada = true;
     }
     @Override
     public void show() {
@@ -140,7 +141,9 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         //Cargar escena
         cargarTexturas();
         crearEscena();
-        cargarMusica();
+        if(!juego.musicaCargada){
+            cargarMusica();
+        }
 
         cpu1 = new ObjetoEscenario(-10,110, cpu);
         cpu2 = new ObjetoEscenario(ANCHO-230 ,110, cpu_der);
@@ -154,7 +157,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         //objetos.add(cpu4);
 
         generarLimites();
-        if(juego.musicOn){
+        if(juego.musicOn && !juego.getMusic().isPlaying()){
             juego.getMusic().setVolume(0.2f);
             juego.getMusic().play();
         }

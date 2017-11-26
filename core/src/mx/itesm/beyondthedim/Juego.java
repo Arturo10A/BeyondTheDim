@@ -118,6 +118,7 @@ public class Juego extends Game {
     public void iniciarJuego(float ANCHO, float ALTO){
         vidaPersonaje = 1000;
         juegoIniciado = true;
+        musicaCargada = false;
         personaje = new Personaje(ANCHO / 9.5f, ALTO / 2f, vidaPersonaje);
         bullets = new ArrayList<Bullet>();
         shootTimer = 0;
@@ -134,6 +135,7 @@ public class Juego extends Game {
     }
 
     public void reiniciarJuego(){
+        musicaCargada = false;
         pantallaCuartoB = null;
         pantallaCuartoC = null;
         pantallaCuartoD = null;
@@ -613,13 +615,13 @@ public class Juego extends Game {
     public void dibujarObjetos(SpriteBatch batch, Texture textureEscenario){
         batch.draw(textureEscenario, 0, 0);
 
-        //Personaje Jett
-        personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
 
         for (int i = 0; i <= objetos.size()-1 ; i++) {
             objetos.get(i).dibujar(batch,Gdx.graphics.getDeltaTime());
         }
 
+        //Personaje Jett
+        personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
         //Enemigos
         for (Enemy ene : this.getEnemy_list()) {
             ene.render(batch, Gdx.graphics.getDeltaTime());

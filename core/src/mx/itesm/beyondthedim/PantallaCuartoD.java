@@ -161,9 +161,11 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
         cargarTexturas();
         crearEscena();
-        cargarMusica();
+        if(!juego.musicaCargada){
+            cargarMusica();
+        }
         generarLimites();
-        if(juego.musicOn){
+        if(juego.musicOn && !juego.getMusic().isPlaying()){
             juego.getMusic().setVolume(0.2f);
             juego.getMusic().play();
         }
