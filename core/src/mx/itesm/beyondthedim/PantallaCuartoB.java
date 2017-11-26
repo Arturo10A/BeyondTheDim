@@ -70,6 +70,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     public void setInicioPantallaB(Juego juego) {
         this.personaje = juego.getPersonaje();
+        System.out.println(juego.getMusic().isPlaying() + "*******");
         juego.iniciarCuartoB(vista, camara);
         //Escenario
         escenaJuego = juego.getEscenaCuartoB();
@@ -80,13 +81,13 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     public void crearEscena() {
         //Escenario
         cpu1 = new ObjetoEscenario(275, 950, texturaCpu);
-        cpu2 = new ObjetoEscenario(275, 113, texturaCpu);
+        cpu2 = new ObjetoEscenario(275, 90, texturaCpu);
         cpu2.sprite.flip(false, true);
-        cpu3 = new ObjetoEscenario(846, 620, texturaCpu);
+        cpu3 = new ObjetoEscenario(846, 520, texturaCpu);
         cpu4 = new ObjetoEscenario(846, 470, texturaCpu);
-        cpu4.sprite.flip(false, true);
+        cpu3.sprite.flip(false, true);
         cpu5 = new ObjetoEscenario(1290, 950, texturaCpu);
-        cpu6 = new ObjetoEscenario(1290, 113, texturaCpu);
+        cpu6 = new ObjetoEscenario(1290, 90, texturaCpu);
         cpu6.sprite.flip(false, true);
         escenaJuego = juego.getEscenaCuartoB();
         Gdx.input.setInputProcessor(this.escenaJuego);
@@ -165,13 +166,16 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             cargarTexturas();
         }
         crearEscena();
-        cargarMusica();
+        if(!juego.musicaCargada){
+            cargarMusica();
+        }
         generarLimites();
-        if (juego.musicOn) {
+
+        if (juego.musicOn && !juego.getMusic().isPlaying()) {
             juego.getMusic().setVolume(0.2f);
             juego.getMusic().play();
+            System.out.println("Entro");
         }
-        cpu4.sprite.flip(false, true);
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         if(isAbiertoCuartoC){
