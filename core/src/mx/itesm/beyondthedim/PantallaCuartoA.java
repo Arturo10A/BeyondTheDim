@@ -87,20 +87,21 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         estilo.knob = skin.getDrawable("padMovimiento");
         //Joystick pistola
         gunJoystick = new Touchpad(20, estilo);
-        gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
+        gunJoystick.setBounds(Pantalla.ANCHO - 210, 0, 200, 200);
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
-        movJoystick.setBounds(0, 0, 200, 200);
+        movJoystick.setBounds(10, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
         //Listener joystick movimiento
+        /*
         movJoystick.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.conMovPadGrande(batch, pad, movJoystick);
+                //juego.conMovPadGrande(batch, pad, movJoystick);
             }
-        });
+        });*/
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
@@ -253,7 +254,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
     @Override
     public void jugar(float delta) {
-        juego.jugar(delta, batch, escenaJuego, gunJoystick);
+        juego.jugar(delta, batch, escenaJuego, gunJoystick, movJoystick);
     }
 
     @Override

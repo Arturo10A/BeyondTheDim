@@ -213,6 +213,7 @@ class PantallaMenu extends Pantalla {
 
             this.dispose();
         }
+
     }
 
 

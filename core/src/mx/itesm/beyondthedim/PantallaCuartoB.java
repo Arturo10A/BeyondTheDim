@@ -115,21 +115,22 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         estilo.knob = skin.getDrawable("padMovimiento");
         //Joystick pistola
         gunJoystick = new Touchpad(20, estilo);
-        gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
+        gunJoystick.setBounds(Pantalla.ANCHO - 210, 0, 200, 200);
 
         //Joystick movimiento
         movJoystick = new Touchpad(20, estilo);
-        movJoystick.setBounds(0, 0, 200, 200);
+        movJoystick.setBounds(10, 0, 200, 200);
         movJoystick.setColor(1, 1, 1, 0.7f);
         //Listener joystick movimiento
+        /*
         movJoystick.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Touchpad pad = (Touchpad) actor;
                 //Control de Sprites
-                juego.conMovPadGrande(batch, pad, movJoystick);
+                //juego.conMovPadGrande(batch, pad, movJoystick);
             }
-        });
+        });*/
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
         juego.getBtnPausa().addListener(new ClickListener() {
@@ -225,7 +226,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
-        batch.draw(vidaIcono,camara.position.x-Pantalla.ANCHO*0.5f, camara.position.y+Pantalla.ALTO*0.40f);
+        batch.draw(vidaIcono,camara.position.x-Pantalla.ANCHO*0.49f, camara.position.y+Pantalla.ALTO*0.43f);
         batch.end();
         if (juego.getEnemy_list().isEmpty() && apariciones >= 0) {
             difficultyLevel+=1;
@@ -370,6 +371,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         if (isAbiertoCuartoBoss && personaje.getPositionX() >= 1820 && personaje.getPositionY() >= 480 && personaje.getPositionY() <= 580) {
             personaje.setPosition(ANCHO / 9.5f, ALTO / 2f);
             juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_BOSS));
+            escenaJuego.clear();
         }
     }
 
@@ -393,7 +395,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
 
     @Override
     public void jugar(float delta) {
-        juego.jugar(delta, batch, escenaJuego, gunJoystick);
+        juego.jugar(delta, batch, escenaJuego, gunJoystick, movJoystick);
     }
 
     @Override

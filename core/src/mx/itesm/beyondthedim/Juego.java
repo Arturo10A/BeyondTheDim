@@ -481,16 +481,18 @@ public class Juego extends Game {
         }
     }
 
-    public void conMovPadGrande(SpriteBatch batch, Touchpad pad, Touchpad movJoystick) {
+    public void conMovPadGrande(SpriteBatch batch, /*Touchpad pad,*/ Touchpad movJoystick) {
+        //Estos estaban con pad
         if (cambiarDireccion) {
-            if (pad.getKnobPercentX() > 0.20) {
+            if (movJoystick.getKnobPercentX() > 0.20) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_DERECHA, batch, Gdx.graphics.getDeltaTime());
-            } else if (pad.getKnobPercentX() < -0.20) {
+            } else if (movJoystick.getKnobPercentX() < -0.20) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA, batch, Gdx.graphics.getDeltaTime());
-            } else if (pad.getKnobPercentX() == 0) {
+            } else if (movJoystick.getKnobPercentX() == 0) {
                 personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO, batch, Gdx.graphics.getDeltaTime());
             }
         }
+        //hasta aqui
         //Restricciones de movimiento(paredes)
         //Narvaez Logic
 
@@ -658,6 +660,10 @@ public class Juego extends Game {
 
         //Personaje Jett
         personaje.dibujar(batch, Gdx.graphics.getDeltaTime());
+        //Balas
+        for (Bullet bullet : this.getBullets()) {
+            bullet.render(batch);
+        }
         //Enemigos
         for (Enemy ene : this.getEnemy_list()) {
             ene.render(batch, Gdx.graphics.getDeltaTime());
@@ -665,10 +671,7 @@ public class Juego extends Game {
         //Vida
         String lifeString = " " + personaje.getLife();
         texto.mostrarMensaje(batch, lifeString, camera.position.x-Pantalla.ANCHO*0.43f, camera.position.y+Pantalla.ALTO*0.47f);
-        //Balas
-        for (Bullet bullet : this.getBullets()) {
-            bullet.render(batch);
-        }
+        //Aqui estaban las balas
         if(pantallaJuego instanceof PantallaCuartoEscenarioBoss){
             System.out.println("Estas en BOOOOOOSS");
             boss.dibujar(batch, Gdx.graphics.getDeltaTime());
@@ -700,7 +703,7 @@ public class Juego extends Game {
                 pantallaPausa.setEscenaJuego(escenaJuego, camera, posX, posY);
                 if(!pantallaPausa.elementosDibujados){
                     this.pantallaPausa.dibujar();
-                    System.out.println("se dibujao pausa");
+                    System.out.println("Se dibujao pausa");
                 }
             }
             this.pantallaPausa.draw();
@@ -708,7 +711,7 @@ public class Juego extends Game {
         }
     }
 
-    public void jugar(float delta, SpriteBatch batch, Stage escenaJuego, Touchpad gunJoystick){
+    public void jugar(float delta, SpriteBatch batch, Stage escenaJuego, Touchpad gunJoystick, Touchpad movJoystick){
         if(this.getEstadoJuego()==EstadoJuego.JUGANDO) {
             if(Gdx.input.getInputProcessor()!= escenaJuego) {
                 pantallaPausa.clear();
@@ -721,6 +724,8 @@ public class Juego extends Game {
             this.logicaDisparo(delta, gunJoystick, batch);
             //***************Colision Bala/Enemigo***************
             this.sistemaColisionesBala();
+            //***************Movimiento jett*****************
+            this.conMovPadGrande(batch, movJoystick);
         }
     }
     private void bossSpecialAtack(float delta, Personaje target, Boss boss){
@@ -806,7 +811,7 @@ public class Juego extends Game {
         }
     }
 
-    public void jugarBossFinal(float delta, SpriteBatch batch, Stage escenaJuego, Touchpad gunJoystick, Boss boss){
+    public void jugarBossFinal(float delta, SpriteBatch batch, Stage escenaJuego, Touchpad gunJoystick, Boss boss, Touchpad movJoystick){
         if (this.getEstadoJuego() == EstadoJuego.JUGANDO){
             if (boss.getLife() > 0){
                 boss.atack(personaje);
@@ -820,6 +825,7 @@ public class Juego extends Game {
                 bossBullets.clear();
             }
             this.logicaDisparo(delta, gunJoystick, batch);
+            this.conMovPadGrande(batch, movJoystick);
             if(timeBala >= 100.0){
                 for (int i = 0; i < bullets.size()-4; i++) {
                     bullets.remove(i);
