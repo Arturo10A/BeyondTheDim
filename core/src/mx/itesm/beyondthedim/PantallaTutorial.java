@@ -77,9 +77,8 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
 
     //Icono de vida
     private Texture vidaIcono;
-    //
-    private AssetManager manager;
 
+    private AssetManager manager;
     //Constructores
     public PantallaTutorial(Juego juego) {
         this.juego = juego;

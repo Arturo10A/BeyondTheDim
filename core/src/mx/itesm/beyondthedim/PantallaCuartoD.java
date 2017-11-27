@@ -235,7 +235,12 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     @Override
     public void crearEnemigos() {
-        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 100, 6));
+        juego.getEnemy_list().add(new Enemy( 200, ALTO / 4, 300, 7));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO / 2, 400, 8));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 200, ALTO , 400, 19));
+        juego.getEnemy_list().add(new Enemy(ANCHO - 800, ALTO / 4, 700, 1));
+        juego.getEnemy_list().add(new Enemy(ANCHO/2, ALTO / 2, 600, 7));
     }
 
     @Override

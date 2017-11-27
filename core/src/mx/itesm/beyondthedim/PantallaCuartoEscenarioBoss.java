@@ -182,7 +182,9 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
         crearEnemigos();
         camara.update();
         boss = new Boss(ANCHO/2,ALTO/2,100);
-        juego.boss = boss;
+        if (boss.getLife() > 0){
+            juego.boss = boss;
+        }
         boss.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Gdx.input.setInputProcessor(escenaJuego);
     }

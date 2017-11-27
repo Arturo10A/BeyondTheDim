@@ -125,7 +125,7 @@ public class Enemy extends Objeto{
         else{
             setEstadoMovimiento(Personaje.EstadoMovimiento.MOV_IZQUIERDA);
         }
-        this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.02));
+        this.x +=  ((float) ((target.getPositionX() - this.getPositionX()) * 0.05));
         this.y +=  ((float) ((target.getPositionY() - this.getPositionY() + enemyPosAlto) * 0.02));
     }
 
