@@ -78,6 +78,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
         Gdx.input.setInputProcessor(this.escenaJuego);
         Gdx.input.setCatchBackKey(true);
+
         Skin skin = new Skin();
         skin.add("padFondo", manager.get("Joystick/joystick_fondo.png"));
         skin.add("padMovimiento", manager.get("Joystick/joystick_movimiento.png"));
@@ -110,6 +111,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
                 System.out.println(camara.position);
             }
         });
+
         escenaJuego.addActor(movJoystick);
         escenaJuego.addActor(gunJoystick);
         escenaJuego.addActor(juego.getBtnPausa());
@@ -185,9 +187,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
     @Override
     public void pause() {
-        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
-            juego.setEstadoJuego(EstadoJuego.PAUSADO);
-        }
+
     }
 
     @Override
@@ -245,6 +245,10 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     @Override
     public void pausa() {
         juego.pausa(vista, batch, escenaJuego, camara);
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            juego.setEstadoJuego(EstadoJuego.PAUSADO);
+            System.out.println(camara.position);
+        }
     }
 
     @Override
