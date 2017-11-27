@@ -195,7 +195,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
             bullet.render(batch);
         }
         batch.draw(vidaIcono,20,Pantalla.ALTO-vidaIcono.getHeight());
-        batch.draw(cuadro1,Pantalla.ANCHO/2- cuadro1.getWidth()/2,Pantalla.ALTO - cuadro1.getHeight());
+        batch.draw(cuadro1,Pantalla.ANCHO/2- cuadro1.getWidth()/2,Pantalla.ALTO - cuadro1.getHeight()*1.5f);
         batch.end();
     }
 
