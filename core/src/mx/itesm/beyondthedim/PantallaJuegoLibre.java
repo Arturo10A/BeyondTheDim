@@ -94,7 +94,6 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         cpu5 = new ObjetoEscenario(1290, 950, texturaCpu);
         cpu6 = new ObjetoEscenario(1290, 90, texturaCpu);
         cpu6.sprite.flip(false, true);
-        escenaJuego = juego.getEscenaCuartoB();
         Gdx.input.setInputProcessor(this.escenaJuego);
         Gdx.input.setCatchBackKey(true);
         //*******************************************************Joysticks*******************************************************
@@ -309,46 +308,7 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     @Override
     public void ganar() {
         //Checar si los cuartos C y D han sido completados
-        if (!juego.isCuartoCterminado && !juego.isCuartoDterminado) {
-            if (personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(3))) {
-                textureEscenario = textureEscenarioAbiertoC;
-                //Puerta C get(13)
-                juego.getLimites().get(13).setSize(0);
-                isAbiertoCuartoC = true;
-            }
-        } else if (juego.isCuartoCterminado && !juego.isCuartoDterminado) {
-            textureEscenario = texturaEscenarioAbiertoD;
-            //Puerta D
-            juego.getLimites().get(14).setSize(0);
-            isAbiertoCuartoD = true;
-        } else if (juego.isCuartoCterminado && juego.isCuartoDterminado) {
-            textureEscenario = texturaEscenarioAbiertoBoss;
-            juego.getLimites().get(15).setSize(0);
-            isAbiertoCuartoBoss = true;
-        }
-        //Checar cuando los cuartos estan abiertos
-        if (isAbiertoCuartoC && personaje.getPositionX() >= 890 && personaje.getPositionX() <= 990 && personaje.getPositionY() > 950) {
-            if (juego.isCuartoCIniciado) {
-                juego.getCuartoC().setInicioPantallaC(juego);
-            }
-            juego.setScreen(juego.getCuartoC());
-            //dispose();
-            escenaJuego.clear();
-            isAbiertoCuartoC = true;
-        }
-        if (isAbiertoCuartoD && personaje.getPositionX() >= 890 && personaje.getPositionX() <= 990 && personaje.getPositionY() < 113) {
-            if (juego.isCuartoDIniciado) {
-                juego.getCuartoD().setInicioPantallaD(juego);
-            }
-            juego.setScreen(juego.getCuartoD());
-            //dispose();
-            escenaJuego.clear();
-            isAbiertoCuartoC = true;
-        }
-        if (isAbiertoCuartoBoss && personaje.getPositionX() >= 1820 && personaje.getPositionY() >= 480 && personaje.getPositionY() <= 580) {
-            personaje.setPosition(ANCHO / 9.5f, ALTO / 2f);
-            juego.setScreen(new PantallaCuartoEscenarioBoss(juego));
-        }
+
     }
 
     @Override

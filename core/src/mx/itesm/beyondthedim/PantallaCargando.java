@@ -84,6 +84,7 @@ class PantallaCargando extends Pantalla {
         manager.load("Botones/button_play.png", Texture.class);
         manager.load("Botones/button_about-us.png", Texture.class);
         manager.load("Botones/button_settings.png", Texture.class);
+        manager.load("Botones/button_free_mode.png", Texture.class);
         //texturaBtnInstructions = new Texture("Botones/button_instructions.png");
         manager.load("Stage/MenuFondo.jpg", Texture.class);
         manager.load("Music/bensound-slowmotion.mp3", Music.class);
@@ -211,7 +212,7 @@ class PantallaCargando extends Pantalla {
                     juego.setScreen(new PantallaTutorial(juego));
                     break;
                 case CUARTO_JUEGO_LIBRE:
-                    juego.setScreen(juego.getCuartoA());
+                    juego.setScreen(juego.getCuartoLibre());
                     break;
             }
             avance = (int) (manager.getProgress() * 100);

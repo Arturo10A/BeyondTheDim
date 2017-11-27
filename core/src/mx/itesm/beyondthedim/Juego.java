@@ -259,8 +259,12 @@ public class Juego extends Game {
         camera.update();
         objetos.clear();
         if(!isCuartoLibreIniciado){
-            escenaCuartoLibre = new Stage(vista);
-            isCuartoLibreIniciado = true;
+            // Cámara HUD
+            camaraHUDEscenarioB = new OrthographicCamera(Pantalla.ANCHO,Pantalla.ALTO);
+            camaraHUDEscenarioB.position.set(70, 530,0);
+            camaraHUDEscenarioB.update();
+            vistaHUDEscenarioB = new StretchViewport(Pantalla.ANCHO, Pantalla.ALTO, camaraHUDEscenarioB);
+            escenaCuartoLibre = new Stage(vistaHUDEscenarioB);
         }
     }
 

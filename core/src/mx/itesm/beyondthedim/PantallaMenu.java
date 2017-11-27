@@ -34,7 +34,7 @@ class PantallaMenu extends Pantalla {
     private Texture texturaBtnJugar;
     private Texture texturaBtnAyuda;
     private Texture texturaBtnSettings;
-    private Texture texturaBtnInstructions;
+    private Texture texturaBtnFreeMode;
     private Texto texto;
 
     //Nave
@@ -80,6 +80,7 @@ class PantallaMenu extends Pantalla {
         texturaBtnAyuda = manager.get("Botones/button_about-us.png");
         texturaBtnSettings = manager.get("Botones/button_settings.png");
         //texturaBtnInstructions = new Texture("Botones/button_instructions.png");
+        texturaBtnFreeMode = manager.get("Botones/button_free_mode.png");
         fondoPantalla = manager.get("Stage/MenuFondo.jpg");
     }
 
@@ -142,6 +143,26 @@ class PantallaMenu extends Pantalla {
 
         });
         escenaMenu.addActor(btnAboutUs);
+
+        //Boton Free Mode
+        TextureRegionDrawable trdFreeMode = new TextureRegionDrawable(new TextureRegion(texturaBtnFreeMode));
+        ImageButton btnFreeMode = new ImageButton(trdFreeMode);
+        btnFreeMode.setPosition(ANCHO-(ANCHO*0.15f),ALTO*0.08f);
+
+        btnFreeMode.addListener( new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Gdx.app.log("clicked","***CUARTO LIBRE PANTALLA***");
+                juego.setEstadoJuego(EstadoJuego.JUGANDO);
+                juego.iniciarJuego(ANCHO,ALTO);
+                juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_JUEGO_LIBRE));
+            }
+
+
+        });
+        escenaMenu.addActor(btnFreeMode);
 
     }
 
