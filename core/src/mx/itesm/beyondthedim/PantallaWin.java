@@ -60,8 +60,8 @@ public class PantallaWin extends Pantalla {
 
         tiempo += Gdx.graphics.getDeltaTime();
 
-        if (tiempo >= 5){
-            juego.setScreen(new PantallaCargando(juego, Pantallas.MENU));
+        if (tiempo >= 10){
+            juego.setScreen(new PantallaAboutUs(juego));
         }
 
     }
