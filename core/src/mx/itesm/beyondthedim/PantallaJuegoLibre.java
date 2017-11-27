@@ -2,6 +2,8 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,9 +30,6 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     //Imagen del ecenario
     private final Juego juego;
     private Texture textureEscenario;
-    private Texture textureEscenarioAbiertoC;
-    private Texture texturaEscenarioAbiertoD;
-    private Texture texturaEscenarioAbiertoBoss;
     private int ANCHO_B = 1920;
     private int ALTO_B = 1080;
     //Jett start
@@ -53,12 +52,10 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     private ObjetoEscenario cpu4;
     private ObjetoEscenario cpu5;
     private ObjetoEscenario cpu6;
-    private ObjetoEscenario cpu7;
     //
-    protected boolean isAbiertoCuartoC = false;
-    protected boolean isAbiertoCuartoD = false;
-    protected boolean isAbiertoCuartoBoss = false;
     private boolean texturasCargadas = false;
+    //
+    private AssetManager manager;
 
     //Constructores
     public PantallaJuegoLibre(Juego juego) {
@@ -71,11 +68,11 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         juego.setPantallaJuego(this);
         this.personaje.setPosition(80, 530);
         this.camara.position.set(70, 530, 0);
+        manager = juego.getAssetManager();
     }
 
     public void setInicioPantallaJuegoLibre(Juego juego) {
         this.personaje = juego.getPersonaje();
-        System.out.println(juego.getMusic().isPlaying() + "*******");
         juego.iniciarCuartoLibre(vista, camara);
         //Escenario
         escenaJuego = juego.getEscenaCuartoLibre();
@@ -99,8 +96,8 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+        skin.add("padFondo", manager.get("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", manager.get("Joystick/joystick_movimiento.png"));
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
@@ -147,18 +144,15 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     //********************Cargar*******************
     @Override
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/escenarioB_cerrado.jpg");
-        textureEscenarioAbiertoC = new Texture("Stage/escenarioB_abiertoC.jpg");
-        texturaEscenarioAbiertoD = new Texture("Stage/escenarioB_abiertoD.jpg");
+        textureEscenario = manager.get("Stage/escenario_libre.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
-        texturaCpu = new Texture("Objetos_varios/mesa_de_control_2.png");
-        texturaEscenarioAbiertoBoss = new Texture("Stage/escenarioB_abiertoBoss.jpg");
+        texturaCpu = manager.get("Objetos_varios/mesa_de_control_2.png");
         texturasCargadas = true;
     }
 
     @Override
     public void cargarMusica() {
-        juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
+        juego.setMusic((Music) manager.get("Music/bensound-extremeaction.mp3"));
         juego.getMusic().setLooping(true);
     }
 
@@ -182,15 +176,8 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         }
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
-        if (isAbiertoCuartoC) {
-            juego.getLimites().get(13).setSize(0);
-        }
-        if (isAbiertoCuartoD) {
-            juego.getLimites().get(13).setSize(0);
-        }
         //Añadir enemigo
         crearEnemigos();
-        System.out.println("Hoola");
         personaje.mover(0, 0);
         this.camara.position.set(70, 530, 0);
         camara.update();
@@ -243,14 +230,14 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-        /*
-        textureEscenario.dispose();
-        textureEscenarioAbiertoC.dispose();
-        texturaEscenarioAbiertoD.dispose();
-        texturaEscenarioAbiertoBoss.dispose();
-        //Checar
-        escenaJuego.dispose();
-        texturaCpu.dispose();*/
+
+
+        manager.unload("Joystick/joystick_movimiento.png");
+        manager.unload("Joystick/joystick_fondo.png");
+        //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+        manager.unload("Objetos_varios/mesa_de_control_2.png");
+        manager.unload("Stage/escenario_libre.jpg");
+        manager.unload("Music/bensound-extremeaction.mp3");
     }
 
     @Override
@@ -359,8 +346,6 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             juego.addLimites(new Rectangle(912, 113, 110, 0));
             //Puerta Boss get(15)
             juego.addLimites(new Rectangle(1852, 470, 0, 110));
-
-            //juego.limitesGenerados = true;
         }
     }
 
@@ -383,8 +368,6 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             //System.out.println("Parte2");
         } else if (posX < ANCHO_B / 3) { // La primera mitad
             camaraPosX = ANCHO_B / 3;
-
-            //System.out.println("Parte3");
         }
         if (posY >= ALTO_B / 3 && posY <= ALTO_B - ALTO_B / 3) {
             camaraPosY = posY;
