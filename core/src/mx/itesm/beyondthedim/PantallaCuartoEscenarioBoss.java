@@ -62,7 +62,10 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
 
     @Override
     public void ganar() {
-
+        //juego.setScreen(new PantallaMenu(juego));
+        if (boss.getLife() <= 0){
+         System.out.println("Pantalla Ganar");
+        }
     }
 
     @Override
@@ -216,7 +219,9 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
         jugar(delta);
         //Ganar/Perder
         perder();
-        ganar();
+        if (boss.getLife() <= 0) {
+            ganar();
+        }
         //Pausa
         pausa();
 

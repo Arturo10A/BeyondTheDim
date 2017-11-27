@@ -207,7 +207,7 @@ class PantallaMenu extends Pantalla {
         }
         if(nave.ANCHO < 0 || nave.ALTO < 0){
             juego.getMusic().stop();
-            //juego.setScreen(new PantallaTutorial(juego));
+            //juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_BOSS));
             juego.musicaCargada = false;
             juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_TUTORIAL));
             this.dispose();
