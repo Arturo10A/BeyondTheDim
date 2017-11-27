@@ -412,25 +412,16 @@ public class Juego extends Game {
         this.pantallaJuego = pantallaJuego;
     }
 
-    /*
-    //Joysticks
-    public Touchpad getGunJoystick(){
-        return gunJoystick;
-    }
-    public Touchpad getMovJoystick(){
-        return movJoystick;
-    }*/
-
     //Boton pausa
     public ImageButton getBtnPausa(){
         return btnPausa;
     }
 
     @Override
-    public void create () {
+    public void create (){
         // Lo preparamos para que cargue mapas
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        setScreen(new PantallaCargando(this));
+        setScreen(new PantallaLogo(this));
     }
 
     public AssetManager getAssetManager() {
@@ -556,17 +547,6 @@ public class Juego extends Game {
                     personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
                 }
             }
-            /*
-            if(pantallaJuego instanceof PantallaCuartoEscenarioBoss){
-            //((PantallaCuartoA) pantalla).generarOverlaps();
-                if((!personajeRectangle.overlaps(this.getLimites().get(1)))&&(!personajeRectangle.overlaps(this.getLimites().get(0)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(2)))&&(!personajeRectangle.overlaps(this.getLimites().get(3)))&(!personajeRectangle.overlaps(this.getLimites().get(4)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(5)))&&(!personajeRectangle.overlaps(this.getLimites().get(6)))&&(!personajeRectangle.overlaps(this.getLimites().get(7)))
-                        &&(!personajeRectangle.overlaps(this.getLimites().get(8)))){
-                    personaje.mover((float)(Math.cos(angle)), (float)(Math.sin(angle)));
-                }
-                System.out.println("Ovelaps Boss");
-            }*/
         }
     }
 
@@ -840,23 +820,6 @@ public class Juego extends Game {
             }
         }
     }
-    /*
-    private void generarJoysticks(){
-        //Texturas
-        Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
-        Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
-        estilo.background = skin.getDrawable("padFondo");
-        estilo.knob = skin.getDrawable("padMovimiento");
-        //Joystick pistola
-        gunJoystick = new Touchpad(20, estilo);
-        gunJoystick.setBounds(Pantalla.ANCHO - 200, 0, 200, 200);
-        //Joystick movimiento
-        movJoystick = new Touchpad(20, estilo);
-        movJoystick.setBounds(0, 0, 200, 200);
-        movJoystick.setColor(1, 1, 1, 0.7f);
-    }*/
 
     private void generarBotonPausa(){
         texturaBtnPausa = new Texture("Botones/button_pause.png");

@@ -1,6 +1,8 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -56,12 +58,15 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     private Texture texturaExt;
     private Texture texturaPC;
 
+    private AssetManager manager;
+
     //Constructores
     public PantallaCuartoD(Juego juego) {
         this.juego = juego;
         this.personaje = juego.getPersonaje();
         juego.iniciarCuartoD(vista, camara);
         juego.setPantallaJuego(this);
+        manager = juego.getAssetManager();
     }
 
 
@@ -94,8 +99,8 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+        skin.add("padFondo", manager.get("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", manager.get("Joystick/joystick_movimiento.png"));
 
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
@@ -139,20 +144,20 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
     //********************Cargar*******************
     @Override
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/escenarioD_abierto.jpg");
+        textureEscenario = manager.get("Stage/escenarioD_abierto.jpg");
 
-        texturaRedBed = new Texture("Objetos_varios/cama_3_2.png");
-        texturaBlueBed = new Texture("Objetos_varios/cama_2_2.png");
-        texturaSeaBed = new Texture("Objetos_varios/cama_4_2.png");
-        texturaGreenBed = new Texture("Objetos_varios/cama_1_2.png");
-        texturaPC = new Texture("Objetos_varios/computadora_2.png");
-        texturaExt = new Texture("Objetos_varios/extintor.png");
-        vidaIcono = new Texture("iconLife.png");
+        texturaRedBed = manager.get("Objetos_varios/cama_3_2.png");
+        texturaBlueBed = manager.get("Objetos_varios/cama_2_2.png");
+        texturaSeaBed = manager.get("Objetos_varios/cama_4_2.png");
+        texturaGreenBed = manager.get("Objetos_varios/cama_1_2.png");
+        texturaPC = manager.get("Objetos_varios/computadora_2.png");
+        texturaExt = manager.get("Objetos_varios/extintor.png");
+        vidaIcono = manager.get("iconLife.png");
 
     }
     @Override
     public void cargarMusica(){
-        juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
+        juego.setMusic((Music) manager.get("Music/bensound-extremeaction.mp3"));
         juego.getMusic().setLooping(true);
     }
     @Override
@@ -214,16 +219,17 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-        /*
-        textureEscenario.dispose();
-        //Escenario
-        escenaJuego.dispose();
-        //Icono de vida
-        vidaIcono.dispose();
-        texturaRedBed.dispose();
-        texturaBlueBed.dispose();
-        texturaSeaBed.dispose();
-        texturaGreenBed.dispose();*/
+        manager.unload("Joystick/joystick_movimiento.png");
+        manager.unload("Joystick/joystick_fondo.png");
+        manager.unload("Stage/escenarioD_abierto.jpg");
+        manager.unload("Objetos_varios/cama_3_2.png");
+        manager.unload("Objetos_varios/cama_2_2.png");
+        manager.unload("Objetos_varios/cama_4_2.png");
+        manager.unload("Objetos_varios/cama_1_2.png");
+        manager.unload("Objetos_varios/computadora_2.png");
+        manager.unload("Objetos_varios/extintor.png");
+        manager.unload("iconLife.png");
+        manager.unload("Music/bensound-extremeaction.mp3");
     }
 
 
@@ -237,11 +243,13 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         if (personaje.getPositionX() >= 560 && personaje.getPositionX() <= 680 && personaje.getPositionY() >= 590) {
             juego.getPersonaje().setPosition(915,120);
             juego.getCuartoB().setInicioPantallaB(juego);
-            juego.setScreen(juego.getCuartoB());
+            juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_B));
             escenaJuego.clear();
         }
-        if(personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(1))){
-            juego.isCuartoDterminado = true;
+        if(!juego.getLimites().isEmpty()){
+            if(personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(1))){
+                juego.isCuartoDterminado = true;
+            }
         }
     }
 

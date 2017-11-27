@@ -1,6 +1,8 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -48,6 +50,8 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
     private ObjetoEscenario cpu1;
     private ObjetoEscenario cpu2;
     private ObjetoEscenario cpu3;
+    //
+    private AssetManager manager;
 
 
 
@@ -62,6 +66,7 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         //Escenario
         escenaJuego = juego.getEscenaCuartoC();
         juego.setPantallaJuego(this);
+        manager = juego.getAssetManager();
     }
 
     public void setInicioPantallaC(Juego juego){
@@ -80,8 +85,8 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+        skin.add("padFondo", manager.get("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", manager.get("Joystick/joystick_movimiento.png"));
 
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
@@ -121,17 +126,17 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     //********************Cargar*******************
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/escenarioC_abierto.jpg");
+        textureEscenario = manager.get("Stage/escenarioC_abierto.jpg");
 
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
-        vidaIcono = new Texture("iconLife.png");
-        cpu  = new Texture("Objetos_varios/cpu_izq.png");
-        cpu_der = new Texture("Objetos_varios/cpu_der.png");
-        cpu_central = new Texture("Objetos_varios/cpu_central.png");
+        vidaIcono = manager.get("iconLife.png");
+        cpu  = manager.get("Objetos_varios/cpu_izq.png");
+        cpu_der = manager.get("Objetos_varios/cpu_der.png");
+        cpu_central = manager.get("Objetos_varios/cpu_central.png");
     }
     @Override
     public void cargarMusica(){
-        juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
+        juego.setMusic((Music) manager.get("Music/bensound-extremeaction.mp3"));
         juego.getMusic().setLooping(true);
         juego.musicaCargada = true;
     }
@@ -211,15 +216,16 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-        /*
-        textureEscenario.dispose();
-        //Escenario
-        escenaJuego.dispose();
-        cpu.dispose();
-        cpu_der.dispose();
-        cpu_central.dispose();
-        //Icono de vida
-        vidaIcono.dispose();*/
+        manager.unload("Joystick/joystick_movimiento.png");
+        manager.unload("Joystick/joystick_fondo.png");
+        manager.unload("Stage/escenarioC_abierto.jpg");
+
+        //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+        manager.unload("iconLife.png");
+        manager.unload("Objetos_varios/cpu_izq.png");
+        manager.unload("Objetos_varios/cpu_der.png");
+        manager.unload("Objetos_varios/cpu_central.png");
+        manager.unload("Music/bensound-extremeaction.mp3");
     }
 
 
@@ -241,11 +247,13 @@ public class PantallaCuartoC extends Pantalla implements INiveles {
         if (personaje.getPositionX() >= 560 && personaje.getPositionX() <= 680 && personaje.getPositionY() <= 111) {
             juego.getPersonaje().setPosition(915,940);
             juego.getCuartoB().setInicioPantallaB(juego);
-            juego.setScreen(juego.getCuartoB());
+            juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_B));
             escenaJuego.clear();
         }
-        if(personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(1))){
-            juego.isCuartoCterminado = true;
+        if(!juego.getLimites().isEmpty()){
+            if(personaje.getSprite().getBoundingRectangle().overlaps(juego.getLimites().get(1))){
+                juego.isCuartoCterminado = true;
+            }
         }
     }
 

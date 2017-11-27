@@ -80,7 +80,7 @@ public class PantallaPausa extends Stage{
                 juego.musicaCargada = false;
                 juego.setEstadoJuego(EstadoJuego.JUGANDO);
                 juego.reiniciarJuego();
-                juego.setScreen(juego.getMenu());
+                juego.setScreen(new PantallaCargando(juego, Pantallas.MENU));
                 /*
                 juego.getCuartoA().dispose();
                 juego.getCuartoB().dispose();

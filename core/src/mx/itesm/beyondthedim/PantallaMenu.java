@@ -1,6 +1,8 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -44,9 +46,12 @@ class PantallaMenu extends Pantalla {
     private Texture fondoPantalla;
     private boolean playAnimacionNave = false;
 
+    private AssetManager manager;
+
     public PantallaMenu(Juego juego) {
         this.juego = juego;
         System.out.println("Se creo un nuevo menu");
+        manager = juego.getAssetManager();
     }
     private void cargarNave() {
         nave = new Nave(ANCHO/2-280/2,ALTO*posAltoNave);
@@ -71,11 +76,11 @@ class PantallaMenu extends Pantalla {
     }
 
     private void cargarTexturas() {
-        texturaBtnJugar = new Texture("Botones/button_play.png");
-        texturaBtnAyuda = new Texture("Botones/button_about-us.png");
-        texturaBtnSettings = new Texture("Botones/button_settings.png");
+        texturaBtnJugar = manager.get("Botones/button_play.png");
+        texturaBtnAyuda = manager.get("Botones/button_about-us.png");
+        texturaBtnSettings = manager.get("Botones/button_settings.png");
         //texturaBtnInstructions = new Texture("Botones/button_instructions.png");
-        fondoPantalla = new Texture("Stage/MenuFondo.jpg");
+        fondoPantalla = manager.get("Stage/MenuFondo.jpg");
     }
 
     private void crearEscenaMenu() {
@@ -181,9 +186,9 @@ class PantallaMenu extends Pantalla {
         }
         if(nave.ANCHO < 0 || nave.ALTO < 0){
             juego.getMusic().stop();
-            juego.setScreen(new PantallaTutorial(juego));
+            //juego.setScreen(new PantallaTutorial(juego));
             juego.musicaCargada = false;
-            //juego.setScreen(new PantallaCuartoEscenarioBoss(juego));
+            juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_TUTORIAL));
             this.dispose();
         }
     }
@@ -207,6 +212,12 @@ class PantallaMenu extends Pantalla {
 
     @Override
     public void dispose() {
-
+        /*
+        manager.unload("Botones/button_play.png");
+        manager.unload("Botones/button_about-us.png");
+        manager.unload("Botones/button_settings.png");
+        //texturaBtnInstructions = new Texture("Botones/button_instructions.png");
+        manager.unload("Stage/MenuFondo.jpg");
+        manager.unload("Music/bensound-slowmotion.mp3");*/
     }
 }

@@ -1,6 +1,8 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -75,6 +77,8 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
 
     //Icono de vida
     private Texture vidaIcono;
+    //
+    private AssetManager manager;
 
     //Constructores
     public PantallaTutorial(Juego juego) {
@@ -84,6 +88,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
         //Escenario
         escenaJuego = juego.getEscenaCuartoTutorial();
         juego.setPantallaJuego(this);
+        manager = juego.getAssetManager();
     }
 
     @Override
@@ -93,8 +98,8 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+        skin.add("padFondo",manager.get("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", manager.get("Joystick/joystick_movimiento.png"));
 
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
@@ -124,8 +129,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 super.clicked(event,x,y);
-                juego.setScreen(juego.getCuartoB());
-                dispose();
+                juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_A));
             }
         });
         escenaJuego.addActor(btnSkip);
@@ -137,15 +141,15 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
     //********************Cargar*******************
     @Override
     public void cargarTexturas() {
-        texturaBtnSkip = new Texture("Botones/forward.png");
-        textureEscenario = new Texture("Stage/tutorial.jpg");
-        vidaIcono = new Texture("iconLife.png");
-        cuadro1 = new Texture("test.png");
-        cuadro2 = new Texture("test2.png");
-        cuadro3 = new Texture("test3.png");
-        cuadro4 = new Texture("test4.png");
-        cuadro5 = new Texture("test5.png");
-        cuadro6 = new Texture("test6.png");
+        texturaBtnSkip =  manager.get("Botones/forward.png");
+        textureEscenario =  manager.get("Stage/tutorial.jpg");
+        vidaIcono =  manager.get("iconLife.png");
+        cuadro1 =  manager.get("test.png");
+        cuadro2 =  manager.get("test2.png");
+        cuadro3 =  manager.get("test3.png");
+        cuadro4 =  manager.get("test4.png");
+        cuadro5 =  manager.get("test5.png");
+        cuadro6 = manager.get("test6.png");
     }
     @Override
     public void cargarMusica(){
@@ -262,7 +266,18 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
 
     @Override
     public void dispose() {
-
+        manager.unload("Joystick/joystick_movimiento.png");
+        manager.unload("Joystick/joystick_fondo.png");
+        manager.unload("Botones/forward.png");
+        manager.unload("Stage/tutorial.jpg");
+        manager.unload("iconLife.png");
+        manager.unload("test.png");
+        manager.unload("test2.png");
+        manager.unload("test3.png");
+        manager.unload("test4.png");
+        manager.unload("test5.png");
+        manager.unload("test6.png");
+        manager.unload("Music/bensound-extremeaction.mp3");
     }
 
 

@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
@@ -24,19 +25,11 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     //Jett start
     private  Personaje personaje;
     //Jett Speed
-    private int DX_PERSONAJE = 5;
-    private int DY_PERSONAJE = 5;
-    //Arreglo de balas
-    private ArrayList<Bullet> bullets;
-    private static final float SWT = 0.3f;
-    private float shootTimer;
-    private float timeBala;
     //BOSS
     private Boss boss;
     //Arreglo balas de Jefe
     private ArrayList<BulletBoss> bossBullets;
     //Escenario y Texturas
-    private Texture texturaBtnGoBack;
     private Texture textureEscenario;
     private Stage escenaJuego;
     //Escena de Pausa
@@ -45,10 +38,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     private Touchpad gunJoystick;
     //Estado del juego
     private EstadoJuego estado = EstadoJuego.JUGANDO;
-    //Texto a mostrar
-    private Texto texto;
-    //Sonidos
-    private Sound shoot = Gdx.audio.newSound(Gdx.files.internal("Music/shoot.mp3"));
+    private AssetManager manager;
 
     //Lista de medicionas
     private ArrayList<Medicina> medicinas = new ArrayList<Medicina>(5);
@@ -62,6 +52,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
         juego.setPantallaJuego(this);
         juego.iniciarCuartoBossFinal(vista, camara);
         texturasCargadas = false;
+        manager = juego.getAssetManager();
     }
 
     @Override
@@ -114,9 +105,8 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
 
     @Override
     public void cargarTexturas(){
-        texturaBtnGoBack = new Texture("Botones/button_pause.png");
-        textureEscenario = new Texture("Stage/escenario_final.png");
-        vidaIcono = new Texture("iconLife.png");
+        textureEscenario = manager.get("Stage/escenario_final.png");
+        vidaIcono = manager.get("iconLife.png");
         texturasCargadas = true;
     }
 
@@ -127,14 +117,12 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
 
     @Override
     public void crearEscena(){
-        bullets = new ArrayList<Bullet>();
-        shootTimer=0;
         escenaJuego = juego.getEscenaCuartoBossFinal();
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+        skin.add("padFondo", manager.get("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", manager.get("Joystick/joystick_movimiento.png"));
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
@@ -195,7 +183,6 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
         camara.update();
         boss = new Boss(ANCHO/2,ALTO/2,100);
         juego.boss = boss;
-        texto = new Texto();
         boss.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
         Gdx.input.setInputProcessor(escenaJuego);
     }
@@ -233,7 +220,6 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
 
         jugar(delta);
         ganar();
-
     }
 
     @Override
@@ -249,5 +235,11 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     @Override
     public void dispose() {
 
+        manager.unload("Joystick/joystick_movimiento.png");
+        manager.unload("Joystick/joystick_fondo.png");
+        manager.unload("Botones/button_pause.png");
+        manager.unload("Stage/escenario_final.png");
+        manager.unload("iconLife.png");
+        manager.unload("Music/bensound-extremeaction.mp3");
     }
 }

@@ -2,6 +2,8 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -46,6 +48,8 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     //Icono de vida
     private Texture vidaIcono;
 
+    private AssetManager manager;
+
     //Constructores
     public PantallaCuartoA(Juego juego) {
         this.juego = juego;
@@ -54,6 +58,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         //Escenario
         escenaJuego = juego.getEscenaCuartoA();
         juego.setPantallaJuego(this);
+        manager = juego.getAssetManager();
     }
 
     public void setInicioPantallaA(Juego juego) {
@@ -74,8 +79,8 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         Gdx.input.setInputProcessor(this.escenaJuego);
         Gdx.input.setCatchBackKey(true);
         Skin skin = new Skin();
-        skin.add("padFondo", new Texture("Joystick/joystick_fondo.png"));
-        skin.add("padMovimiento", new Texture("Joystick/joystick_movimiento.png"));
+        skin.add("padFondo", manager.get("Joystick/joystick_fondo.png"));
+        skin.add("padMovimiento", manager.get("Joystick/joystick_movimiento.png"));
         Touchpad.TouchpadStyle estilo = new Touchpad.TouchpadStyle();
         estilo.background = skin.getDrawable("padFondo");
         estilo.knob = skin.getDrawable("padMovimiento");
@@ -97,7 +102,14 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         });
         //****************************************Boton Pausa -> check variable and conflic agins problems*********************************************
         //Listener boton pausa
+        juego.getBtnPausa().addListener(new ClickListener() {
 
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                juego.setEstadoJuego(EstadoJuego.PAUSADO);
+                System.out.println(camara.position);
+            }
+        });
         escenaJuego.addActor(movJoystick);
         escenaJuego.addActor(gunJoystick);
         escenaJuego.addActor(juego.getBtnPausa());
@@ -107,14 +119,13 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
     //********************Cargar*******************
     @Override
     public void cargarTexturas() {
-        textureEscenario = new Texture("Stage/fondo_nivel_uno_cerrado.jpg");
-        textureEscenarioAbierto = new Texture("Stage/fondo_nivel_uno_abierto.jpg");
-        //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
-        vidaIcono = new Texture("iconLife.png");
+        textureEscenario = manager.get("Stage/fondo_nivel_uno_cerrado.jpg");
+        textureEscenarioAbierto = manager.get("Stage/fondo_nivel_uno_abierto.jpg");
+        vidaIcono = manager.get("iconLife.png");
     }
     @Override
     public void cargarMusica(){
-        juego.setMusic(Gdx.audio.newMusic(Gdx.files.internal("Music/bensound-extremeaction.mp3")));
+        juego.setMusic((Music) manager.get("Music/bensound-extremeaction.mp3"));
         juego.getMusic().setLooping(true);
     }
     @Override
@@ -167,6 +178,8 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         ganar();
         //Pausa
         pausa();
+
+
     }
 
 
@@ -191,6 +204,12 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
         //Checar
         escenaJuego.dispose();
         vidaIcono.dispose();*/
+        manager.unload("Joystick/joystick_movimiento.png");
+        manager.unload("Joystick/joystick_fondo.png");
+        manager.unload("Stage/fondo_nivel_uno_cerrado.jpg");
+        manager.unload("Stage/fondo_nivel_uno_abierto.jpg");
+        manager.unload("iconLife.png");
+        manager.unload("Music/bensound-extremeaction.mp3");
     }
 
 
@@ -207,7 +226,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
             juego.getLimites().get(5).setSize(0);
 
             if (personaje.getPositionX() >= 1090 && personaje.getPositionY() > 315 && personaje.getPositionY() < 420) {
-                juego.setScreen(juego.getCuartoB());
+                juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_B));
                 escenaJuego.clear();
             }
 
@@ -225,10 +244,7 @@ public class PantallaCuartoA  extends Pantalla implements INiveles {
 
     @Override
     public void pausa() {
-        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
-            juego.setEstadoJuego(EstadoJuego.PAUSADO);
-        }
-
+        juego.pausa(vista, batch, escenaJuego, camara);
     }
 
     @Override
