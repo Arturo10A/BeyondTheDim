@@ -46,6 +46,7 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     private int difficultyLevel = 1;
     private int randomNumX;
     private int randomNumY;
+
     //
     private ObjetoEscenario cpu1;
     private ObjetoEscenario cpu2;
@@ -260,14 +261,8 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     }
 
     public static int randInt(int min, int max) {
-
-        // Usually this can be a field rather than a method variable
         Random rand = new Random();
-
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
         int randomNum = rand.nextInt((max - min) + 1) + min;
-
         return randomNum;
     }
     public static int nthPrime(int n) {
@@ -277,15 +272,11 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
                 ++count;
             }
         }
-        // The candidate has been incremented once after the count reached n
         return candidate-1;
     }
     private static boolean isPrime(int n) {
         for(int i = 2; i < n; ++i) {
             if (n % i == 0) {
-                // We are naive, but not stupid, if
-                // the number has a divisor other
-                // than 1 or itself, we return immediately.
                 return false;
             }
         }
@@ -297,8 +288,20 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
 
         int enemiesThisTime = nthPrime(difficultyLevel);
         for(int i=0;i<enemiesThisTime;i++){
-            randomNumX = randInt((int)personaje.getPositionX()+50,(int)(ANCHO-100));
-            randomNumY = randInt((int)personaje.getPositionY()+50,(int)(ALTO-100));
+            randomNumX = randInt((int)(ANCHO/16),(int)(ANCHO-(ANCHO/16)));
+            randomNumY = randInt((int)(ALTO/9),(int)(ALTO-(ALTO/9)));
+            if((randomNumX<personaje.getPositionX()+40 && randomNumX>personaje.getPositionX()-40)&& (randomNumY<personaje.getPositionY()+40 && randomNumY>personaje.getPositionY()-40)){
+                if(randomNumX<0){
+                    randomNumX-=40;
+                }else{
+                    randomNumX+=40;
+                }
+                if(randomNumY<0){
+                    randomNumY-=40;
+                }else{
+                    randomNumY+=40;
+                }
+            }
             juego.getEnemy_list().add(new Enemy(randomNumX, randomNumY, 100, 1));
         }
 
