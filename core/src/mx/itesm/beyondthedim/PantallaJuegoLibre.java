@@ -185,7 +185,6 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             timerMedicinas = 0;
         }
 
-        System.out.println("******** Timer Medicinas: "+timerMedicinas);
 
         if (juego.musicOn && !juego.getMusic().isPlaying()) {
             juego.getMusic().setVolume(0.2f);
