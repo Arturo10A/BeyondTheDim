@@ -41,7 +41,7 @@ class PantallaCargando extends Pantalla {
 
     @Override
     public void show() {
-        texturaCargando = new Texture(Gdx.files.internal("cargando/cargando.png"));
+        texturaCargando = new Texture(Gdx.files.internal("Cargando/cargando.png"));
         spriteCargando = new Sprite(texturaCargando);
         spriteCargando.setPosition(ANCHO / 2 - spriteCargando.getWidth() / 2, ALTO / 2 - spriteCargando.getHeight() / 2);
         cargarRecursosSigPantalla();

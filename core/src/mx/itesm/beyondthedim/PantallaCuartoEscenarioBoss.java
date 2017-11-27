@@ -1,6 +1,7 @@
 package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -80,6 +81,10 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     @Override
     public void pausa() {
         juego.pausa(vista, batch, escenaJuego, camara);
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            juego.setEstadoJuego(EstadoJuego.PAUSADO);
+            System.out.println(camara.position);
+        }
     }
 
     @Override
@@ -121,6 +126,8 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     @Override
     public void crearEscena(){
         escenaJuego = juego.getEscenaCuartoBossFinal();
+        Gdx.input.setInputProcessor(this.escenaJuego);
+        Gdx.input.setCatchBackKey(true);
         //*******************************************************Joysticks*******************************************************
         //Texturas
         Skin skin = new Skin();

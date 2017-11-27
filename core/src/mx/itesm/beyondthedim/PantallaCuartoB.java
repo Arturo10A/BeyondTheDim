@@ -380,6 +380,10 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     @Override
     public void pausa() {
         juego.pausa(vista, batch, escenaJuego, camara);
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            juego.setEstadoJuego(EstadoJuego.PAUSADO);
+            System.out.println(camara.position);
+        }
     }
 
     @Override
