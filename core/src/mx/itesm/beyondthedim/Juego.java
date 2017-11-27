@@ -113,12 +113,18 @@ public class Juego extends Game {
     private ArrayList<BulletBoss> bossBullets = new ArrayList<BulletBoss>();
     protected Boss boss;
 
+    //Pausa
+    private Texture texturePausa;
+
 
     public Juego(){
         assetManager = new AssetManager();
     }
 
     public void iniciarJuego(float ANCHO, float ALTO) {
+        if(texturePausa == null){
+            texturePausa = new Texture("Stage/pausa_fondo.png");
+        }
         vidaPersonaje = 1000;
         juegoIniciado = true;
         musicaCargada = false;
@@ -685,7 +691,7 @@ public class Juego extends Game {
             float posX = camara.position.x;
             float posY = camara.position.y;
             if (this.pantallaPausa ==null) {
-                this.pantallaPausa = new PantallaPausa(vista, batch, this, escenaJuego, posX, posY);
+                this.pantallaPausa = new PantallaPausa(vista, batch, this, escenaJuego, posX, posY, texturePausa);
                 if(!pantallaPausa.elementosDibujados){
                     this.pantallaPausa.dibujar();
                     System.out.println("se dibujao pausa");

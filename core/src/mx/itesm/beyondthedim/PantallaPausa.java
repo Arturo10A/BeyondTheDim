@@ -27,31 +27,36 @@ public class PantallaPausa extends Stage{
 
     private Stage escenaJuego;
     private Image imgRectangulo;
+    private Image imgFondo;
     private Juego juego;
     private ImageButton btnSalir;
     private ImageButton btnReintentar;
+    private Texture texturaMenuPausa;
     protected boolean elementosDibujados;
     private float posX;
     private float posY;
 
-    public PantallaPausa(Viewport vista, SpriteBatch batch, final Juego juego, Stage escenaJuego, float posX, float posY) {
+    public PantallaPausa(Viewport vista, SpriteBatch batch, final Juego juego, Stage escenaJuego, float posX, float posY, Texture texturaMenuPausa) {
         super(vista,batch);
         this.escenaJuego = escenaJuego;
         this.juego = juego;
         this.posX = posX;
         this.posY = posY;
+        this.texturaMenuPausa = texturaMenuPausa;
         Pixmap pixmap = new Pixmap((int) (Pantalla.ANCHO), (int) (Pantalla.ALTO), Pixmap.Format.RGBA8888);
-        pixmap.setColor( 0.1f, 0.1f, 0.1f, 0.4f );
+        pixmap.setColor( 0.698f, 0.133f, 0.133f, 0.6f );
         pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
         Texture texturaRectangulo = new Texture(pixmap);
         pixmap.dispose();
+
         imgRectangulo = new Image(texturaRectangulo);
-        Texture texturaBtnSalir = new Texture("Botones/button_inicio.png");
+        imgFondo = new Image(texturaMenuPausa);
+        Texture texturaBtnSalir = new Texture("Botones/button_menu.png");
         TextureRegionDrawable trdSalir = new TextureRegionDrawable(
                 new TextureRegion(texturaBtnSalir));
         btnSalir = new ImageButton(trdSalir);
         // Continuar
-        Texture texturabtnReintentar = new Texture("Botones/button_back_2.png");
+        Texture texturabtnReintentar = new Texture("Botones/button_resume.png");
         TextureRegionDrawable trdReintentar = new TextureRegionDrawable(
                 new TextureRegion(texturabtnReintentar));
         btnReintentar = new ImageButton(trdReintentar);
@@ -69,6 +74,9 @@ public class PantallaPausa extends Stage{
         System.out.println(imgRectangulo.getX()+ "*********************" + imgRectangulo.getY());
         System.out.println(posX + " kkk "+ posY);
         this.addActor(imgRectangulo);
+
+        imgFondo.setPosition(posX-Pantalla.ANCHO/2, posY-Pantalla.ALTO/2);
+        this.addActor(imgFondo);
 
         // Salir
         btnSalir.setPosition(posX-btnSalir.getWidth()/2, posY - btnSalir.getHeight());

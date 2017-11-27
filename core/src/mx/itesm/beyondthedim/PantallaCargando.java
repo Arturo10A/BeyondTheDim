@@ -166,6 +166,13 @@ class PantallaCargando extends Pantalla {
     }
 
     private void cargarRecursosJuegoLibre() {
+
+        manager.load("Joystick/joystick_movimiento.png", Texture.class);
+        manager.load("Joystick/joystick_fondo.png", Texture.class);
+        //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
+        manager.load("Objetos_varios/mesa_de_control_2.png", Texture.class);
+        manager.load("Stage/escenario_libre.jpg", Texture.class);
+        manager.load("Music/bensound-extremeaction.mp3",Music.class);
     }
 
     @Override
@@ -174,7 +181,7 @@ class PantallaCargando extends Pantalla {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         spriteCargando.draw(batch);
-        texto.mostrarMensaje(batch, avance + " %", ANCHO / 2, ALTO / 2);
+        texto.mostrarMensaje(batch, "Loading", ANCHO / 2, ALTO / 2);
         batch.end();
         // Actualizar
         timerAnimacion -= delta;
@@ -182,6 +189,7 @@ class PantallaCargando extends Pantalla {
             timerAnimacion = TIEMPO_ENTRE_FRAMES;
             spriteCargando.rotate(20);
         }
+        System.out.println(avance);
         // Actualizar carga
         actualizarCargaRecursos();
     }
@@ -215,7 +223,6 @@ class PantallaCargando extends Pantalla {
                     juego.setScreen(juego.getCuartoLibre());
                     break;
             }
-            avance = (int) (manager.getProgress() * 100);
         }
     }
 
