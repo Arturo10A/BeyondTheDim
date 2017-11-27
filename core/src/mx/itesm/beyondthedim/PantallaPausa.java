@@ -44,7 +44,7 @@ public class PantallaPausa extends Stage{
         this.posY = posY;
         this.texturaMenuPausa = texturaMenuPausa;
         Pixmap pixmap = new Pixmap((int) (Pantalla.ANCHO), (int) (Pantalla.ALTO), Pixmap.Format.RGBA8888);
-        pixmap.setColor( 0.698f, 0.133f, 0.133f, 0.4f );
+        pixmap.setColor( 0.698f, 0.133f, 0.133f, 0.6f );
         pixmap.fillRectangle(0, 0,pixmap.getWidth(),pixmap.getHeight());
         Texture texturaRectangulo = new Texture(pixmap);
         pixmap.dispose();
