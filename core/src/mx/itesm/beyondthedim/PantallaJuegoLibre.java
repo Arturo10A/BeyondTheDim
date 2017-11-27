@@ -62,6 +62,7 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
 
     //
     private AssetManager manager;
+    private Texture vidaIcono;
 
     //Constructores
     public PantallaJuegoLibre(Juego juego) {
@@ -153,6 +154,8 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         textureEscenario = manager.get("Stage/escenario_libre.jpg");
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
         texturaCpu = manager.get("Objetos_varios/mesa_de_control_2.png");
+        vidaIcono = manager.get("iconLife.png");
+
         texturasCargadas = true;
     }
 
@@ -209,6 +212,7 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
 
+        batch.draw(vidaIcono,camara.position.x-Pantalla.ANCHO*0.49f, camara.position.y+Pantalla.ALTO*0.43f);
         if (timerMedicinas >= 4 && medicinas.isEmpty() ){
             medicinas.add(new Medicina(1701 ,856));
             medicinas.add(new Medicina(255 ,818));
@@ -273,6 +277,7 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         manager.unload("Objetos_varios/mesa_de_control_2.png");
         manager.unload("Stage/escenario_libre.jpg");
         manager.unload("Music/bensound-extremeaction.mp3");
+        manager.unload("iconLife.png");
     }
 
     @Override

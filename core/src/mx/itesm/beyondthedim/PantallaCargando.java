@@ -110,6 +110,7 @@ class PantallaCargando extends Pantalla {
         manager.load("Objetos_varios/mesa_de_control_2.png", Texture.class);
         manager.load("Stage/escenarioB_abiertoBoss.jpg", Texture.class);
         manager.load("Music/bensound-extremeaction.mp3",Music.class);
+        manager.load("iconLife.png", Texture.class);
     }
 
     private void cargarRecursosCuartoC() {
@@ -173,6 +174,7 @@ class PantallaCargando extends Pantalla {
         manager.load("Objetos_varios/mesa_de_control_2.png", Texture.class);
         manager.load("Stage/escenario_libre.jpg", Texture.class);
         manager.load("Music/bensound-extremeaction.mp3",Music.class);
+        manager.load("iconLife.png", Texture.class);
     }
 
     @Override

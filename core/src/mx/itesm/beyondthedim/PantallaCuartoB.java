@@ -65,6 +65,8 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
     //
     private AssetManager manager;
 
+    private Texture vidaIcono;
+
     //Constructores
     public PantallaCuartoB(Juego juego) {
 
@@ -161,6 +163,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         //texturaItemHistoria = new Texture("Objetos_varios/notas_prueba.png");
         texturaCpu =  manager.get("Objetos_varios/mesa_de_control_2.png");
         texturaEscenarioAbiertoBoss =  manager.get("Stage/escenarioB_abiertoBoss.jpg");
+        vidaIcono = manager.get("iconLife.png");
         texturasCargadas = true;
     }
 
@@ -222,6 +225,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
+        batch.draw(vidaIcono,camara.position.x-Pantalla.ANCHO*0.5f, camara.position.y+Pantalla.ALTO*0.40f);
         batch.end();
         if (juego.getEnemy_list().isEmpty() && apariciones >= 0) {
             difficultyLevel+=1;
@@ -270,6 +274,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         manager.unload("Objetos_varios/mesa_de_control_2.png");
         manager.unload("Stage/escenarioB_abiertoBoss.jpg");
         manager.unload("Music/bensound-extremeaction.mp3");
+        manager.unload("iconLife.png");
     }
 
     @Override
