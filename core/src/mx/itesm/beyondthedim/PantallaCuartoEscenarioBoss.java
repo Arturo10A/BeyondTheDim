@@ -65,7 +65,7 @@ public class PantallaCuartoEscenarioBoss extends  Pantalla implements INiveles{
     public void ganar() {
         //juego.setScreen(new PantallaMenu(juego));
         if (boss.getLife() <= 0){
-         System.out.println("Pantalla Ganar");
+            juego.setScreen(new PantallaWin(juego));
         }
     }
 
