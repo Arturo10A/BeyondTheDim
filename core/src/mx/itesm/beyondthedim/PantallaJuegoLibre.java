@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 /**
@@ -55,6 +56,10 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
     private ObjetoEscenario cpu6;
     //
     private boolean texturasCargadas = false;
+
+    private ArrayList<Medicina> medicinas = new ArrayList<Medicina>(4);
+    int timerMedicinas = 0;
+
     //
     private AssetManager manager;
 
@@ -170,10 +175,22 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         }
         generarLimites();
 
+        timerMedicinas += difficultyLevel;
+
+        if (timerMedicinas >= 1 ){
+            medicinas.add(new Medicina(1701 ,856));
+            medicinas.add(new Medicina(255 ,818));
+            medicinas.add(new Medicina(190 ,190));
+            medicinas.add(new Medicina(1668 ,213));
+            timerMedicinas = 0;
+        }
+
+        System.out.println("******** Timer Medicinas: "+timerMedicinas);
+
         if (juego.musicOn && !juego.getMusic().isPlaying()) {
             juego.getMusic().setVolume(0.2f);
             juego.getMusic().play();
-            System.out.println("Entro");
+            //System.out.println("Entro");
         }
         //personaje.sprite.getBoundingRectangle(
         personaje.setEstadoMovimiento(Personaje.EstadoMovimiento.QUIETO);
@@ -192,9 +209,27 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
         batch.setProjectionMatrix(camara.combined);
         batch.begin();
         juego.dibujarObjetos(batch, textureEscenario);
+
+        if (timerMedicinas >= 4 && medicinas.isEmpty() ){
+            medicinas.add(new Medicina(1701 ,856));
+            medicinas.add(new Medicina(255 ,818));
+            medicinas.add(new Medicina(190 ,190));
+            medicinas.add(new Medicina(1668 ,213));
+
+            timerMedicinas = 0;
+        }
+
+        for (int i = 0; i < medicinas.size(); i++) {
+            medicinas.get(i).dib(batch);
+            if (medicinas.get(i).vida(personaje)){
+                medicinas.remove(i);
+            }
+
+        }
         batch.end();
         if (juego.getEnemy_list().isEmpty() && apariciones >= 0) {
             difficultyLevel+=1;
+            timerMedicinas +=1;
             crearEnemigos();
             apariciones--;
         }
