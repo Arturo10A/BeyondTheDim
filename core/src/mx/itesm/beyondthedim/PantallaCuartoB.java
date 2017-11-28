@@ -246,7 +246,7 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
         ganar();
         //Pausa
         pausa();
-        //System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
+        System.out.println(personaje.sprite.getX()+ " " + personaje.sprite.getY());
         //System.out.println(camara.position);
     }
 
@@ -410,13 +410,13 @@ public class PantallaCuartoB extends Pantalla implements INiveles {
             //Muro Sur Oeste
             juego.addLimites(new Rectangle(102, 950, 820, 0));
             //Muro Sur Este
-            juego.addLimites(new Rectangle(1092, 950, 820, 0));
+            juego.addLimites(new Rectangle(980, 950, 820, 0));
             //Muro Oeste
             juego.addLimites(new Rectangle(102, 113, 0, 1900));
             //Muro Norte Oeste
             juego.addLimites(new Rectangle(102, 113, 820, 0));
             //Muro Norte Este
-            juego.addLimites(new Rectangle(1092, 113, 820, 0));
+            juego.addLimites(new Rectangle(980, 113, 820, 0));
             //Muro Este Norte
             juego.addLimites(new Rectangle(1852, 113, 0, 367));
             //Muro Este Sur
