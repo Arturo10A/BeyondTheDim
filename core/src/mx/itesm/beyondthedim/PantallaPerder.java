@@ -33,12 +33,15 @@ public class PantallaPerder extends Pantalla{
     private Texture backButtonReload;
     //Texto
     private Texto texto;
+    //
+    private Pantallas pantalla;
 
     //Music
     Music lose = Gdx.audio.newMusic(Gdx.files.internal("Music/lose.mp3"));
 
-    public PantallaPerder(Juego juego){
+    public PantallaPerder(Juego juego, Pantallas pantalla){
         this.juego = juego;
+        this.pantalla = pantalla;
     }
 
     public void cargarTexturas(){
@@ -90,7 +93,7 @@ public class PantallaPerder extends Pantalla{
                 //juego.setScreen(new PantallaCuartoA(juego));
                 juego.reiniciarJuego();
                 juego.iniciarJuego(ANCHO,ALTO);
-                juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_A));
+                juego.setScreen(new PantallaCargando(juego, pantalla));
                 //dispose();
             }
         });

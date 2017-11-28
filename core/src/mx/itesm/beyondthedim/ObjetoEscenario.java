@@ -22,6 +22,8 @@ public class ObjetoEscenario extends Objeto {
     protected EstadoMovimiento estadoMovimiento = EstadoMovimiento.QUIETO;
     private float x;
     private float y;
+    private float alto;
+    private float ancho;
 
 
     public ObjetoEscenario(float x, float y, Texture textura){
@@ -30,6 +32,8 @@ public class ObjetoEscenario extends Objeto {
         texturaObjeto = textura;
         sprite = new Sprite(textura);    // QUIETO
         sprite.setPosition(x,y);    // Posición inicial
+        alto = textura.getWidth();
+        ancho = textura.getHeight();
     }
 
 
@@ -39,6 +43,12 @@ public class ObjetoEscenario extends Objeto {
 
     public void dibujar(SpriteBatch batch, float tiempo){
         batch.draw(sprite, x, y);
+    }
+
+    public void dibujar(SpriteBatch batch, float alto, float ancho){
+        this.alto = alto;
+        this.ancho = ancho;
+        batch.draw(sprite, x, y, ancho, alto);
     }
 
     public float getPositionX(){
@@ -59,5 +69,13 @@ public class ObjetoEscenario extends Objeto {
     public  void setPosition(float x, float y){
         this.x = x;
         this.y = y;
+    }
+
+    public float getAlto(){
+        return alto;
+    }
+
+    public float getAncho(){
+        return ancho;
     }
 }

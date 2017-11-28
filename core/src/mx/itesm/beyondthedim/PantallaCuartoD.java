@@ -269,7 +269,7 @@ public class PantallaCuartoD extends Pantalla implements INiveles {
         if (personaje.getLife() <= 0) {
             juego.getMusic().stop();
             juego.musicaCargada = false;
-            juego.setScreen(new PantallaPerder(juego));
+            juego.setScreen(new PantallaPerder(juego, Pantallas.CUARTO_B));
         }
     }
 

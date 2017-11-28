@@ -2,7 +2,6 @@ package mx.itesm.beyondthedim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -34,8 +33,15 @@ class PantallaMenu extends Pantalla {
     private Texture texturaBtnJugar;
     private Texture texturaBtnAyuda;
     private Texture texturaBtnSettings;
-    private Texture texturaBtnFreeMode;
-    private Texto texto;
+    private Texture texturaFreeMode;
+    private Texture texturaInstrucciones;
+    private Texture textureBtnFreeMode;
+
+    private ObjetoEscenario spriteFeeRoom;
+
+    private float altoSprite;
+    private float anchoSprite;
+    private float timerAnimacion = 0.1f;
 
     //Nave
     private Nave nave;
@@ -80,8 +86,11 @@ class PantallaMenu extends Pantalla {
         texturaBtnAyuda = manager.get("Botones/button_about-us.png");
         texturaBtnSettings = manager.get("Botones/button_settings.png");
         //texturaBtnInstructions = new Texture("Botones/button_instructions.png");
-        texturaBtnFreeMode = manager.get("Botones/button_free_mode.png");
+        texturaFreeMode = manager.get("Botones/button_free_mode.png");
         fondoPantalla = manager.get("Stage/MenuFondo.jpg");
+        texturaInstrucciones = manager.get("Objetos_varios/begin_instruction.png");
+        textureBtnFreeMode =  manager.get("Botones/button_free_mode_textura.png");
+        spriteFeeRoom = new ObjetoEscenario(ANCHO-(ANCHO*0.15f),ALTO*0.08f, texturaFreeMode);
     }
 
     private void crearEscenaMenu() {
@@ -145,7 +154,7 @@ class PantallaMenu extends Pantalla {
         escenaMenu.addActor(btnAboutUs);
 
         //Boton Free Mode
-        TextureRegionDrawable trdFreeMode = new TextureRegionDrawable(new TextureRegion(texturaBtnFreeMode));
+        TextureRegionDrawable trdFreeMode = new TextureRegionDrawable(new TextureRegion(textureBtnFreeMode));
         ImageButton btnFreeMode = new ImageButton(trdFreeMode);
         btnFreeMode.setPosition(ANCHO-(ANCHO*0.15f),ALTO*0.08f);
 
@@ -182,19 +191,31 @@ class PantallaMenu extends Pantalla {
         Gdx.input.setInputProcessor(escenaMenu);
 
         batch = new SpriteBatch();
-        texto = new Texto();
+        altoSprite = 0;
+        anchoSprite = 0;
     }
 
     @Override
     public void render(float delta) {
         borrarPantalla(1.0f,1.0f,1.0f);
         batch.setProjectionMatrix(camara.combined);
+        if(spriteFeeRoom.getAncho() <= texturaFreeMode.getWidth()*0.9f){
+            timerAnimacion = -0.1f;
+        }else if(spriteFeeRoom.getAncho() >= texturaFreeMode.getWidth()){
+            timerAnimacion = 0.1f;
+        }
+        altoSprite += timerAnimacion;
+        anchoSprite += timerAnimacion;
         escenaMenu.draw();
+        batch.begin();
+        spriteFeeRoom.dibujar(batch, texturaFreeMode.getWidth()-anchoSprite, texturaFreeMode.getHeight()-altoSprite);
+        batch.end();
         if(!playAnimacionNave) {
             altoNave = 0;
             altoNave = 0;
             batch.begin();
             nave.dibujar(batch, Gdx.graphics.getDeltaTime(), anchoNave, altoNave);
+            batch.draw(texturaInstrucciones, Pantalla.ANCHO/2-texturaInstrucciones.getWidth()/2, Pantalla.ALTO*0.1f);
             batch.end();
         }else{
             altoNave += 1f;
@@ -210,7 +231,6 @@ class PantallaMenu extends Pantalla {
             //juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_BOSS));
             juego.musicaCargada = false;
             juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_TUTORIAL));
-
             this.dispose();
         }
 

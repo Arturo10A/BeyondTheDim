@@ -189,7 +189,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
         }else {
             String lifeString = "0";
             texto.mostrarMensaje(batch, lifeString,98,Pantalla.ALTO/1.03f);
-            juego.setScreen(new PantallaPerder(juego));
+            juego.setScreen(new PantallaPerder(juego, Pantallas.CUARTO_TUTORIAL));
         }
         //Balas
         for (Bullet bullet: juego.getBullets()){
@@ -293,7 +293,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
     @Override
     public void perder() {
         if (personaje.getLife() <= 0) {
-            juego.setScreen(new PantallaPerder(juego));
+            juego.setScreen(new PantallaPerder(juego, Pantallas.CUARTO_TUTORIAL));
         }
     }
 

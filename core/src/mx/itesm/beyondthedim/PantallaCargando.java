@@ -88,6 +88,8 @@ class PantallaCargando extends Pantalla {
         //texturaBtnInstructions = new Texture("Botones/button_instructions.png");
         manager.load("Stage/MenuFondo.jpg", Texture.class);
         manager.load("Music/bensound-slowmotion.mp3", Music.class);
+        manager.load("Objetos_varios/begin_instruction.png", Texture.class);
+        manager.load("Botones/button_free_mode_textura.png", Texture.class);
     }
 
 
