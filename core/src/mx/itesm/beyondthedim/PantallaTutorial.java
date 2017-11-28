@@ -51,6 +51,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
 
     //Timer dialogos
     private int timerDialogo;
+    private int timerCambio;
     //**************************************************************
 
     //Imagen del ecenario
@@ -63,6 +64,8 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
     //Joystick
     private Touchpad movJoystick;
     private Touchpad gunJoystick;
+    //Tutorial terminado
+    private boolean isTerminado = false;
 
 
     private ArrayList<ObjetoEscenario> objetos = new ArrayList<ObjetoEscenario>();
@@ -77,6 +80,7 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
 
     //Icono de vida
     private Texture vidaIcono;
+
 
     private AssetManager manager;
     //Constructores
@@ -230,11 +234,11 @@ public class PantallaTutorial  extends Pantalla implements INiveles {
 
         if(cuadro1==cuadro5 && timerDialogo > 600){
             cuadro1 = cuadro6;
+            isTerminado = true;
         }
-        /*
-        if (timerDialogo >= 1000){
-            juego.setScreen(new PantallaCuartoD(juego));
-        }*/
+        if (timerDialogo >= 1000 && isTerminado){
+            juego.setScreen(new PantallaCargando(juego, Pantallas.CUARTO_A));
+        }
         System.out.println(timerDialogo);
         if (estado == EstadoJuego.JUGANDO){
             dibujarObjetos();
