@@ -235,7 +235,6 @@ public class PantallaJuegoLibre extends Pantalla implements INiveles {
             difficultyLevel+=1;
             timerMedicinas +=1;
             crearEnemigos();
-            apariciones--;
         }
         //Dibujar Objetos
         //batch.setProjectionMatrix(juego.camaraHUDEscenarioB.combined);
